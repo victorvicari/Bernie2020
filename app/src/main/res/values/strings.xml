@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Bernie2020</string>
+    <string name="home">Home</string>
+    <string name="plans">Plans</string>
+    <string name="events_map">Events Map</string>
+    <string name="canvas">Canvas</string>
+    <string name="timeline">Timeline</string>
+    <string name="legislation">Legislation</string>
+    <string name="wallpapers">Wallpapers</string>
+    <string name="news">News</string>
+    <string name="taxes">Taxes</string>
+    <string name="jobs">Jobs</string>
+    <string name="press">Press</string>
+    <string name="podcast">Podcast</string>
+
+    <string name="events_url" translatable="false">https://map.berniesanders.com/</string>
+    <string name="bern_url" translatable="false">https://app.berniesanders.com/</string>
+    <string name="news_url" translatable="false">https://twitter.com/BernieSanders</string>
+    <string name="taxes_url" translatable="false">https://berniesanders.com/tax-returns/</string>
+    <string name="jobs_url" translatable="false">https://boards.greenhouse.io/bernie2020</string>
+    <string name="press_url" translatable="false">https://berniesanders.com/press/</string>
+    <string name="podcast_url" translatable="false">https://berniesanders.com/podcast/</string>
+</resources>
