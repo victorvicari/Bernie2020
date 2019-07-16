@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
+import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.web.WebFragment
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -53,7 +55,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).commit()
         } else {
-
+            lateinit var fragment : Fragment
+            when(item.title){
+                getString(R.string.plans) -> fragment = PlansFragment.newInstance()
+            }
+            
+            supportFragmentManager.beginTransaction()
+                    //todo this tag could be trouble
+                .replace(R.id.fragment_container, fragment, fragment.TAG).commit()
         }
 
 
