@@ -4,7 +4,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ 
  */
     fun Disposable.into(compositeDisposable: CompositeDisposable?) {
         compositeDisposable?.let {

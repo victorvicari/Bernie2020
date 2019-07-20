@@ -1,18 +1,23 @@
 package com.appsontap.bernie2020.models
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import android.util.Log
+import androidx.room.*
+import com.appsontap.bernie2020.AppDatabase
+import com.appsontap.bernie2020.TAG
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.rxkotlin.toObservable
 
 
 @Dao
-interface CategoryDao{
+abstract class CategoryDao{
     @Query ("SELECT * FROM category_table")
-    fun getAll() : Single<List<Category>>
+     abstract fun getAll() : Single<List<Category>>
+    
+    @Query("SELECT * FROM category_table WHERE id = :categoryId")
+    abstract fun getCategoryForId(categoryId: String) : Single<Category>
     
     @Insert (onConflict = OnConflictStrategy.IGNORE)
-    fun insert(category: Category)
+    abstract fun insert(category: Category)
+    
 }

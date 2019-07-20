@@ -2,42 +2,38 @@ package com.appsontap.bernie2020.plans
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import com.appsontap.bernie2020.AppDatabase
-import com.appsontap.bernie2020.R
-import com.appsontap.bernie2020.TAG
-import com.appsontap.bernie2020.into
+import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Plan
+import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.category_view_holder.view.*
+import kotlinx.android.synthetic.main.title_view_holder.view.*
 import kotlinx.android.synthetic.main.fragment_plans.*
-import kotlinx.android.synthetic.main.plan_view_holder.view.*
+import kotlinx.android.synthetic.main.item_view_holder.view.*
 import java.lang.RuntimeException
 
-/**
- * Copyright (c) 2019 Pandora Media, Inc.
- */
+
+//todo need to diff the list here so when back is pressed from a detail fragment the list doesn't go back to the top
 class PlansFragment : Fragment() {
 
-    val viewModel : PlansViewModel by lazy { 
+    private val viewModel: PlansViewModel by lazy {
         ViewModelProviders.of(this).get(PlansViewModel::class.java)
     }
-    val bin = CompositeDisposable()
-    
+    private val bin = CompositeDisposable()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,12 +42,15 @@ class PlansFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchData()
+        if (savedInstanceState == null) {
+            viewModel.fetchData()
+        }
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.dataEmitter
+        viewModel
+            .dataEmitter
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -69,14 +68,28 @@ class PlansFragment : Fragment() {
         bin.clear()
     }
 
-    class PlansAdapter(val context: Context, val data: List<Any>) : RecyclerView.Adapter<PlansAdapter.BaseViewHolder>(){
-       
+    internal class PlansAdapter(val context: Context, val data: List<Any>) :
+        RecyclerView.Adapter<PlansAdapter.BaseViewHolder>() {
+        lateinit var recyclerView: RecyclerView
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-            when(viewType){
-                R.layout.category_view_holder -> return CategoryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.category_view_holder, parent, false))
-                R.layout.plan_view_holder -> return PlanViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.plan_view_holder, parent, false))
+            when (viewType) {
+                R.layout.title_view_holder -> return CategoryViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.title_view_holder,
+                        parent,
+                        false
+                    )
+                )
+                R.layout.item_view_holder -> return PlanViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_view_holder,
+                        parent,
+                        false
+                    )
+                )
             }
-            
+
             throw RuntimeException("Invalid viewholder type")
         }
 
@@ -85,7 +98,7 @@ class PlansFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-            when(holder){
+            when (holder) {
                 is CategoryViewHolder -> {
                     holder.itemView.category_title.text = (data[position] as Category).name
                 }
@@ -96,31 +109,45 @@ class PlansFragment : Fragment() {
         }
 
         override fun getItemViewType(position: Int): Int {
-            when(data[position]){
-                is Category -> return R.layout.category_view_holder
-                is Plan -> return R.layout.plan_view_holder
+            when (data[position]) {
+                is Category -> return R.layout.title_view_holder
+                is Plan -> return R.layout.item_view_holder
             }
-            
+
             throw RuntimeException("Unsupported View Type")
         }
-        
+
         override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
             super.onAttachedToRecyclerView(recyclerView)
+            this.recyclerView = recyclerView
         }
 
-        open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            
+        open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+        inner class CategoryViewHolder(itemView: View) : BaseViewHolder(itemView) {
+            init {
+                itemView.setOnClickListener {
+                    val args = Bundle()
+                    val itemPosition = recyclerView.findContainingViewHolder(itemView)?.adapterPosition
+                    val id = (data.get(itemPosition!!) as Category).id
+                    args.putString(CategoryDetailsFragment.EXTRA_CATEGORY_ID, id)
+
+                    (context as FragmentActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, CategoryDetailsFragment.newInstance(args), CategoryDetailsFragment.TAG)
+                        .addToBackStack(CategoryDetailsFragment.TAG).commit()
+                }
+            }
         }
-        
-        class CategoryViewHolder(itemView: View) : BaseViewHolder(itemView) {
-            
+
+        inner class PlanViewHolder(itemView: View) : BaseViewHolder(itemView) {
+            init {
+                itemView.more_image.setColorFilter(itemView.resources.getColor(R.color.secondaryColor))
+            }
+
         }
-        
-        class PlanViewHolder(itemView: View) : BaseViewHolder(itemView) {
-            
-        }
-        
+
     }
+
     companion object {
         fun newInstance(): PlansFragment {
             return PlansFragment()

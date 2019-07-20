@@ -1,5 +1,9 @@
 package com.appsontap.bernie2020.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "legislation_table")
 data class Legislation(
     val category_ids: String?,
     val congress: Int?,
@@ -7,12 +11,12 @@ data class Legislation(
     val created_at: String?,
     val description: String?,
     val whitepaper: String?,
-    val id: String?,
-    val links: List<String>?,
+    @PrimaryKey val id: String,
+    val links: String?,
     val name: String?,
-    val proposal_ids: List<String>?,
-    val quote_ids: List<String>?,
+    val proposal_ids: String?,
+    val quote_ids: String?,
     val type: String?,
     val url: String?,
-    val video_ids: List<String>?
+    val video_ids: String?
 )

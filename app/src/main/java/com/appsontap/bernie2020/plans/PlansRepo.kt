@@ -15,14 +15,14 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ 
  */
 class PlansRepo(val context: Context) {
     val dataEmitter = BehaviorSubject.create<MutableList<Any>>()
     
     fun fetchData(): Single<MutableList<Any>>? {
         return AppDatabase
-            .getDatabase(context)
+            .getDatabase()
             .categoryDao()
             .getAll()
             .flattenAsObservable { it }
@@ -31,51 +31,8 @@ class PlansRepo(val context: Context) {
             }
             .flatMap {
                 Log.d(TAG, "Category id ${it.id}")
-                getPlanWithCategory(it) 
+                AppDatabase.getDatabase().getPlansWithCategory(it) 
             }
             .toList()
     }
-
-
-    fun getPlanWithCategory(category: Category): Observable<Any> {
-        val getPlansObservable =
-            Observable.fromArray(category.getPlanIds())
-                .flatMapIterable {
-                    it
-                }.flatMap { id ->
-                    Log.d(TAG, "plan id $id")
-                    AppDatabase.getDatabase(context).planDao().getPlan(id).toObservable()
-                }
-        return Observable.concat(Observable.just(category), getPlansObservable)
-}
-
-//    fun fetchCategoriesAndPlans() {
-//        val items = mutableListOf<Any>()
-//        AppDatabase
-//            .getDatabase(context)
-//            .categoryDao()
-//            .getAll()
-//            .concatMap { listOfCategories ->
-//                listOfCategories.toObservable()
-//            }
-//            .doOnNext { category ->
-//                items.add(category)
-//            }
-//            .concatMap { category ->
-//                category.getPlanIds()!!.toObservable()
-//            }
-//            .flatMap { planId ->
-//                AppDatabase.getDatabase(context).planDao().getPlan(planId)
-//            }.collectInto(items, BiConsumer{ list, i ->
-//                Log.d(TAG, "Collect into")
-//                list.add(i)
-//            })
-//            .subscribeBy(
-//                onSuccess = {
-//                    Log.d(TAG, "Got the list")
-//                },
-//                onError = {
-//                    Log.e(TAG, "Couldn't build list ${it.message}", it)
-//                })
-//    }
 }

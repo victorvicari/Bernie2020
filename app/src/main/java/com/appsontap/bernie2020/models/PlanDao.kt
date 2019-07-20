@@ -8,9 +8,7 @@ import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 
-/**
- * Copyright (c) 2019 Pandora Media, Inc.
- */
+
 @Dao
 interface PlanDao {
     @Query("SELECT * FROM plans_table")
@@ -20,5 +18,5 @@ interface PlanDao {
     fun getPlan(planId: String) : Single<Plan>
     
     @Insert (onConflict =  OnConflictStrategy.IGNORE)
-    fun insert(category: Plan)
+    fun insert(plan: Plan)
 }

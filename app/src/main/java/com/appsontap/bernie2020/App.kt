@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ 
  */
 class App : Application() {
 
@@ -14,9 +14,16 @@ class App : Application() {
 
         INSTANCE = this
 
-        AppDatabase.getDatabase(this)
+        AppDatabase.getDatabase()
             .populateDatabase(this)
     }
+
+//    override fun getSystemService(name: String): Any? {
+//        if(name == Constants.FRAGMENT_MANAGER){
+//            return 
+//        }
+//        return super.getSystemService(name)
+//    }
 
     companion object {
         lateinit var INSTANCE: App

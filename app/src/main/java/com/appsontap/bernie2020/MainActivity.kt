@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val args = Bundle()
             args.putString(WebFragment.EXTRA_URL, url)
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).commit()
+                .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).addToBackStack(WebFragment.TAG).commit()
         } else {
             lateinit var fragment : Fragment
             when(item.title){
@@ -61,12 +61,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             
             supportFragmentManager.beginTransaction()
-                    //todo this tag could be trouble
-                .replace(R.id.fragment_container, fragment, fragment.TAG).commit()
+                .replace(R.id.fragment_container, fragment, fragment.TAG).addToBackStack(fragment.TAG).commit()
         }
 
 
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
+
+//    override fun getSystemService(name: String): Any? {
+//        if(name == )
+//        return super.getSystemService(name)
+//    }
 }

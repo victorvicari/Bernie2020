@@ -13,7 +13,7 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ 
  */
 class PlansViewModel : ViewModel() {
     val plansRepo = PlansRepo(App.get())
