@@ -20,4 +20,9 @@
     <string name="jobs_url" translatable="false">https://boards.greenhouse.io/bernie2020</string>
     <string name="press_url" translatable="false">https://berniesanders.com/press/</string>
     <string name="podcast_url" translatable="false">https://berniesanders.com/podcast/</string>
+    
+    <string name="plans_and_proposals">Plans and Proposals</string>
+    <string name="detailed_plans_and_bills">Detailed Plans &amp; Bills</string>
+    <string name="statements">Statements</string>
+    <string name="more_plans">More Plans</string>
 </resources>

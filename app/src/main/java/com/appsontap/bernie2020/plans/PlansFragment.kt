@@ -129,11 +129,19 @@ class PlansFragment : Fragment() {
                 itemView.setOnClickListener {
                     val args = Bundle()
                     val itemPosition = recyclerView.findContainingViewHolder(itemView)?.adapterPosition
-                    val id = (data.get(itemPosition!!) as Category).id
+                    if (itemPosition == RecyclerView.NO_POSITION) {
+                        Log.e(TAG, "Invalid position clicked, try again?")
+                        return@setOnClickListener
+                    }
+                    val id = (data[itemPosition!!] as Category).id
                     args.putString(CategoryDetailsFragment.EXTRA_CATEGORY_ID, id)
 
                     (context as FragmentActivity).supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, CategoryDetailsFragment.newInstance(args), CategoryDetailsFragment.TAG)
+                        .replace(
+                            R.id.fragment_container,
+                            CategoryDetailsFragment.newInstance(args),
+                            CategoryDetailsFragment.TAG
+                        )
                         .addToBackStack(CategoryDetailsFragment.TAG).commit()
                 }
             }
@@ -142,6 +150,24 @@ class PlansFragment : Fragment() {
         inner class PlanViewHolder(itemView: View) : BaseViewHolder(itemView) {
             init {
                 itemView.more_image.setColorFilter(itemView.resources.getColor(R.color.secondaryColor))
+                itemView.setOnClickListener {
+                    val args = Bundle()
+                    val itemPosition = recyclerView.findContainingViewHolder(itemView)?.adapterPosition
+                    if (itemPosition == RecyclerView.NO_POSITION) {
+                        Log.e(TAG, "Invalid position clicked, try again?")
+                        return@setOnClickListener
+                    }
+                    val id = (data[itemPosition!!] as Plan).id
+                    args.putString(CategoryDetailsFragment.EXTRA_PLAN_ID, id)
+
+                    (context as FragmentActivity).supportFragmentManager.beginTransaction()
+                        .replace(
+                            R.id.fragment_container,
+                            CategoryDetailsFragment.newInstance(args),
+                            CategoryDetailsFragment.TAG
+                        )
+                        .addToBackStack(CategoryDetailsFragment.TAG).commit()
+                }
             }
 
         }

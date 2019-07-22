@@ -112,8 +112,20 @@ abstract class AppDatabase : RoomDatabase() {
                 }
             )
     }
-
+    
     //can't @Transaction these since they return Rx async types, this is a Room limitation
+    open fun getCategoriesForPlan(plan: Plan): Single<MutableList<Category>>? {
+        return Observable
+            .just(plan)
+            .flatMap { 
+                Observable.fromArray(it.getCategoryIds())
+            }
+            .flatMapIterable { it }
+            .flatMap { 
+                AppDatabase.getDatabase().categoryDao().getCategoryForId(it).toObservable()
+            }.toList()
+    }
+    
     open fun getPlansForCategory(category: Category): Single<MutableList<Plan>>? {
         return Observable
             .just(category)

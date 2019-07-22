@@ -11,7 +11,9 @@
     <TextView android:id="@+id/plan_text"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
-              android:layout_margin="8dp"
+              android:layout_marginStart="8dp"
+              android:layout_marginEnd="8dp"
+              android:layout_marginBottom="8dp"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintEnd_toStartOf="@id/more_image"
               app:layout_constraintTop_toTopOf="parent"
@@ -28,6 +30,6 @@
 
     <View android:layout_width="match_parent" android:layout_height="1dp"
           app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@color/cardview_dark_background"
+            android:background="@color/dividerColor"
     />
 </androidx.constraintlayout.widget.ConstraintLayout>

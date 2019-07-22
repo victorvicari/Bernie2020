@@ -1,7 +1,9 @@
 package com.appsontap.bernie2020.plan_details
 
+import com.appsontap.bernie2020.App
 import com.appsontap.bernie2020.AppDatabase
 import com.appsontap.bernie2020.Constants
+import com.appsontap.bernie2020.R
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toObservable
@@ -11,7 +13,49 @@ import io.reactivex.rxkotlin.toObservable
  */
 class CategoryDetailRepo {
 
-    //Build a list of all objects, with indexes to markate which ones are section headrs
+    fun fetchDataForPlan(planId: String): Single<UiState.ListReady> {
+        val result = mutableListOf<Any>()
+        val titleIndexes = mutableSetOf<Int>()
+
+        return AppDatabase
+            .getDatabase()
+            .planDao()
+            .getPlan(planId)
+            .doOnSuccess {
+                it.name?.let { name ->
+                    result.add(name)
+                    titleIndexes.add(0)
+                }
+
+            }.map {
+                it.getCategoryIds()?.first()
+            }.flatMap {
+                AppDatabase.getDatabase().categoryDao().getCategoryForId(it)
+            }.flatMap {
+                AppDatabase.getDatabase().getLegislationForCategory(it)
+            }.map {
+                result.add(App.get().resources.getString(R.string.detailed_plans_and_bills))
+                titleIndexes.add(result.size - 1)
+                //add all the legislation for the first category
+                it.forEach { legislation ->
+                    result.add(legislation)
+                }
+            }.flatMap {
+                AppDatabase.getDatabase().planDao().getPlan(planId)
+            }.flatMap {
+                AppDatabase.getDatabase().getCategoriesForPlan(it)
+            }.map {
+                result.add(App.get().resources.getString(R.string.more_plans))
+                titleIndexes.add(result.size - 1)
+                it.forEach { category ->
+                    result.add(category)
+                }
+            }.flatMapObservable {
+                Observable.just(UiState.ListReady(result, titleIndexes))
+            }.singleOrError()
+    }
+
+    //Build a list of all objects, with indexes to markate which ones are section headers
     fun fetchDataForCategory(categoryId: String): Single<UiState.ListReady> {
         val result = mutableListOf<Any>()
         val titleIndexes = mutableSetOf<Int>()
@@ -30,7 +74,7 @@ class CategoryDetailRepo {
                 AppDatabase.getDatabase().getPlansForCategory(it)?.toObservable()
             }
             .map {
-                result.add("PLANS")
+                result.add(App.get().resources.getString(R.string.plans_and_proposals))
                 titleIndexes.add(result.size - 1)
                 it.forEach { plan ->
                     result.add(plan)
@@ -40,7 +84,7 @@ class CategoryDetailRepo {
             }.flatMap {
                 AppDatabase.getDatabase().getLegislationForCategory(it).toObservable()
             }.map {
-                result.add("Legislation")
+                result.add(App.get().resources.getString(R.string.detailed_plans_and_bills))
                 titleIndexes.add(result.size - 1)
                 it.forEach { legislation ->
                     result.add(legislation)
@@ -50,7 +94,7 @@ class CategoryDetailRepo {
             }.flatMap {
                 AppDatabase.getDatabase().getQuotesForCategory(it).toObservable()
             }.map {
-                result.add("Quotes")
+                result.add(App.get().resources.getString(R.string.statements))
                 titleIndexes.add(result.size - 1)
                 it.forEach { quote ->
                     result.add(quote)
@@ -59,4 +103,5 @@ class CategoryDetailRepo {
                 Observable.just(UiState.ListReady(result, titleIndexes))
             }.singleOrError()
     }
+
 }

@@ -8,7 +8,11 @@ import io.reactivex.Single
  */
 class CategoryDetailsViewModel : ViewModel() {
     
-    fun fetchData(categoryId: String): Single<UiState.ListReady> {
+    fun categoryDetails(categoryId: String): Single<UiState.ListReady> {
         return CategoryDetailRepo().fetchDataForCategory(categoryId)
+    }
+    
+    fun planDetails(planId: String): Single<UiState.ListReady> {
+        return CategoryDetailRepo().fetchDataForPlan(planId)
     }
 }

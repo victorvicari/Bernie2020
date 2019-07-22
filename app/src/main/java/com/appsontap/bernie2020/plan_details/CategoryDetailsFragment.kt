@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appsontap.bernie2020.Constants
 import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.TAG
+import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,7 +28,7 @@ import java.lang.RuntimeException
  */
 class CategoryDetailsFragment : Fragment() {
     var categoryId: String? = null
-    var proposalName: String? = null
+    var planId: String? = null
     private val viewModel : CategoryDetailsViewModel by lazy {
         ViewModelProviders.of(this).get(CategoryDetailsViewModel::class.java)
     }
@@ -38,7 +39,7 @@ class CategoryDetailsFragment : Fragment() {
         arguments?.let {
             it.run {
                 categoryId = getString(EXTRA_CATEGORY_ID)
-                proposalName = getString(EXTRA_PROPOSAL_NAME)
+                planId = getString(EXTRA_PLAN_ID)
             }
         }
     }
@@ -50,7 +51,7 @@ class CategoryDetailsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         categoryId?.let { 
-                    viewModel.fetchData(it)
+                    viewModel.categoryDetails(it)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeBy(
@@ -61,7 +62,19 @@ class CategoryDetailsFragment : Fragment() {
                                 Log.e(TAG, error.message, error)
                             }
                         )}
-        }
+        
+        planId?.let { 
+                    viewModel.planDetails(it)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeBy(
+                            onSuccess = {uiState ->
+                                recycler_view.adapter = ProposalDetailAdapter(uiState)
+                            },
+                            onError = { error ->
+                                Log.e(TAG, error.message, error)
+                            }
+                        )}        }
     
 
     inner class ProposalDetailAdapter(val uiState: UiState.ListReady) : RecyclerView.Adapter<ProposalDetailAdapter.BaseViewHolder>() {
@@ -78,7 +91,6 @@ class CategoryDetailsFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            //1 for header
             return uiState.items.size
         }
 
@@ -90,6 +102,7 @@ class CategoryDetailsFragment : Fragment() {
                     when(val item = uiState.items[position]){
                         is Plan -> holder.bind(item.name)
                         is Legislation -> holder.bind(item.name)
+                        is Category -> holder.bind(item.name)
                     }
                 }
             }
@@ -135,8 +148,8 @@ class CategoryDetailsFragment : Fragment() {
     }
 
     companion object {
-        val EXTRA_CATEGORY_ID = "extra_category_id"
-        val EXTRA_PROPOSAL_NAME = "extra_proposal_name"
+        const val EXTRA_CATEGORY_ID = "extra_category_id"
+        const val EXTRA_PLAN_ID = "extra_plan_id"
         fun newInstance(args: Bundle): CategoryDetailsFragment {
             val fragment = CategoryDetailsFragment()
             fragment.arguments = args
