@@ -33,7 +33,13 @@ data class Category(
         }
         return null
     }
-    
+
+    fun getQuoteIds() : List<String>? {
+        quote_ids?.let {
+            return it.split(" ")
+        }
+        return null
+    }
     
     
     fun getPlanWithCategory(category: Category): Observable<Any> {

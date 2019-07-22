@@ -139,6 +139,20 @@ abstract class AppDatabase : RoomDatabase() {
             }.toList()
     }
 
+    fun getQuotesForCategory(category: Category): Single<List<Quote>> {
+        return Observable
+            .just(category)
+            .flatMap {
+                Observable.fromArray(it.getQuoteIds())
+            }.flatMapIterable {
+                it
+            }
+            .flatMap {
+                Log.d(TAG, "Fetching quote: $it for category: ${category.id}")
+                AppDatabase.getDatabase().quoteDao().getQuote(it).toObservable()
+            }.toList()
+    }
+
     open fun getPlansWithCategory(category: Category): Observable<Any> {
         val getPlansObservable =
             Observable.fromArray(category.getPlanIds())

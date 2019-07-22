@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val args = Bundle()
             args.putString(WebFragment.EXTRA_URL, url)
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).addToBackStack(WebFragment.TAG).commit()
+                .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).commit()
         } else {
             lateinit var fragment : Fragment
             when(item.title){
