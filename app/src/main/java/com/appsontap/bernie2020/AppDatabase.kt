@@ -1,5 +1,6 @@
 package com.appsontap.bernie2020
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.room.*
@@ -39,7 +40,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun quoteDao(): QuoteDao
     
     abstract fun legislationDao(): LegislationDao
+    
+    abstract fun timelineDao(): TimelineItemDao
 
+    @SuppressLint("CheckResult")
     fun populateDatabase(context: Context) {
         val gson = GsonBuilder().create()
         var reader = BufferedReader(InputStreamReader(context.resources.openRawResource(R.raw.categories)))
@@ -57,6 +61,11 @@ abstract class AppDatabase : RoomDatabase() {
         reader = BufferedReader(InputStreamReader(context.resources.openRawResource(R.raw.legislation)))
         val legislationInput = reader.use { it.readText() }
         val legislation = gson.fromJson(legislationInput, Array<Legislation>::class.java)
+        
+        reader = BufferedReader(InputStreamReader(context.resources.openRawResource(R.raw.timeline)))
+        val timelineInput = reader.use { it.readText() }
+        val timeline = gson.fromJson(timelineInput, Array<TimelineItem>::class.java)
+
 
         categories.toObservable()
             .doOnNext { category ->
@@ -111,6 +120,21 @@ abstract class AppDatabase : RoomDatabase() {
                     Log.e(TAG, "Couldn't build quotes ${it.message}", it)
                 }
             )
+        
+        timeline.toObservable()
+            .doOnNext{
+                getDatabase().timelineDao().insert(it)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribeBy(
+                onComplete = {
+                    Log.d(TAG, "Built timeline")
+                },
+                onError = {
+                    Log.e(TAG, "Couldn't build timeline ${it.message}", it)
+                }
+            )
     }
     
     //can't @Transaction these since they return Rx async types, this is a Room limitation
@@ -141,6 +165,9 @@ abstract class AppDatabase : RoomDatabase() {
     fun getLegislationForCategory(category: Category) : Single<List<Legislation>>{
         return Observable
             .just(category)
+            .filter{
+                it.getLegislationIds() != null
+            }
             .flatMap { 
                 Observable.fromArray(it.getLegislationIds())
             }
@@ -154,6 +181,9 @@ abstract class AppDatabase : RoomDatabase() {
     fun getQuotesForCategory(category: Category): Single<List<Quote>> {
         return Observable
             .just(category)
+            .filter{
+                it.getQuoteIds() != null
+            }
             .flatMap {
                 Observable.fromArray(it.getQuoteIds())
             }.flatMapIterable {

@@ -34,6 +34,8 @@ class PlansFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.fetchData()
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,25 +44,24 @@ class PlansFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState == null) {
-            viewModel.fetchData()
+        if(savedInstanceState == null) {
+            viewModel
+                .dataEmitter
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                    onNext = {
+                        recycler_view.adapter = PlansAdapter(requireContext(), it)
+                    },
+                    onError = {
+                        Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
+                    }
+                ).into(bin)
         }
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel
-            .dataEmitter
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onNext = {
-                    recycler_view.adapter = PlansAdapter(requireContext(), it)
-                },
-                onError = {
-                    Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
-                }
-            ).into(bin)
     }
 
     override fun onStop() {
