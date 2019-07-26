@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import com.appsontap.bernie2020.AppDatabase
 import com.appsontap.bernie2020.TAG
+import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
@@ -15,17 +16,16 @@ import io.reactivex.subjects.PublishSubject
  */
 class TimelineRepo{
     
-     var timelineEmitter = BehaviorSubject.create<Timeline>()
      private val timeline = Timeline()
     
     @SuppressLint("CheckResult")
-    private fun buildTimeline(){
-        AppDatabase
+    fun buildTimeline(): Single<Timeline> {
+        return AppDatabase
             .getDatabase()
             .timelineDao()
             .getAll()
             .map { 
-                it.sortedBy { it.year?.toInt() }
+                it.sortedBy { it.year.toInt() }
                 it
             }.flatMapObservable { 
                 it.toObservable()
@@ -41,13 +41,5 @@ class TimelineRepo{
             }.map { 
                 timeline
             }.singleOrError()
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .subscribeBy(onSuccess = {
-                Log.d(TAG, "Built timeline $it")
-                timelineEmitter.onNext(it)
-            }, onError = {
-                Log.e(TAG, "Couldn't build timeline ${it.message}", it)
-            })
     }
 }

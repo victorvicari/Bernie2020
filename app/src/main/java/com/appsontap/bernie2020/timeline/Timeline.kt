@@ -30,6 +30,22 @@ class Timeline {
 
     }
 
+    fun totalItemCount() : Int {
+        var count = 0
+        sections.forEach {
+            count +=1
+            count +=it.itemsForYear.size
+        }
+        return count
+    }
+
+    fun getTypeForPosition(position: Int){
+        val flattenedList = mutableListOf<>()
+        sections.flatMap {
+
+        }
+    }
+
     inner class Section(val year: String) {
         val itemsForYear = mutableListOf<TimelineItem>()
     }
