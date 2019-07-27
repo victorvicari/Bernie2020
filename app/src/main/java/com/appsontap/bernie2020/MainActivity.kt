@@ -9,6 +9,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.appsontap.bernie2020.plans.PlansFragment
+import com.appsontap.bernie2020.timeline.TimelineFragment
 import com.appsontap.bernie2020.web.WebFragment
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             lateinit var fragment : Fragment
             when(item.title){
                 getString(R.string.plans) -> fragment = PlansFragment.newInstance()
+                getString(R.string.timeline) -> fragment = TimelineFragment.newInstance()
             }
             
             supportFragmentManager.beginTransaction()

@@ -13,6 +13,9 @@
                 android:id="@+id/events"
                 android:title="@string/events_map"/>
         <item
+                android:id="@+id/timeline"
+                android:title="@string/timeline" />
+        <item
                 android:id="@+id/canvas"
                 android:title="@string/canvas"/>
         <item

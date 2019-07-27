@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import com.appsontap.bernie2020.AppDatabase
 import com.appsontap.bernie2020.TAG
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.toObservable
@@ -27,19 +28,19 @@ class TimelineRepo{
             .map { 
                 it.sortedBy { it.year.toInt() }
                 it
-            }.flatMapObservable { 
-                it.toObservable()
             }
-            .map { 
-                if(timeline.contains(it.year)){
+            .flatMapObservable { it.toObservable() }
+            .doOnNext {
+                if (timeline.contains(it.year)) {
                     timeline.getSectionForYear(it.year)?.itemsForYear?.add(it)
                 } else {
                     val section = Timeline().Section(it.year)
                     section.itemsForYear.add(it)
                     timeline.insert(section)
                 }
-            }.map { 
-                timeline
-            }.singleOrError()
+            }.toList()
+            .flatMap { 
+                Observable.just(timeline).singleOrError()
+            }
     }
 }
