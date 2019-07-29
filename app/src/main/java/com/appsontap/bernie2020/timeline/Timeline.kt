@@ -28,8 +28,9 @@ class Timeline {
         return null
     }
 
-    fun updateSection() {
-
+    fun clear() {
+        sections.clear()
+        flattenedList.clear()
     }
 
     fun totalItemCount() : Int {

@@ -21,7 +21,10 @@ class TimelineRepo{
     
     @SuppressLint("CheckResult")
     fun buildTimeline(): Single<Timeline> {
-        return AppDatabase
+        
+        timeline.clear()
+        
+         return AppDatabase
             .getDatabase()
             .timelineDao()
             .getAll()
@@ -42,5 +45,6 @@ class TimelineRepo{
             .flatMap { 
                 Observable.just(timeline).singleOrError()
             }
+        
     }
 }
