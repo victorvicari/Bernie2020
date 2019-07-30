@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.appsontap.bernie2020.MainActivity
@@ -27,7 +28,7 @@ class WebFragment : Fragment(){
         super.onStart()
         webview.settings.javaScriptEnabled = true
         webview.loadUrl(arguments?.getString(EXTRA_URL))
-        (activity as MainActivity).supportActionBar?.title = arguments?.getString(EXTRA_TITLE)
+        (activity as AppCompatActivity).supportActionBar?.title = arguments?.getString(EXTRA_TITLE)
     }
 
     override fun onStop() {
