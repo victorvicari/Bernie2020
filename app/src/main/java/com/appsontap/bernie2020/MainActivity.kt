@@ -46,8 +46,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var toolbarTitle: String? = null
 
         when (item.title) {
-            // TODO add to bottom nav: getString(R.string.events_map) -> url = getString(R.string.events_url)
-            // TODO add to bottom nav: getString(R.string.canvas) -> url = getString(R.string.bern_url)
             getString(R.string.drawer_news) -> {
                 url = getString(R.string.news_url)
                 toolbarTitle = getString(R.string.web_title_news)
