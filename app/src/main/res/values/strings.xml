@@ -20,9 +20,42 @@
     <string name="jobs_url" translatable="false">https://boards.greenhouse.io/bernie2020</string>
     <string name="press_url" translatable="false">https://berniesanders.com/press/</string>
     <string name="podcast_url" translatable="false">https://berniesanders.com/podcast/</string>
+    <string name="debt_calc_url">https://berniesanders.com/debt/</string>
+    <string name="how_to_vote_url">https://voteforbernie.org/</string>
     
     <string name="plans_and_proposals">Plans and Proposals</string>
     <string name="detailed_plans_and_bills">Detailed Plans &amp; Bills</string>
     <string name="statements">Statements</string>
     <string name="more_plans">More Plans</string>
+
+    <string name="title_canvass">Canvass</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Plans</string>
+    <string name="title_notifications">Events Map</string>
+    <string name="title_plans">Plans</string>
+    <string name="title_map">Map</string>
+    <string name="title_donate">Donate</string>
+    <string name="title_more">More</string>
+
+    <string name="drawer_timeline">Timeline</string>
+    <string name="drawer_legislation">Legislation</string>
+    <string name="drawer_debt_calculator">Debt Calculator</string>
+    <string name="drawer_wallpapers">Wallpapers</string>
+    <string name="drawer_news">News</string>
+    <string name="drawer_taxes">Tax Returns</string>
+    <string name="drawer_jobs">Jobs</string>
+    <string name="drawer_press">Press</string>
+    <string name="drawer_podcast">Podcast</string>
+    <string name="drawer_how_to_vote">How to Vote</string>
+
+    <string name="web_title_events">Events</string>
+    <string name="web_title_canvass">Bern App</string>
+    <string name="web_title_news">Bernie\'s Twitter</string>
+    <string name="web_title_taxes">Bernie\'s Tax Returns</string>
+    <string name="web_title_jobs">Jobs</string>
+    <string name="web_title_press">Press</string>
+    <string name="web_title_podcast">Hear the Bern</string>
+    <string name="web_title_vote">Voter Registration Info</string>
+    <string name="web_title_debt_calculator">College Debt Relief Calculator</string>
+
 </resources>

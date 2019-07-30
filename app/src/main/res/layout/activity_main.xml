@@ -38,7 +38,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:menu="@menu/drawer" >
+            app:menu="@menu/activity_main_drawer" >
 
         <TextView
                 android:id="@+id/app_version_textview"

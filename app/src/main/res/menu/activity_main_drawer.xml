@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <!-- TODO: find better icons for legislation, press -->
+
+    <item
+        android:id="@+id/nav_timeline"
+        android:icon="@drawable/ic_timeline_black_24dp"
+        android:title="@string/drawer_timeline" />
+    <item
+        android:id="@+id/nav_legislation"
+        android:icon="@drawable/ic_gavel_black_24dp"
+        android:title="@string/drawer_legislation" />
+
+    <item
+        android:id="@+id/nav_voter_reg"
+        android:icon="@drawable/ic_playlist_add_check_black_24dp"
+        android:title="@string/drawer_how_to_vote" />
+
+    <item
+        android:id="@+id/nav_debtcalc"
+        android:icon="@drawable/ic_attach_money_black_24dp"
+        android:title="@string/drawer_debt_calculator" />
+    <item
+        android:id="@+id/nav_wallpapers"
+        android:icon="@drawable/ic_wallpaper_black_24dp"
+        android:title="@string/drawer_wallpapers" />
+    <item
+        android:id="@+id/nav_news"
+        android:icon="@drawable/ic_local_library_black_24dp"
+        android:title="@string/drawer_news" />
+    <item
+        android:id="@+id/nav_taxes"
+        android:icon="@drawable/ic_monetization_on_black_24dp"
+        android:title="@string/drawer_taxes" />
+    <item
+        android:id="@+id/nav_jobs"
+        android:icon="@drawable/ic_person_add_black_24dp"
+        android:title="@string/drawer_jobs" />
+    <item
+        android:id="@+id/nav_press"
+        android:icon="@drawable/ic_tv_black_24dp"
+        android:title="@string/drawer_press" />
+    <item
+        android:id="@+id/nav_podcast"
+        android:icon="@drawable/ic_mic_black_24dp"
+        android:title="@string/drawer_podcast" />
+
+</menu>

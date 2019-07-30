@@ -40,20 +40,46 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         Log.d(TAG, "Menu item selected")
         var url: String? = null
+        var toolbarTitle: String? = null
 
         when (item.title) {
-            getString(R.string.events_map) -> url = getString(R.string.events_url)
-            getString(R.string.canvas) -> url = getString(R.string.bern_url)
-            getString(R.string.news) -> url = getString(R.string.news_url)
-            getString(R.string.taxes) -> url = getString(R.string.taxes_url)
-            getString(R.string.press) -> url = getString(R.string.press_url)
-            getString(R.string.jobs) -> url = getString(R.string.jobs_url)
-            getString(R.string.podcast) -> url = getString(R.string.podcast_url)
+            // TODO add to bottom nav: getString(R.string.events_map) -> url = getString(R.string.events_url)
+            // TODO add to bottom nav: getString(R.string.canvas) -> url = getString(R.string.bern_url)
+            getString(R.string.drawer_news) -> {
+                url = getString(R.string.news_url)
+                toolbarTitle = getString(R.string.web_title_news)
+            }
+            getString(R.string.drawer_taxes) -> {
+                url = getString(R.string.taxes_url)
+                toolbarTitle = getString(R.string.web_title_taxes)
+            }
+            getString(R.string.drawer_press) -> {
+                url = getString(R.string.press_url)
+                toolbarTitle = getString(R.string.web_title_press)
+            }
+            getString(R.string.drawer_jobs) -> {
+                url = getString(R.string.jobs_url)
+                toolbarTitle = getString(R.string.web_title_jobs)
+            }
+            getString(R.string.drawer_podcast) -> {
+                url = getString(R.string.podcast_url)
+                toolbarTitle = getString(R.string.web_title_podcast)
+            }
+            getString(R.string.drawer_debt_calculator) -> {
+                url = getString(R.string.debt_calc_url)
+                toolbarTitle = getString(R.string.web_title_debt_calculator)
+            }
+            getString(R.string.drawer_how_to_vote) -> {
+                url = getString(R.string.how_to_vote_url)
+                toolbarTitle = getString(R.string.web_title_vote)
+            }
+
         }
 
         if (url != null) {
             val args = Bundle()
             args.putString(WebFragment.EXTRA_URL, url)
+            args.putString(WebFragment.EXTRA_TITLE, toolbarTitle)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).commit()
         } else {

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.appsontap.bernie2020.MainActivity
 import com.appsontap.bernie2020.R
 import kotlinx.android.synthetic.main.fragment_web.*
 
@@ -26,6 +27,7 @@ class WebFragment : Fragment(){
         super.onStart()
         webview.settings.javaScriptEnabled = true
         webview.loadUrl(arguments?.getString(EXTRA_URL))
+        (activity as MainActivity).supportActionBar?.title = arguments?.getString(EXTRA_TITLE)
     }
 
     override fun onStop() {
@@ -33,6 +35,7 @@ class WebFragment : Fragment(){
     }
 
     companion object{
+        val EXTRA_TITLE = "title"
         val EXTRA_URL = "url"
         fun newInstance(args: Bundle) : WebFragment {
             val fragment = WebFragment()
