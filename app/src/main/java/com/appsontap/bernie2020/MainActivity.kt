@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.timeline.TimelineFragment
 import com.appsontap.bernie2020.web.WebFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer.addDrawerListener(toggle)
         nav_view.setNavigationItemSelectedListener(this)
+
+        nav_view_bottom.setOnNavigationItemSelectedListener(onBottomNavigationSelectedListener)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -76,7 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
 
-        if (url != null) {
+        if (url != null && toolbarTitle != null) {
             val args = Bundle()
             args.putString(WebFragment.EXTRA_URL, url)
             args.putString(WebFragment.EXTRA_TITLE, toolbarTitle)
@@ -97,6 +100,59 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
+
+    override fun onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private val onBottomNavigationSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {
+
+        when(it.itemId) {
+            R.id.bot_nav_events_map -> {
+                loadWebFragment(getString(R.string.events_url), getString(R.string.web_title_events))
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.bot_nav_canvass -> {
+                loadWebFragment(getString(R.string.bern_url), getString(R.string.web_title_canvass))
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.bot_nav_more -> {
+                toggleDrawer()
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.bot_nav_plans -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, PlansFragment.newInstance(),
+                        PlansFragment.TAG).addToBackStack(PlansFragment.TAG).commit()
+                return@OnNavigationItemSelectedListener true
+            }
+            // TODO add home fragment functionality
+            else -> false
+        }
+    }
+
+    private fun toggleDrawer() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            drawer.openDrawer(GravityCompat.START)
+        }
+    }
+
+    private fun loadWebFragment(url: String?, title: String?) {
+        if (url != null && title != null) {
+            val args = Bundle()
+            args.putString(WebFragment.EXTRA_URL, url)
+            args.putString(WebFragment.EXTRA_TITLE, title)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).commit()
+        }
+    }
+
 
 //    override fun getSystemService(name: String): Any? {
 //        if(name == )
