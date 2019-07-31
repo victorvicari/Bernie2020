@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Plan
+import com.appsontap.bernie2020.models.SimpleCategory
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -51,13 +52,39 @@ class PlansFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onNext = {
+                        val categories = getSimpleCategoriesFromCategoriesAndPlans(it)
+                        // TODO rewrite adapters for the expandable recycler views
                         recycler_view.adapter = PlansAdapter(requireContext(), it)
+                        Log.d("LOOK AT ME", categories.toString())
+
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
                     }
                 ).into(bin)
         }
+    }
+
+    // data for the expandable recycler view must be provided in a list of SimpleCategory objects,
+    // each of which contain lists of their respective Plan objects. The database pulls down a list
+    // of categories followed by their plans, so this function groups those into a list of SimpleCategory
+    private fun getSimpleCategoriesFromCategoriesAndPlans(catsAndPlans: List<Any>): Any {
+        val categories = mutableListOf<SimpleCategory>()
+        var simpleCategory : SimpleCategory? = null
+        var last = Any()
+        for(item in catsAndPlans) {
+            if(item is Category) {
+                if(last is Plan && simpleCategory != null) {
+                    categories.add(simpleCategory)
+                }
+                simpleCategory = SimpleCategory(item.name!!, mutableListOf<Plan>())
+            }
+            if(item is Plan && simpleCategory != null) {
+                simpleCategory.addPlan(item)
+            }
+            last = item
+        }
+        return categories
     }
 
     override fun onStart() {
@@ -74,6 +101,8 @@ class PlansFragment : Fragment() {
         lateinit var recyclerView: RecyclerView
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+
+
             when (viewType) {
                 R.layout.title_view_holder -> return CategoryViewHolder(
                     LayoutInflater.from(parent.context).inflate(
