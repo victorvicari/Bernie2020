@@ -112,24 +112,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(it.itemId) {
             R.id.bot_nav_events_map -> {
                 loadWebFragment(getString(R.string.events_url), getString(R.string.web_title_events))
-                true
+                return@OnNavigationItemSelectedListener true
             }
             R.id.bot_nav_canvass -> {
                 loadWebFragment(getString(R.string.bern_url), getString(R.string.web_title_canvass))
-                true
+                return@OnNavigationItemSelectedListener true
             }
             R.id.bot_nav_more -> {
                 toggleDrawer()
-                true
+                return@OnNavigationItemSelectedListener true
             }
             R.id.bot_nav_plans -> {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, PlansFragment.newInstance(),
                         PlansFragment.TAG).addToBackStack(PlansFragment.TAG).commit()
-                true
+                return@OnNavigationItemSelectedListener true
             }
             // TODO add home fragment functionality
-            else -> false
+            else -> return@OnNavigationItemSelectedListener false
         }
     }
 
