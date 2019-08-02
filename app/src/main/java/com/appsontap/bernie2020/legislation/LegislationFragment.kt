@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_legislation.*
 import kotlinx.android.synthetic.main.item_view_holder.view.*
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 class LegislationFragment : BaseFragment(){
     val repo = LegislationRepo()

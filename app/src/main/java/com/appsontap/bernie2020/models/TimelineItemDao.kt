@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 @Dao
 interface TimelineItemDao{

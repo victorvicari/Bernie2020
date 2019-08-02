@@ -1,6 +1,6 @@
 package com.appsontap.bernie2020.plan_details
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 data class SectionHeader(val title: String)
