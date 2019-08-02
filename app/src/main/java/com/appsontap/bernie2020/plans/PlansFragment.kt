@@ -24,16 +24,15 @@ import kotlinx.android.synthetic.main.item_view_holder.view.*
 import java.lang.RuntimeException
 
 
-//todo need to diff the list here so when back is pressed from a detail fragment the list doesn't go back to the top
-class PlansFragment : Fragment() {
+class PlansFragment : BaseFragment() {
 
     private val viewModel: PlansViewModel by lazy {
         ViewModelProviders.of(this).get(PlansViewModel::class.java)
     }
-    private val bin = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        title = getString(R.string.title_plans)
         viewModel.fetchData()
 
     }
@@ -44,28 +43,22 @@ class PlansFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(savedInstanceState == null) {
-            viewModel
-                .dataEmitter
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onNext = {
-                        recycler_view.adapter = PlansAdapter(requireContext(), it)
-                    },
-                    onError = {
-                        Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
-                    }
-                ).into(bin)
-        }
+        viewModel
+            .dataEmitter
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    recycler_view.adapter = PlansAdapter(requireContext(), it)
+                },
+                onError = {
+                    Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
+                }
+            ).into(bin)
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroyView() {
+        super.onDestroyView()
         bin.clear()
     }
 
@@ -129,12 +122,12 @@ class PlansFragment : Fragment() {
             init {
                 itemView.setOnClickListener {
                     val args = Bundle()
-                    val itemPosition = recyclerView.findContainingViewHolder(itemView)?.adapterPosition
+                    val itemPosition = adapterPosition
                     if (itemPosition == RecyclerView.NO_POSITION) {
                         Log.e(TAG, "Invalid position clicked, try again?")
                         return@setOnClickListener
                     }
-                    val id = (data[itemPosition!!] as Category).id
+                    val id = (data[itemPosition] as Category).id
                     args.putString(CategoryDetailsFragment.EXTRA_CATEGORY_ID, id)
 
                     (context as FragmentActivity).supportFragmentManager.beginTransaction()
@@ -153,12 +146,12 @@ class PlansFragment : Fragment() {
                 itemView.more_image.setColorFilter(itemView.resources.getColor(R.color.secondaryColor))
                 itemView.setOnClickListener {
                     val args = Bundle()
-                    val itemPosition = recyclerView.findContainingViewHolder(itemView)?.adapterPosition
+                    val itemPosition = adapterPosition
                     if (itemPosition == RecyclerView.NO_POSITION) {
                         Log.e(TAG, "Invalid position clicked, try again?")
                         return@setOnClickListener
                     }
-                    val id = (data[itemPosition!!] as Plan).id
+                    val id = (data[itemPosition] as Plan).id
                     args.putString(CategoryDetailsFragment.EXTRA_PLAN_ID, id)
 
                     (context as FragmentActivity).supportFragmentManager.beginTransaction()

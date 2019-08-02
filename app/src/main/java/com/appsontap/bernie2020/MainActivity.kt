@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import com.appsontap.bernie2020.legislation.LegislationFragment
 import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.timeline.TimelineFragment
 import com.appsontap.bernie2020.web.WebFragment
@@ -74,7 +75,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 url = getString(R.string.how_to_vote_url)
                 toolbarTitle = getString(R.string.web_title_vote)
             }
-
         }
 
         if (url != null && toolbarTitle != null) {
@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             when(item.title){
                 getString(R.string.plans) -> fragment = PlansFragment.newInstance()
                 getString(R.string.timeline) -> fragment = TimelineFragment.newInstance()
+                getString(R.string.drawer_legislation) -> fragment = LegislationFragment.newInstance()
             }
             
             supportFragmentManager.beginTransaction()
@@ -150,10 +151,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).commit()
         }
     }
-
-
-//    override fun getSystemService(name: String): Any? {
-//        if(name == )
-//        return super.getSystemService(name)
-//    }
+    
 }
