@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Single
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 class TimelineViewModel : ViewModel(){
 

@@ -5,7 +5,7 @@ import com.appsontap.bernie2020.models.Legislation
 import io.reactivex.Single
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 class LegislationRepo{
     fun getLegislation() : Single<List<Legislation>>{

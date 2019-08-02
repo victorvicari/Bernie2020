@@ -13,7 +13,7 @@ import com.appsontap.bernie2020.web.WebFragment
 import kotlinx.android.synthetic.main.fragment_legislation_details.*
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 class LegislationDetailsFragment : Fragment() {
 

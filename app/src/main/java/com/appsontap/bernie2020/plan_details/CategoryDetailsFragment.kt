@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.item_view_holder.view.*
 import java.lang.RuntimeException
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 class CategoryDetailsFragment : Fragment() {
     var categoryId: String? = null

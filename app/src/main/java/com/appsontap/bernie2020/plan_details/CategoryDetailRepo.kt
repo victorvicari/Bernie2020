@@ -9,7 +9,7 @@ import io.reactivex.Single
 import io.reactivex.rxkotlin.toObservable
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 class CategoryDetailRepo {
 
