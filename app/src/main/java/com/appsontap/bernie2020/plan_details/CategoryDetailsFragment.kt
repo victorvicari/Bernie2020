@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appsontap.bernie2020.Constants
 import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.TAG
+import com.appsontap.bernie2020.legislation_details.LegislationDetailsFragment
 import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
@@ -101,6 +102,7 @@ class CategoryDetailsFragment : Fragment() {
                 is HeaderViewHolder -> holder.bind(uiState.items[position] as String)
                 is TitleViewHolder -> holder.bind(uiState.items[position] as String)
                 is ItemViewHolder -> {
+                    //this is just an easy way to cast all these things
                     when(val item = uiState.items[position]){
                         is Plan -> holder.bind(item.name)
                         is Legislation -> holder.bind(item.name)
@@ -141,6 +143,19 @@ class CategoryDetailsFragment : Fragment() {
         }
 
         inner class ItemViewHolder(itemView: View) : BaseViewHolder(itemView) {
+            init{
+                itemView.setOnClickListener { 
+                    if(uiState.items[adapterPosition] is Legislation){
+                        val legislation = uiState.items[adapterPosition]
+                        requireActivity()
+                            .supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, LegislationDetailsFragment.newInstance(), LegislationDetailsFragment.TAG)
+                            .addToBackStack(LegislationDetailsFragment.TAG)
+                            .commit()
+                    }
+                }
+            }
             fun bind(description: String?){
                 description?.let { 
                     itemView.plan_text.text = it
