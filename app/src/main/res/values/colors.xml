@@ -14,4 +14,9 @@
     <color name="dividerColor">#0C000000</color>
     <color name="white">#ffffff</color>
 
+
+    <color name="colorPrimary">#087ED7</color>
+    <color name="colorPrimaryDark">#055694</color>
+    <color name="colorAccent">#EA504E</color>
+
 </resources>
