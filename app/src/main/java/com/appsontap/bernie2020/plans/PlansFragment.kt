@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.view.animation.Animation.RELATIVE_TO_SELF
 import android.view.animation.RotateAnimation
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.SimpleCategory
+import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
@@ -54,10 +56,10 @@ class PlansFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onNext = {
-                        val categories = getSimpleCategoriesFromCategoriesAndPlans(it)
+                        val simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
                         // TODO rewrite adapters for the expandable recycler views
-                        recycler_view.adapter = PlansAdapter(requireContext(), categories as List<SimpleCategory>)
-                        Log.d("LOOK AT ME", categories.toString())
+                        recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories as List<SimpleCategory>)
+                        Log.d("LOOK AT ME", simpleCategories.toString())
 
                     },
                     onError = {
@@ -66,7 +68,6 @@ class PlansFragment : Fragment() {
                 ).into(bin)
         }
     }
-
     // data for the expandable recycler view must be provided in a list of SimpleCategory objects,
     // each of which contain lists of their respective Plan objects. The database pulls down a list
     // of categories followed by their plans, so this function groups those into a list of SimpleCategory
@@ -79,7 +80,7 @@ class PlansFragment : Fragment() {
                 if(last is Plan && simpleCategory != null) {
                     categories.add(simpleCategory)
                 }
-                simpleCategory = SimpleCategory(item.name!!, mutableListOf<Plan>())
+                simpleCategory = SimpleCategory(item.name!!, mutableListOf<Plan>(), item.id)
             }
             if(item is Plan && simpleCategory != null) {
                 simpleCategory.addPlan(item)
@@ -99,6 +100,8 @@ class PlansFragment : Fragment() {
     }
 
     internal class CategoryViewHolder(val categoryView: View) : GroupViewHolder(categoryView) {
+
+
 
         fun setCategoryName(category: ExpandableGroup<*>) {
             if (category is SimpleCategory) {
@@ -140,6 +143,7 @@ class PlansFragment : Fragment() {
     }
     internal class PlansAdapter(val context: Context, val data:List<SimpleCategory>) :
         ExpandableRecyclerViewAdapter<CategoryViewHolder, PlanViewHolder>(data) {
+
         override fun onCreateGroupViewHolder(parent: ViewGroup?, viewType: Int): CategoryViewHolder {
             var view = LayoutInflater.from(context).inflate(R.layout.item_plan_category, parent, false)
             return CategoryViewHolder(view)
@@ -163,6 +167,18 @@ class PlansFragment : Fragment() {
 
         override fun onBindGroupViewHolder(holder: CategoryViewHolder?, flatPosition: Int, group: ExpandableGroup<*>) {
             holder?.setCategoryName(group)
+            holder?.categoryView?.textview_proposal_category_item_name?.setOnClickListener {
+                val args = Bundle()
+                args.putString(CategoryDetailsFragment.EXTRA_CATEGORY_ID, (group as SimpleCategory).id)
+                (context as FragmentActivity).supportFragmentManager.beginTransaction()
+                    .replace(
+                        R.id.fragment_container,
+                        CategoryDetailsFragment.newInstance(args),
+                        CategoryDetailsFragment.TAG
+                    )
+                    .addToBackStack(CategoryDetailsFragment.TAG).commit()
+            }
+
             if (isGroupExpanded(group)) {
                 holder?.expand()
             }
