@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation.RELATIVE_TO_SELF
 import android.view.animation.RotateAnimation
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -27,6 +28,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_plans.*
 import kotlinx.android.synthetic.main.item_plan.view.*
 import kotlinx.android.synthetic.main.item_plan_category.view.*
+import org.json.JSONArray
+import org.json.JSONException
+import java.util.*
 
 
 //todo need to diff the list here so when back is pressed from a detail fragment the list doesn't go back to the top
@@ -49,6 +53,7 @@ class PlansFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         if(savedInstanceState == null) {
             viewModel
                 .dataEmitter
@@ -59,8 +64,6 @@ class PlansFragment : Fragment() {
                         val simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
                         // TODO rewrite adapters for the expandable recycler views
                         recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories as List<SimpleCategory>)
-                        Log.d("LOOK AT ME", simpleCategories.toString())
-
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
@@ -99,9 +102,8 @@ class PlansFragment : Fragment() {
         bin.clear()
     }
 
+
     internal class CategoryViewHolder(val categoryView: View) : GroupViewHolder(categoryView) {
-
-
 
         fun setCategoryName(category: ExpandableGroup<*>) {
             if (category is SimpleCategory) {
@@ -163,6 +165,18 @@ class PlansFragment : Fragment() {
             val proposal = (group as SimpleCategory).items[childIndex]
             holder?.setTextViewName(proposal.name)
             holder?.setTextViewDesc(proposal.description)
+            holder?.planView?.setOnClickListener {
+                val args = Bundle()
+                args.putString(CategoryDetailsFragment.EXTRA_PLAN_ID, proposal.id)
+
+                (context as FragmentActivity).supportFragmentManager.beginTransaction()
+                    .replace(
+                        R.id.fragment_container,
+                        CategoryDetailsFragment.newInstance(args),
+                        CategoryDetailsFragment.TAG
+                    )
+                    .addToBackStack(CategoryDetailsFragment.TAG).commit()
+            }
         }
 
         override fun onBindGroupViewHolder(holder: CategoryViewHolder?, flatPosition: Int, group: ExpandableGroup<*>) {
@@ -182,6 +196,12 @@ class PlansFragment : Fragment() {
             if (isGroupExpanded(group)) {
                 holder?.expand()
             }
+        }
+    }
+
+    companion object {
+        fun newInstance(): PlansFragment {
+            return PlansFragment()
         }
     }
 
@@ -293,9 +313,5 @@ class PlansFragment : Fragment() {
 //
 //    }
 
-    companion object {
-        fun newInstance(): PlansFragment {
-            return PlansFragment()
-        }
-    }
+
 }
