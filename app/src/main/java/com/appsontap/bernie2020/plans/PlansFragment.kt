@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation.RELATIVE_TO_SELF
 import android.view.animation.RotateAnimation
+import android.widget.LinearLayout.HORIZONTAL
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -31,6 +32,9 @@ import kotlinx.android.synthetic.main.item_plan_category.view.*
 import org.json.JSONArray
 import org.json.JSONException
 import java.util.*
+import androidx.recyclerview.widget.DividerItemDecoration
+
+
 
 
 //todo need to diff the list here so when back is pressed from a detail fragment the list doesn't go back to the top
@@ -54,6 +58,10 @@ class PlansFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "LOOK AT BACKSTACK COUNT: " + (activity as AppCompatActivity).supportFragmentManager.backStackEntryCount.toString())
+
+        val itemDecor = DividerItemDecoration(context, HORIZONTAL)
+        recycler_view.addItemDecoration(itemDecor)
+        (activity as AppCompatActivity).supportActionBar!!.setTitle(getString(R.string.fragment_title_plans))
 
         if(savedInstanceState == null) {
             viewModel

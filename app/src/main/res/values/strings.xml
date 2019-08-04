@@ -58,4 +58,10 @@
     <string name="web_title_vote">Voter Registration Info</string>
     <string name="web_title_debt_calculator">College Debt Relief Calculator</string>
 
+    <string name="fragment_title_legislation">Legislation</string>
+    <string name="fragment_title_main">Bernie 2020</string>
+    <string name="fragment_title_plan_detail">Plan Details</string>
+    <string name="fragment_title_plans">Plans</string>
+    <string name="fragment_title_web">Web Resource</string>
+
 </resources>
