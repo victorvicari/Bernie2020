@@ -8,12 +8,13 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.timeline.TimelineFragment
 import com.appsontap.bernie2020.web.WebFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main_old.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -23,16 +24,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         toolbar.setTitleTextColor(getColor(R.color.white))
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
+        // these are no longer needed with the updated appbarlayout included in the new main layout
+        // supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        // supportActionBar?.setHomeButtonEnabled(true)
+        // supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
 
         toggle = ActionBarDrawerToggle(this, drawer, toolbar, 0, 0)
 
         drawer.addDrawerListener(toggle)
+        toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
+        setFragmentToggleBetweenUpAndHamburger()
+        Log.d(TAG, "LOOK AT BACKSTACK COUNT: " + supportFragmentManager.backStackEntryCount.toString())
 
         nav_view_bottom.setOnNavigationItemSelectedListener(onBottomNavigationSelectedListener)
+
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -125,7 +131,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.bot_nav_plans -> {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, PlansFragment.newInstance(),
-                        PlansFragment.TAG).addToBackStack(PlansFragment.TAG).commit()
+                        PlansFragment.TAG)
+                    .commit()
                 return@OnNavigationItemSelectedListener true
             }
             // TODO add home fragment functionality
@@ -149,6 +156,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).commit()
         }
+    }
+
+    private fun setFragmentToggleBetweenUpAndHamburger() {
+        supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener {
+            override fun onBackStackChanged() {
+                Log.d(TAG, "BACKSTACK CHANGED")
+
+                if (supportFragmentManager.backStackEntryCount > 0) {
+                    toggle.setDrawerIndicatorEnabled(false)
+                    supportActionBar!!.setDisplayHomeAsUpEnabled(true)// show back button
+                    toolbar.setNavigationOnClickListener { onBackPressed() }
+                    Log.d(TAG, "BACKSTACK > 0")
+                } else {
+                    //show hamburger
+                    Log.d(TAG, "onBackStackChanged: HERE")
+                    toggle.setDrawerIndicatorEnabled(true)
+                    supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+                    toggle.syncState()
+                    toolbar.setNavigationOnClickListener { drawer.openDrawer(GravityCompat.START) }
+                }
+            }
+        })
     }
 
 

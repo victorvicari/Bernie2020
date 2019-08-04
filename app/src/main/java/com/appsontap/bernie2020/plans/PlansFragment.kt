@@ -53,6 +53,7 @@ class PlansFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "LOOK AT BACKSTACK COUNT: " + (activity as AppCompatActivity).supportFragmentManager.backStackEntryCount.toString())
 
         if(savedInstanceState == null) {
             viewModel
@@ -175,7 +176,8 @@ class PlansFragment : Fragment() {
                         CategoryDetailsFragment.newInstance(args),
                         CategoryDetailsFragment.TAG
                     )
-                    .addToBackStack(CategoryDetailsFragment.TAG).commit()
+                    .addToBackStack(CategoryDetailsFragment.TAG)
+                    .commit()
             }
         }
 
@@ -190,7 +192,8 @@ class PlansFragment : Fragment() {
                         CategoryDetailsFragment.newInstance(args),
                         CategoryDetailsFragment.TAG
                     )
-                    .addToBackStack(CategoryDetailsFragment.TAG).commit()
+                    .addToBackStack(CategoryDetailsFragment.TAG)
+                    .commit()
             }
 
             if (isGroupExpanded(group)) {
