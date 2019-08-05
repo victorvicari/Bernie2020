@@ -257,11 +257,10 @@ class PlansFragment : Fragment() {
                     .commit()
             }
             // favorites pre-checking and interaction
-            if(favorites.contains(proposal.id)) {
-                holder?.planView?.checkbox_proposal_item_favorite?.isChecked = true
-            }
-            holder?.planView?.checkbox_proposal_item_favorite?.setOnCheckedChangeListener { compoundButton, checked ->
-                if(checked) {
+            holder?.planView?.checkbox_proposal_item_favorite?.isChecked = favorites.contains(proposal.id)
+
+            holder?.planView?.checkbox_proposal_item_favorite?.setOnClickListener {
+                if(holder?.planView?.checkbox_proposal_item_favorite?.isChecked ?: false) {
                     IOHelper.addFavoriteToSharedPrefs(context, proposal.id)
                 } else {
                     IOHelper.removeFavoriteFromSharedPrefs(context, proposal.id)
