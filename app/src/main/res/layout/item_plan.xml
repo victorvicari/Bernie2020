@@ -56,4 +56,9 @@
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="textview_proposal_item_name,imageview_proposal_item_share,imageview_proposal_item_favorite"
             tools:layout_editor_absoluteX="411dp"/>
+
+    <View style="@style/Divider"
+            app:layout_constraintTop_toBottomOf="@id/textview_proposal_item_desc"
+            app:layout_constraintStart_toStartOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

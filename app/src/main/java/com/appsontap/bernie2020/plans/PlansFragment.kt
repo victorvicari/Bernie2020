@@ -63,8 +63,6 @@ class PlansFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "LOOK AT BACKSTACK COUNT: " + (activity as AppCompatActivity).supportFragmentManager.backStackEntryCount.toString())
 
-        val itemDecor = DividerItemDecoration(context, HORIZONTAL)
-        recycler_view.addItemDecoration(itemDecor)
         (activity as AppCompatActivity).supportActionBar!!.setTitle(getString(R.string.fragment_title_plans))
 
         if(savedInstanceState == null) {

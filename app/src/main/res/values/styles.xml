@@ -34,6 +34,12 @@
         <item name="android:fontFamily">@font/lora_bold</item>
     </style>
 
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
     <dimen name="text_header_size">18sp</dimen>
     <dimen name="text_subheader_size">16sp</dimen>
 
