@@ -64,4 +64,9 @@
     <string name="fragment_title_plans">Plans</string>
     <string name="fragment_title_web">Web Resource</string>
 
+    <string name="options_menu_search">Search</string>
+    <string name="options_menu_search_hint">Search</string>
+    <string name="options_menu_open_in_browser">Open in Browser</string>
+
+
 </resources>

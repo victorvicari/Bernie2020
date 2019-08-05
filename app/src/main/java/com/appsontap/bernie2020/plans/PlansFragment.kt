@@ -1,15 +1,17 @@
 package com.appsontap.bernie2020.plans
 
+import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.Animation.RELATIVE_TO_SELF
 import android.view.animation.RotateAnimation
+import android.widget.ImageView
 import android.widget.LinearLayout.HORIZONTAL
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -44,11 +46,13 @@ class PlansFragment : Fragment() {
         ViewModelProviders.of(this).get(PlansViewModel::class.java)
     }
     private val bin = CompositeDisposable()
+    private lateinit var data : List<Any>
+    private lateinit var simpleCategories : List<SimpleCategory>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.fetchData()
-
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -70,7 +74,8 @@ class PlansFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onNext = {
-                        val simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
+                        data = it
+                        simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
                         // TODO rewrite adapters for the expandable recycler views
                         recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories as List<SimpleCategory>)
                     },
@@ -83,7 +88,7 @@ class PlansFragment : Fragment() {
     // data for the expandable recycler view must be provided in a list of SimpleCategory objects,
     // each of which contain lists of their respective Plan objects. The database pulls down a list
     // of categories followed by their plans, so this function groups those into a list of SimpleCategory
-    private fun getSimpleCategoriesFromCategoriesAndPlans(catsAndPlans: List<Any>): Any {
+    private fun getSimpleCategoriesFromCategoriesAndPlans(catsAndPlans: List<Any>): List<SimpleCategory> {
         val categories = mutableListOf<SimpleCategory>()
         var simpleCategory : SimpleCategory? = null
         var last = Any()
@@ -111,6 +116,70 @@ class PlansFragment : Fragment() {
         bin.clear()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater!!.inflate(R.menu.options_menu_searchable, menu)
+        // Associate searchable configuration with the SearchView
+        val searchManager = activity!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu!!.findItem(R.id.action_search).actionView as SearchView
+        searchView.setSearchableInfo(
+            searchManager.getSearchableInfo(activity!!.componentName)
+        )
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                val filteredResults = searchDataByKeyword(searchView.query.toString())
+                recycler_view.adapter = context?.let { PlansAdapter(it, filteredResults) }
+                recycler_view.adapter?.notifyDataSetChanged()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                if(newText.length == 0) {
+                    recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
+                    recycler_view.adapter?.notifyDataSetChanged()
+                }
+                return true
+            }
+        })
+        // listens for the back button press to reset the adapter to the full list
+        val expandListener = object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
+                recycler_view.adapter?.notifyDataSetChanged()
+                return true
+            }
+        }
+        menu.findItem(R.id.action_search).setOnActionExpandListener(expandListener)
+    }
+
+    private fun searchDataByKeyword(keyword: String): List<SimpleCategory> {
+        val categories = mutableListOf<SimpleCategory>()
+        var simpleCategory : SimpleCategory? = null
+        var last = Any()
+        for(item in data) {
+            if(item is Category) {
+                if(last is Plan && simpleCategory != null) {
+                    categories.add(simpleCategory)
+                }
+                simpleCategory = SimpleCategory(item.name!!, mutableListOf<Plan>(), item.id)
+            }
+            if(item is Plan && simpleCategory != null) {
+                if(item.name?.contains(keyword) ?: false || item.description?.contains(keyword ) ?: false)
+                simpleCategory.addPlan(item)
+            }
+            last = item
+        }
+        // check if the category is empty and remove it
+        for(i in (categories.size - 1) downTo 0) {
+            if(categories.get(i).plans.isEmpty()) {
+                categories.removeAt(i)
+            }
+        }
+        return categories
+    }
 
     internal class CategoryViewHolder(val categoryView: View) : GroupViewHolder(categoryView) {
 
