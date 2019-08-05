@@ -35,8 +35,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import java.util.*
 import androidx.recyclerview.widget.DividerItemDecoration
-
-
+import kotlin.collections.HashSet
 
 
 //todo need to diff the list here so when back is pressed from a detail fragment the list doesn't go back to the top
@@ -48,6 +47,7 @@ class PlansFragment : Fragment() {
     private val bin = CompositeDisposable()
     private lateinit var data : List<Any>
     private lateinit var simpleCategories : List<SimpleCategory>
+    private lateinit var favorites: Set<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +64,8 @@ class PlansFragment : Fragment() {
         Log.d(TAG, "LOOK AT BACKSTACK COUNT: " + (activity as AppCompatActivity).supportFragmentManager.backStackEntryCount.toString())
 
         (activity as AppCompatActivity).supportActionBar!!.setTitle(getString(R.string.fragment_title_plans))
+        favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
+        Log.d(TAG, "FAVORITES ARE: "+favorites.toString())
 
         if(savedInstanceState == null) {
             viewModel
@@ -219,7 +221,7 @@ class PlansFragment : Fragment() {
             planView.textview_proposal_item_desc.setText(desc)
         }
     }
-    internal class PlansAdapter(val context: Context, val data:List<SimpleCategory>) :
+    internal inner class PlansAdapter(val context: Context, val data:List<SimpleCategory>) :
         ExpandableRecyclerViewAdapter<CategoryViewHolder, PlanViewHolder>(data) {
 
         override fun onCreateGroupViewHolder(parent: ViewGroup?, viewType: Int): CategoryViewHolder {
@@ -241,7 +243,7 @@ class PlansFragment : Fragment() {
             val proposal = (group as SimpleCategory).items[childIndex]
             holder?.setTextViewName(proposal.name)
             holder?.setTextViewDesc(proposal.description)
-            holder?.planView?.setOnClickListener {
+            holder?.planView?.textview_proposal_item_name?.setOnClickListener {
                 val args = Bundle()
                 args.putString(CategoryDetailsFragment.EXTRA_PLAN_ID, proposal.id)
 
@@ -253,6 +255,18 @@ class PlansFragment : Fragment() {
                     )
                     .addToBackStack(CategoryDetailsFragment.TAG)
                     .commit()
+            }
+            // favorites pre-checking and interaction
+            if(favorites.contains(proposal.id)) {
+                holder?.planView?.checkbox_proposal_item_favorite?.isChecked = true
+            }
+            holder?.planView?.checkbox_proposal_item_favorite?.setOnCheckedChangeListener { compoundButton, checked ->
+                if(checked) {
+                    IOHelper.addFavoriteToSharedPrefs(context, proposal.id)
+                } else {
+                    IOHelper.removeFavoriteFromSharedPrefs(context, proposal.id)
+                }
+                favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
             }
         }
 
