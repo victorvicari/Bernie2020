@@ -16,8 +16,4 @@ open class BaseFragment : Fragment(){
             (requireActivity() as AppCompatActivity).supportActionBar?.setTitle(it)
         }
     }
-    
-    companion object{
-        val EXTRA_TITLE = "EXTRA_TITLE"
-    }
 }
