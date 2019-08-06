@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.content_main.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var toggle: ActionBarDrawerToggle
+    val BACK_STACK_ROOT_TAG = "root_fragment"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -84,12 +85,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
+        // will dump all the fragments from the stack when switching to a new top-level fragment
+        supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
         if (url != null && toolbarTitle != null) {
             val args = Bundle()
             args.putString(WebFragment.EXTRA_URL, url)
             args.putString(WebFragment.EXTRA_TITLE, toolbarTitle)
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).commit()
+                .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG)
+                .addToBackStack(BACK_STACK_ROOT_TAG)
+                .commit()
         } else {
             lateinit var fragment : Fragment
             when(item.title){
@@ -99,7 +105,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment, fragment.TAG).addToBackStack(fragment.TAG).commit()
+                .replace(R.id.fragment_container, fragment, fragment.TAG)
+                .addToBackStack(BACK_STACK_ROOT_TAG)
+                .commit()
         }
 
 
@@ -131,9 +139,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return@OnNavigationItemSelectedListener true
             }
             R.id.bot_nav_plans -> {
+                supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, PlansFragment.newInstance(),
                         PlansFragment.TAG)
+                    .addToBackStack(BACK_STACK_ROOT_TAG)
                     .commit()
                 return@OnNavigationItemSelectedListener true
             }
@@ -155,8 +165,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val args = Bundle()
             args.putString(WebFragment.EXTRA_URL, url)
             args.putString(WebFragment.EXTRA_TITLE, title)
+            supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG).commit()
+                .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG)
+                .addToBackStack(BACK_STACK_ROOT_TAG)
+                .commit()
         }
     }
 
@@ -165,7 +178,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onBackStackChanged() {
                 Log.d(TAG, "BACKSTACK CHANGED")
 
-                if (supportFragmentManager.backStackEntryCount > 0) {
+                if (supportFragmentManager.backStackEntryCount > 1) {
                     toggle.setDrawerIndicatorEnabled(false)
                     supportActionBar!!.setDisplayHomeAsUpEnabled(true)// show back button
                     toolbar.setNavigationOnClickListener { onBackPressed() }
