@@ -43,7 +43,6 @@ class PlansFragment : BaseFragment() {
     private val viewModel: PlansViewModel by lazy {
         ViewModelProviders.of(this).get(PlansViewModel::class.java)
     }
-    private val bin = CompositeDisposable()
     private lateinit var data : List<Any>
     private lateinit var simpleCategories : List<SimpleCategory>
     private lateinit var favorites: Set<String>
