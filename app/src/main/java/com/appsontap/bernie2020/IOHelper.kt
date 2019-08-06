@@ -10,12 +10,11 @@ class IOHelper {
 
 
     companion object{
-        val PREFS_FAVORITES = "favorites"
+        const val PREFS_FAVORITES = "favorites"
 
-        @JvmStatic
         fun addFavoriteToSharedPrefs(context: Context, id: String) {
             val pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-            val idSet = HashSet<String>(pref.getStringSet(PREFS_FAVORITES, null))
+            val idSet = HashSet<String>(pref.getStringSet(PREFS_FAVORITES, setOf()))
 
             if(!(idSet.contains(id))) {
                 idSet.add(id)
@@ -27,10 +26,9 @@ class IOHelper {
             editor.commit()
         }
 
-        @JvmStatic
         fun removeFavoriteFromSharedPrefs(context: Context, id: String) {
             val pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-            val idSet = HashSet<String>(pref.getStringSet(PREFS_FAVORITES, null))
+            val idSet = HashSet<String>(pref.getStringSet(PREFS_FAVORITES, setOf()))
             if(idSet.contains(id)) {
                 idSet.remove(id)
                 Log.d(TAG, idSet.toString())
@@ -40,10 +38,9 @@ class IOHelper {
             }
         }
 
-        @JvmStatic
         fun loadFavoritesFromSharedPrefs(context: Context?) : Set<String> {
             val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-            return HashSet<String>(pref?.getStringSet(PREFS_FAVORITES, null))
+            return HashSet<String>(pref?.getStringSet(PREFS_FAVORITES, setOf()))
         }
     }
 }
