@@ -24,17 +24,22 @@ import kotlinx.android.synthetic.main.timeline_year_viewholder.view.*
 import java.lang.RuntimeException
 import android.content.Intent
 import android.net.Uri
+import com.appsontap.bernie2020.BaseFragment
 
 
 /**
  * Feel the Bern
  */
-class TimelineFragment : Fragment() {
+class TimelineFragment : BaseFragment() {
 
     val viewModel: TimelineViewModel by lazy {
         ViewModelProviders.of(this).get(TimelineViewModel::class.java)
     }
-    val bin = CompositeDisposable()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        title = getString(R.string.drawer_timeline)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_timeline, container, false)
@@ -42,6 +47,7 @@ class TimelineFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel.timelineReady()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
