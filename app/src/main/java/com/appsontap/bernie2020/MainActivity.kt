@@ -85,6 +85,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
+        nav_view_bottom.setSelectedItemId(R.id.bot_nav_more)
+
+
         // will dump all the fragments from the stack when switching to a new top-level fragment
         supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
