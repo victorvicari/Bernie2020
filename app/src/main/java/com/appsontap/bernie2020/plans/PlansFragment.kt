@@ -7,12 +7,8 @@ import android.util.Log
 import android.view.*
 import android.view.animation.Animation.RELATIVE_TO_SELF
 import android.view.animation.RotateAnimation
-import android.widget.ImageView
-import android.widget.LinearLayout.HORIZONTAL
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.MenuItemCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.appsontap.bernie2020.*
@@ -25,17 +21,11 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_plans.*
 import kotlinx.android.synthetic.main.item_plan.view.*
 import kotlinx.android.synthetic.main.item_plan_category.view.*
-import org.json.JSONArray
-import org.json.JSONException
-import java.util.*
-import androidx.recyclerview.widget.DividerItemDecoration
-import kotlin.collections.HashSet
 
 
 class PlansFragment : BaseFragment() {
