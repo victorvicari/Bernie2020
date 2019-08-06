@@ -2,9 +2,11 @@ package com.appsontap.bernie2020
 
 import android.app.Application
 import android.util.Log
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 
 /**
- 
+ Feel the Bern
  */
 class App : Application() {
 
@@ -17,13 +19,6 @@ class App : Application() {
         AppDatabase.getDatabase()
             .populateDatabase(this)
     }
-
-//    override fun getSystemService(name: String): Any? {
-//        if(name == Constants.FRAGMENT_MANAGER){
-//            return 
-//        }
-//        return super.getSystemService(name)
-//    }
 
     companion object {
         lateinit var INSTANCE: App
