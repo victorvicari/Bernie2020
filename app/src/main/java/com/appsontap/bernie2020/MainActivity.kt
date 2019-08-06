@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import com.appsontap.bernie2020.legislation.LegislationFragment
 import androidx.fragment.app.FragmentManager
 import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.timeline.TimelineFragment
@@ -38,7 +39,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d(TAG, "LOOK AT BACKSTACK COUNT: " + supportFragmentManager.backStackEntryCount.toString())
 
         nav_view_bottom.setOnNavigationItemSelectedListener(onBottomNavigationSelectedListener)
-
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -80,7 +80,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 url = getString(R.string.how_to_vote_url)
                 toolbarTitle = getString(R.string.web_title_vote)
             }
-
         }
 
         if (url != null && toolbarTitle != null) {
@@ -94,6 +93,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             when(item.title){
                 getString(R.string.plans) -> fragment = PlansFragment.newInstance()
                 getString(R.string.timeline) -> fragment = TimelineFragment.newInstance()
+                getString(R.string.drawer_legislation) -> fragment = LegislationFragment.newInstance()
             }
             
             supportFragmentManager.beginTransaction()
@@ -185,4 +185,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //        if(name == )
 //        return super.getSystemService(name)
 //    }
+
 }

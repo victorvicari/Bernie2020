@@ -1,7 +1,7 @@
 package com.appsontap.bernie2020.timeline;
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 public enum ViewType {
     YEAR, IMAGE, TEXT

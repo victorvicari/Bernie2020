@@ -1,7 +1,7 @@
 package com.appsontap.bernie2020
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 class Constants{
     companion object{

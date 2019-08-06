@@ -38,8 +38,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import kotlin.collections.HashSet
 
 
-//todo need to diff the list here so when back is pressed from a detail fragment the list doesn't go back to the top
-class PlansFragment : Fragment() {
+class PlansFragment : BaseFragment() {
 
     private val viewModel: PlansViewModel by lazy {
         ViewModelProviders.of(this).get(PlansViewModel::class.java)
@@ -51,6 +50,7 @@ class PlansFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        title = getString(R.string.title_plans)
         viewModel.fetchData()
         setHasOptionsMenu(true)
     }
@@ -107,12 +107,8 @@ class PlansFragment : Fragment() {
         return categories
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroyView() {
+        super.onDestroyView()
         bin.clear()
     }
 
@@ -288,6 +284,7 @@ class PlansFragment : Fragment() {
                 holder?.expand()
             }
         }
+
     }
 
     companion object {

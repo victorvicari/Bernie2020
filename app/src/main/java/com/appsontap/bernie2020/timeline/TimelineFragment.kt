@@ -27,7 +27,7 @@ import android.net.Uri
 
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * Feel the Bern
  */
 class TimelineFragment : Fragment() {
 
