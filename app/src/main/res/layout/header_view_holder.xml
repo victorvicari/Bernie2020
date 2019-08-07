@@ -10,6 +10,7 @@
               android:layout_width="wrap_content"
               android:textSize="24sp"
               android:layout_marginBottom="32dp"
+              style="@style/Header"
     />
     <ImageView android:id="@+id/header_image_view"
                android:layout_height="80dp"
