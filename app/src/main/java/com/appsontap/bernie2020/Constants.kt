@@ -8,5 +8,7 @@ class Constants{
         val FRAGMENT_MANAGER = "_fragment_manager_"
         val CATEGORY_KEY = "key_category"
         val PROPOSALS_KEY = "key_proposals"
+        val BACK_STACK_ROOT_TAG = "root_fragment"
+
     }
 }

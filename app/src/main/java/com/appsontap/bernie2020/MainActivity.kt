@@ -10,6 +10,8 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.appsontap.bernie2020.legislation.LegislationFragment
 import androidx.fragment.app.FragmentManager
+import com.appsontap.bernie2020.Constants.Companion.BACK_STACK_ROOT_TAG
+import com.appsontap.bernie2020.home.HomeFragment
 import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.timeline.TimelineFragment
 import com.appsontap.bernie2020.web.WebFragment
@@ -22,17 +24,11 @@ import kotlinx.android.synthetic.main.content_main.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var toggle: ActionBarDrawerToggle
-    val BACK_STACK_ROOT_TAG = "root_fragment"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         toolbar.setTitleTextColor(getColor(R.color.white))
         setSupportActionBar(toolbar)
-        // these are no longer needed with the updated appbarlayout included in the new main layout
-        // supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        // supportActionBar?.setHomeButtonEnabled(true)
-        // supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
-
         toggle = ActionBarDrawerToggle(this, drawer, toolbar, 0, 0)
 
         drawer.addDrawerListener(toggle)
@@ -42,6 +38,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d(TAG, "LOOK AT BACKSTACK COUNT: " + supportFragmentManager.backStackEntryCount.toString())
 
         nav_view_bottom.setOnNavigationItemSelectedListener(onBottomNavigationSelectedListener)
+        
+        if(supportFragmentManager.backStackEntryCount == 0){
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_container, HomeFragment.newInstance(), HomeFragment.TAG)
+                .commit()
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -129,6 +132,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val onBottomNavigationSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {
 
         when(it.itemId) {
+            R.id.bot_nav_home -> {
+                supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.beginTransaction()
+                    .replace(
+                        R.id.fragment_container, HomeFragment.newInstance(),
+                        HomeFragment.TAG
+                    )
+                    .addToBackStack(BACK_STACK_ROOT_TAG)
+                    .commit()
+                return@OnNavigationItemSelectedListener true 
+            }
             R.id.bot_nav_events_map -> {
                 loadWebFragment(getString(R.string.events_url), getString(R.string.web_title_events))
                 return@OnNavigationItemSelectedListener true
@@ -182,14 +196,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Log.d(TAG, "BACKSTACK CHANGED")
 
                 if (supportFragmentManager.backStackEntryCount > 1) {
-                    toggle.setDrawerIndicatorEnabled(false)
+                    toggle.isDrawerIndicatorEnabled = false
                     supportActionBar!!.setDisplayHomeAsUpEnabled(true)// show back button
                     toolbar.setNavigationOnClickListener { onBackPressed() }
                     Log.d(TAG, "BACKSTACK > 0")
                 } else {
                     //show hamburger
                     Log.d(TAG, "onBackStackChanged: HERE")
-                    toggle.setDrawerIndicatorEnabled(true)
+                    toggle.isDrawerIndicatorEnabled = true
                     supportActionBar!!.setDisplayHomeAsUpEnabled(false)
                     toggle.syncState()
                     toolbar.setNavigationOnClickListener { drawer.openDrawer(GravityCompat.START) }
@@ -197,11 +211,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
     }
-
-
-//    override fun getSystemService(name: String): Any? {
-//        if(name == )
-//        return super.getSystemService(name)
-//    }
 
 }
