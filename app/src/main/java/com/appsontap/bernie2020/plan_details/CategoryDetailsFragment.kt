@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import com.appsontap.bernie2020.Constants
 import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.TAG
 import com.appsontap.bernie2020.legislation_details.LegislationDetailsFragment
@@ -23,7 +22,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.title_view_holder.view.*
 import kotlinx.android.synthetic.main.fragment_plan_details.*
 import kotlinx.android.synthetic.main.header_view_holder.view.*
-import kotlinx.android.synthetic.main.item_view_holder.view.*
+import kotlinx.android.synthetic.main.item_legislation.view.*
 import kotlinx.android.synthetic.main.quote_view_holder.view.*
 import java.lang.RuntimeException
 
@@ -108,9 +107,9 @@ class CategoryDetailsFragment : Fragment() {
                         false
                     )
                 )
-                R.layout.item_view_holder -> return ItemViewHolder(
+                R.layout.item_legislation -> return ItemViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_view_holder,
+                        R.layout.item_legislation,
                         parent,
                         false
                     )
@@ -160,7 +159,7 @@ class CategoryDetailsFragment : Fragment() {
             when(uiState.items[position]){
                 is Quote -> return R.layout.quote_view_holder
             }
-            return R.layout.item_view_holder
+            return R.layout.item_legislation
         }
 
 

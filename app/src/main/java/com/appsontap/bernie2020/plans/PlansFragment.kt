@@ -166,37 +166,6 @@ class PlansFragment : BaseFragment() {
         return categories
     }
 
-    internal class CategoryViewHolder(val categoryView: View) : GroupViewHolder(categoryView) {
-
-        fun setCategoryName(category: ExpandableGroup<*>) {
-            if (category is SimpleCategory) {
-                categoryView.textview_proposal_category_item_name.setText(category.name)
-            }
-        }
-
-        override fun expand() {
-            animateExpand()
-        }
-
-        override fun collapse() {
-            animateCollapse()
-        }
-
-        private fun animateExpand() {
-            val rotate = RotateAnimation(360f, 180f, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f)
-            rotate.duration = 300
-            rotate.fillAfter = true
-            categoryView.imageview_proposal_category_item_arrow.animation = rotate
-        }
-
-        private fun animateCollapse() {
-            val rotate = RotateAnimation(180f, 360f, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f)
-            rotate.duration = 300
-            rotate.fillAfter = true
-            categoryView.imageview_proposal_category_item_arrow.animation = rotate
-        }
-    }
-
     internal class PlanViewHolder(val planView: View) : ChildViewHolder(planView) {
         fun setTextViewName(name: String?) {
             planView.textview_proposal_item_name.setText(name)

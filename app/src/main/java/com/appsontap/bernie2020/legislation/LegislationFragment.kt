@@ -6,27 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.appsontap.bernie2020.BaseFragment
-import com.appsontap.bernie2020.R
-import com.appsontap.bernie2020.TAG
-import com.appsontap.bernie2020.into
+import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Legislation
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_legislation.*
-import kotlinx.android.synthetic.main.item_view_holder.view.*
+import kotlinx.android.synthetic.main.item_legislation.*
+import kotlinx.android.synthetic.main.item_legislation.view.*
+import kotlinx.android.synthetic.main.item_plan.*
+import kotlinx.android.synthetic.main.item_plan.view.*
 
 /**
  * Feel the Bern
  */
 class LegislationFragment : BaseFragment(){
     val repo = LegislationRepo()
-    
+    private lateinit var favorites: Set<String>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         title = getString(R.string.drawer_legislation)
+        favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,7 +64,7 @@ class LegislationFragment : BaseFragment(){
     
     inner class LegislationAdapter(val items : List<Legislation>) : RecyclerView.Adapter<LegislationViewHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LegislationViewHolder {
-            return LegislationViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_view_holder, parent, false))
+            return LegislationViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_legislation, parent, false))
         }
 
         override fun getItemCount(): Int {
@@ -82,7 +84,17 @@ class LegislationFragment : BaseFragment(){
         }
         fun bind(legislation: Legislation){
             itemView.textview_legislation_name.text = legislation.name
+            itemView.checkbox_legislation_favorite?.isChecked = favorites.contains(legislation.id)
+
+            itemView.checkbox_legislation_favorite?.setOnClickListener {
+                if(itemView.checkbox_legislation_favorite.isChecked) {
+                    context?.let { theContext -> IOHelper.addFavoriteToSharedPrefs(theContext, legislation.id) }
+                } else {
+                    context?.let { theContext -> IOHelper.removeFavoriteFromSharedPrefs(theContext, legislation.id) }
+                }
+                favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
+                Log.d(TAG, "FAVORITES: $favorites")
+            }
         }
     }
-    
 }
