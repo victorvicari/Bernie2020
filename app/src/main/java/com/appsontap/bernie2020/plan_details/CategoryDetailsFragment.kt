@@ -18,6 +18,7 @@ import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.Quote
+import com.appsontap.bernie2020.plans.PlanViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -35,6 +36,7 @@ import java.lang.RuntimeException
 class CategoryDetailsFragment : Fragment() {
     var categoryId: String? = null
     var planId: String? = null
+    lateinit var favorites: Set<String>
     private val viewModel: CategoryDetailsViewModel by lazy {
         ViewModelProviders.of(this).get(CategoryDetailsViewModel::class.java)
     }
@@ -42,6 +44,7 @@ class CategoryDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
         arguments?.let {
             it.run {
                 categoryId = getString(EXTRA_CATEGORY_ID)
@@ -132,6 +135,13 @@ class CategoryDetailsFragment : Fragment() {
                         false
                     )
                 )
+                R.layout.item_plan -> return PlanViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_plan,
+                        parent,
+                        false
+                    )
+                )
             }
 
             throw RuntimeException("Invalid view type")
@@ -148,7 +158,6 @@ class CategoryDetailsFragment : Fragment() {
                 is ItemViewHolder -> {
                     //this is just an easy way to cast all these things
                     when (val item = uiState.items[position]) {
-                        is Plan -> holder.bind(item.name)
                         is Category -> holder.bind(item.name)
                     }
                 }
@@ -162,6 +171,16 @@ class CategoryDetailsFragment : Fragment() {
                         is Quote -> holder.bind(item.quote)
                     }
                 }
+                is PlanViewHolder -> {
+                    when (val item = uiState.items[position]) {
+                        is Plan -> {
+                            holder.setTextViewName(item.name)
+                            context?.let { holder.setOnClickListener(it, item) }
+                            context?.let { holder.setupFavoriteCheckbox(it, item.id, favorites) }
+                        }
+                    }
+                }
+
             }
         }
 
@@ -174,6 +193,7 @@ class CategoryDetailsFragment : Fragment() {
             when(uiState.items[position]){
                 is Quote -> return R.layout.quote_view_holder
                 is Legislation -> return R.layout.item_legislation
+                is Plan -> return R.layout.item_plan
             }
             return R.layout.item_generic
         }

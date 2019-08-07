@@ -5,8 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.animation.Animation.RELATIVE_TO_SELF
-import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
@@ -18,13 +16,10 @@ import com.appsontap.bernie2020.models.SimpleCategory
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
-import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
-import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_plans.*
-import kotlinx.android.synthetic.main.item_plan.view.*
 import kotlinx.android.synthetic.main.item_plan_category.view.*
 
 
@@ -33,8 +28,8 @@ class PlansFragment : BaseFragment() {
     private val viewModel: PlansViewModel by lazy {
         ViewModelProviders.of(this).get(PlansViewModel::class.java)
     }
-    private lateinit var data : List<Any>
-    private lateinit var simpleCategories : List<SimpleCategory>
+    private lateinit var data: List<Any>
+    private lateinit var simpleCategories: List<SimpleCategory>
     private lateinit var favorites: Set<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,13 +45,16 @@ class PlansFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "LOOK AT BACKSTACK COUNT: " + (activity as AppCompatActivity).supportFragmentManager.backStackEntryCount.toString())
+        Log.d(
+            TAG,
+            "LOOK AT BACKSTACK COUNT: " + (activity as AppCompatActivity).supportFragmentManager.backStackEntryCount.toString()
+        )
 
         (activity as AppCompatActivity).supportActionBar!!.setTitle(getString(R.string.fragment_title_plans))
         favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
         Log.d(TAG, "FAVORITES ARE: $favorites")
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             viewModel
                 .dataEmitter
                 .subscribeOn(Schedulers.io())
@@ -74,21 +72,22 @@ class PlansFragment : BaseFragment() {
                 ).into(bin)
         }
     }
+
     // data for the expandable recycler view must be provided in a list of SimpleCategory objects,
     // each of which contain lists of their respective Plan objects. The database pulls down a list
     // of categories followed by their plans, so this function groups those into a list of SimpleCategory
     private fun getSimpleCategoriesFromCategoriesAndPlans(catsAndPlans: List<Any>): List<SimpleCategory> {
         val categories = mutableListOf<SimpleCategory>()
-        var simpleCategory : SimpleCategory? = null
+        var simpleCategory: SimpleCategory? = null
         var last = Any()
-        for(item in catsAndPlans) {
-            if(item is Category) {
-                if(last is Plan && simpleCategory != null) {
+        for (item in catsAndPlans) {
+            if (item is Category) {
+                if (last is Plan && simpleCategory != null) {
                     categories.add(simpleCategory)
                 }
                 simpleCategory = SimpleCategory(item.name!!, mutableListOf(), item.id)
             }
-            if(item is Plan && simpleCategory != null) {
+            if (item is Plan && simpleCategory != null) {
                 simpleCategory.addPlan(item)
             }
             last = item
@@ -118,7 +117,7 @@ class PlansFragment : BaseFragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if(newText.length == 0) {
+                if (newText.length == 0) {
                     recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
                     recycler_view.adapter?.notifyDataSetChanged()
                 }
@@ -142,31 +141,31 @@ class PlansFragment : BaseFragment() {
 
     private fun searchDataByKeyword(keyword: String): List<SimpleCategory> {
         val categories = mutableListOf<SimpleCategory>()
-        var simpleCategory : SimpleCategory? = null
+        var simpleCategory: SimpleCategory? = null
         var last = Any()
-        for(item in data) {
-            if(item is Category) {
-                if(last is Plan && simpleCategory != null) {
+        for (item in data) {
+            if (item is Category) {
+                if (last is Plan && simpleCategory != null) {
                     categories.add(simpleCategory)
                 }
                 simpleCategory = SimpleCategory(item.name!!, mutableListOf(), item.id)
             }
-            if(item is Plan && simpleCategory != null) {
-                if(item.name?.contains(keyword) == true || item.description?.contains(keyword ) == true)
-                simpleCategory.addPlan(item)
+            if (item is Plan && simpleCategory != null) {
+                if (item.name?.contains(keyword) == true || item.description?.contains(keyword) == true)
+                    simpleCategory.addPlan(item)
             }
             last = item
         }
         // check if the category is empty and remove it
-        for(i in (categories.size - 1) downTo 0) {
-            if(categories.get(i).plans.isEmpty()) {
+        for (i in (categories.size - 1) downTo 0) {
+            if (categories.get(i).plans.isEmpty()) {
                 categories.removeAt(i)
             }
         }
         return categories
     }
 
-    internal inner class PlansAdapter(val context: Context, val data:List<SimpleCategory>) :
+    internal inner class PlansAdapter(val context: Context, val data: List<SimpleCategory>) :
         ExpandableRecyclerViewAdapter<CategoryViewHolder, PlanViewHolder>(data) {
 
         override fun onCreateGroupViewHolder(parent: ViewGroup?, viewType: Int): CategoryViewHolder {
@@ -188,31 +187,11 @@ class PlansFragment : BaseFragment() {
             val proposal = (group as SimpleCategory).items[childIndex]
             holder?.setTextViewName(proposal.name)
             holder?.setTextViewDesc(proposal.description)
-            holder?.planView?.textview_proposal_item_name?.setOnClickListener {
-                val args = Bundle()
-                args.putString(CategoryDetailsFragment.EXTRA_PLAN_ID, proposal.id)
-
-                (context as FragmentActivity).supportFragmentManager.beginTransaction()
-                    .replace(
-                        R.id.fragment_container,
-                        CategoryDetailsFragment.newInstance(args),
-                        CategoryDetailsFragment.TAG
-                    )
-                    .addToBackStack(CategoryDetailsFragment.TAG)
-                    .commit()
-            }
-            // favorites pre-checking and interaction
-            holder?.planView?.checkbox_plan_favorite?.isChecked = favorites.contains(proposal.id)
-
-            holder?.planView?.checkbox_plan_favorite?.setOnClickListener {
-                if(holder?.planView?.checkbox_plan_favorite?.isChecked ?: false) {
-                    IOHelper.addFavoriteToSharedPrefs(context, proposal.id)
-                } else {
-                    IOHelper.removeFavoriteFromSharedPrefs(context, proposal.id)
-                }
-                favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
-            }
+            holder?.setOnClickListener(context, proposal)
+            holder?.setupFavoriteCheckbox(context, proposal.id, favorites)
+            favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
         }
+
 
         override fun onBindGroupViewHolder(holder: CategoryViewHolder?, flatPosition: Int, group: ExpandableGroup<*>) {
             holder?.setCategoryName(group)
