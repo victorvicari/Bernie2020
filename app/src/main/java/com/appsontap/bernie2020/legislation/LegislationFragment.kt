@@ -72,29 +72,9 @@ class LegislationFragment : BaseFragment(){
         }
 
         override fun onBindViewHolder(holder: LegislationViewHolder, position: Int) {
-            holder.bind(items[position])
+            context?.let { holder.bind(items[position], it, IOHelper.loadFavoritesFromSharedPrefs(it)) }
         }
     }
     
-    inner class LegislationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        init{
-            itemView.setOnClickListener { 
-                
-            }
-        }
-        fun bind(legislation: Legislation){
-            itemView.textview_legislation_name.text = legislation.name
-            itemView.checkbox_legislation_favorite?.isChecked = favorites.contains(legislation.id)
 
-            itemView.checkbox_legislation_favorite?.setOnClickListener {
-                if(itemView.checkbox_legislation_favorite.isChecked) {
-                    context?.let { theContext -> IOHelper.addFavoriteToSharedPrefs(theContext, legislation.id) }
-                } else {
-                    context?.let { theContext -> IOHelper.removeFavoriteFromSharedPrefs(theContext, legislation.id) }
-                }
-                favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
-                Log.d(TAG, "FAVORITES: $favorites")
-            }
-        }
-    }
 }

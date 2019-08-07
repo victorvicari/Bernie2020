@@ -9,8 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import com.appsontap.bernie2020.IOHelper
 import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.TAG
+import com.appsontap.bernie2020.legislation.LegislationViewHolder
 import com.appsontap.bernie2020.legislation_details.LegislationDetailsFragment
 import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Legislation
@@ -22,6 +24,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.title_view_holder.view.*
 import kotlinx.android.synthetic.main.fragment_plan_details.*
 import kotlinx.android.synthetic.main.header_view_holder.view.*
+import kotlinx.android.synthetic.main.item_generic.view.*
 import kotlinx.android.synthetic.main.item_legislation.view.*
 import kotlinx.android.synthetic.main.quote_view_holder.view.*
 import java.lang.RuntimeException
@@ -88,10 +91,10 @@ class CategoryDetailsFragment : Fragment() {
 
 
     inner class ProposalDetailAdapter(val uiState: UiState.ListReady) :
-        RecyclerView.Adapter<ProposalDetailAdapter.BaseViewHolder>() {
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             when (viewType) {
                 R.layout.header_view_holder -> return HeaderViewHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -107,9 +110,17 @@ class CategoryDetailsFragment : Fragment() {
                         false
                     )
                 )
-                R.layout.item_legislation -> return ItemViewHolder(
+                R.layout.item_legislation -> return LegislationViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_legislation,
+                        parent,
+                        false
+                    )
+                )
+                // temporary placeholder for non-specific items
+                R.layout.item_generic -> return ItemViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_generic,
                         parent,
                         false
                     )
@@ -130,7 +141,7 @@ class CategoryDetailsFragment : Fragment() {
             return uiState.items.size
         }
 
-        override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             when (holder) {
                 is HeaderViewHolder -> holder.bind(uiState.items[position] as String)
                 is TitleViewHolder -> holder.bind(uiState.items[position] as String)
@@ -138,8 +149,12 @@ class CategoryDetailsFragment : Fragment() {
                     //this is just an easy way to cast all these things
                     when (val item = uiState.items[position]) {
                         is Plan -> holder.bind(item.name)
-                        is Legislation -> holder.bind(item.name)
                         is Category -> holder.bind(item.name)
+                    }
+                }
+                is LegislationViewHolder -> {
+                    when (val item = uiState.items[position]) {
+                        is Legislation -> context?.let { holder.bind(item, it, IOHelper.loadFavoritesFromSharedPrefs(it)) }
                     }
                 }
                 is QuoteViewHolder -> {
@@ -158,8 +173,9 @@ class CategoryDetailsFragment : Fragment() {
 
             when(uiState.items[position]){
                 is Quote -> return R.layout.quote_view_holder
+                is Legislation -> return R.layout.item_legislation
             }
-            return R.layout.item_legislation
+            return R.layout.item_generic
         }
 
 
@@ -203,7 +219,7 @@ class CategoryDetailsFragment : Fragment() {
             }
             fun bind(description: String?){
                 description?.let { 
-                    itemView.textview_legislation_name.text = it
+                    itemView.item_name.text = it
                 }
             }
         }
