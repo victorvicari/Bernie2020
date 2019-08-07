@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.R
@@ -82,7 +81,7 @@ class LegislationFragment : BaseFragment(){
             }
         }
         fun bind(legislation: Legislation){
-            itemView.plan_text.text = legislation.name
+            itemView.textview_legislation_name.text = legislation.name
         }
     }
     

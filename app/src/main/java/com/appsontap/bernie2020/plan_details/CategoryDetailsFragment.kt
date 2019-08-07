@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import com.appsontap.bernie2020.Constants
 import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.TAG
 import com.appsontap.bernie2020.legislation_details.LegislationDetailsFragment
@@ -158,7 +157,7 @@ class CategoryDetailsFragment : Fragment() {
             }
             fun bind(description: String?){
                 description?.let { 
-                    itemView.plan_text.text = it
+                    itemView.textview_legislation_name.text = it
                 }
             }
         }
