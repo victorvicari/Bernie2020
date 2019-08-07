@@ -242,10 +242,10 @@ class PlansFragment : BaseFragment() {
                     .commit()
             }
             // favorites pre-checking and interaction
-            holder?.planView?.checkbox_legislation_favorite?.isChecked = favorites.contains(proposal.id)
+            holder?.planView?.checkbox_plan_favorite?.isChecked = favorites.contains(proposal.id)
 
-            holder?.planView?.checkbox_legislation_favorite?.setOnClickListener {
-                if(holder?.planView?.checkbox_legislation_favorite?.isChecked ?: false) {
+            holder?.planView?.checkbox_plan_favorite?.setOnClickListener {
+                if(holder?.planView?.checkbox_plan_favorite?.isChecked ?: false) {
                     IOHelper.addFavoriteToSharedPrefs(context, proposal.id)
                 } else {
                     IOHelper.removeFavoriteFromSharedPrefs(context, proposal.id)
