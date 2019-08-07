@@ -166,15 +166,6 @@ class PlansFragment : BaseFragment() {
         return categories
     }
 
-    internal class PlanViewHolder(val planView: View) : ChildViewHolder(planView) {
-        fun setTextViewName(name: String?) {
-            planView.textview_proposal_item_name.setText(name)
-        }
-
-        fun setTextViewDesc(desc: String?) {
-            planView.textview_proposal_item_desc.setText(desc)
-        }
-    }
     internal inner class PlansAdapter(val context: Context, val data:List<SimpleCategory>) :
         ExpandableRecyclerViewAdapter<CategoryViewHolder, PlanViewHolder>(data) {
 
