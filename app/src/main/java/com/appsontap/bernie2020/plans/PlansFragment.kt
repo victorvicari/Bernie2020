@@ -117,7 +117,7 @@ class PlansFragment : BaseFragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if (newText.length == 0) {
+                if (newText.length == 0 && recycler_view != null) {
                     recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
                     recycler_view.adapter?.notifyDataSetChanged()
                 }
