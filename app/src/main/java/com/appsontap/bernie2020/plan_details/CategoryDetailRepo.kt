@@ -74,8 +74,10 @@ class CategoryDetailRepo {
                 AppDatabase.getDatabase().getPlansForCategory(it)?.toObservable()
             }
             .map {
-                result.add(App.get().resources.getString(R.string.plans_and_proposals))
-                titleIndexes.add(result.size - 1)
+                if(it.isNotEmpty()) {
+                    result.add(App.get().resources.getString(R.string.plans_and_proposals))
+                    titleIndexes.add(result.size - 1)
+                }
                 it.forEach { plan ->
                     result.add(plan)
                 }
@@ -84,18 +86,22 @@ class CategoryDetailRepo {
             }.flatMap {
                 AppDatabase.getDatabase().getLegislationForCategory(it).toObservable()
             }.map {
-                result.add(App.get().resources.getString(R.string.detailed_plans_and_bills))
-                titleIndexes.add(result.size - 1)
-                it.forEach { legislation ->
-                    result.add(legislation)
+                if(it.isNotEmpty()) {
+                    result.add(App.get().resources.getString(R.string.detailed_plans_and_bills))
+                    titleIndexes.add(result.size - 1)
                 }
+                    it.forEach { legislation ->
+                        result.add(legislation)
+                    }
             }.flatMap {
                 AppDatabase.getDatabase().categoryDao().getCategoryForId(categoryId).toObservable()
             }.flatMap {
                 AppDatabase.getDatabase().getQuotesForCategory(it).toObservable()
             }.map {
-                result.add(App.get().resources.getString(R.string.statements))
-                titleIndexes.add(result.size - 1)
+                if(it.isNotEmpty()) {
+                    result.add(App.get().resources.getString(R.string.statements))
+                    titleIndexes.add(result.size - 1)
+                }
                 it.forEach { quote ->
                     result.add(quote)
                 }

@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import io.reactivex.Observable
 import io.reactivex.Single
 
 /**
@@ -17,4 +16,7 @@ interface TimelineItemDao{
     
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insert(item: TimelineItem)
+    
+    @Query("SELECT * FROM timeline_table WHERE id IN (:ids)")
+    fun getTimelineItemsForIds(ids: List<String>) : Single<List<TimelineItem>>
 }

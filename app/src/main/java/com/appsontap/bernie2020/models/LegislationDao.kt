@@ -17,6 +17,9 @@ interface LegislationDao {
     @Query("SELECT * FROM legislation_table WHERE id = :legislationId")
     fun getLegislation(legislationId: String) : Single<Legislation>
     
+    @Query("SELECT * FROM legislation_table WHERE id IN (:ids)")
+    fun getLegislationsForIds(ids: List<String>) : Single<List<Legislation>>
+    
     @Insert (onConflict =  OnConflictStrategy.ABORT)
     fun insert(legislation: Legislation)
 }

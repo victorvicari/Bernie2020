@@ -20,6 +20,10 @@
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">@dimen/text_subheader_size</item>
     </style>
+    
+    <style name="quote" parent="AppTheme">
+         <item name="android:fontFamily">@font/sourcesanspro_italic</item>
+    </style>
 
     <style name="SubheaderBlue" parent="AppTheme">
         <item name="android:fontFamily">@font/lato_black</item>

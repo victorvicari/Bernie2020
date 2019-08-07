@@ -54,7 +54,7 @@ class PlansFragment : BaseFragment() {
 
         (activity as AppCompatActivity).supportActionBar!!.setTitle(getString(R.string.fragment_title_plans))
         favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
-        Log.d(TAG, "FAVORITES ARE: "+favorites.toString())
+        Log.d(TAG, "FAVORITES ARE: $favorites")
 
         if(savedInstanceState == null) {
             viewModel
@@ -86,7 +86,7 @@ class PlansFragment : BaseFragment() {
                 if(last is Plan && simpleCategory != null) {
                     categories.add(simpleCategory)
                 }
-                simpleCategory = SimpleCategory(item.name!!, mutableListOf<Plan>(), item.id)
+                simpleCategory = SimpleCategory(item.name!!, mutableListOf(), item.id)
             }
             if(item is Plan && simpleCategory != null) {
                 simpleCategory.addPlan(item)
@@ -149,10 +149,10 @@ class PlansFragment : BaseFragment() {
                 if(last is Plan && simpleCategory != null) {
                     categories.add(simpleCategory)
                 }
-                simpleCategory = SimpleCategory(item.name!!, mutableListOf<Plan>(), item.id)
+                simpleCategory = SimpleCategory(item.name!!, mutableListOf(), item.id)
             }
             if(item is Plan && simpleCategory != null) {
-                if(item.name?.contains(keyword) ?: false || item.description?.contains(keyword ) ?: false)
+                if(item.name?.contains(keyword) == true || item.description?.contains(keyword ) == true)
                 simpleCategory.addPlan(item)
             }
             last = item
@@ -186,14 +186,14 @@ class PlansFragment : BaseFragment() {
             val rotate = RotateAnimation(360f, 180f, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f)
             rotate.duration = 300
             rotate.fillAfter = true
-            categoryView.imageview_proposal_category_item_arrow.setAnimation(rotate)
+            categoryView.imageview_proposal_category_item_arrow.animation = rotate
         }
 
         private fun animateCollapse() {
             val rotate = RotateAnimation(180f, 360f, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f)
             rotate.duration = 300
             rotate.fillAfter = true
-            categoryView.imageview_proposal_category_item_arrow.setAnimation(rotate)
+            categoryView.imageview_proposal_category_item_arrow.animation = rotate
         }
     }
 
