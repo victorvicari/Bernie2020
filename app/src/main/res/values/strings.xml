@@ -74,6 +74,8 @@
     <string name="upcoming_events">Upcoming \n Events</string>
     <string name="volunteer_with_bernie">Volunteer with Bernie</string>
     <string name="donate_to_bernie">Donate to Bernie</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="drawer_favorites">Favorites</string>
 
 
 </resources>

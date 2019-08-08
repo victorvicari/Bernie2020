@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.appsontap.bernie2020.legislation.LegislationFragment
 import androidx.fragment.app.FragmentManager
 import com.appsontap.bernie2020.Constants.Companion.BACK_STACK_ROOT_TAG
+import com.appsontap.bernie2020.favorites.FavoritesFragment
 import com.appsontap.bernie2020.home.HomeFragment
 import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.timeline.TimelineFragment
@@ -109,6 +110,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 getString(R.string.plans) -> fragment = PlansFragment.newInstance()
                 getString(R.string.timeline) -> fragment = TimelineFragment.newInstance()
                 getString(R.string.drawer_legislation) -> fragment = LegislationFragment.newInstance()
+                getString(R.string.drawer_favorites) -> fragment = FavoritesFragment.newInstance()
+
             }
             replaceFragment(fragment)
         }
@@ -165,8 +168,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .commit()
                 return@OnNavigationItemSelectedListener true
             }
-            // TODO add home fragment functionality
-            else -> return@OnNavigationItemSelectedListener true
+            else -> return@OnNavigationItemSelectedListener false
         }
     }
 

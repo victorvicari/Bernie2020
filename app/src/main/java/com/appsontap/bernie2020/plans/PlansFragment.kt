@@ -63,7 +63,6 @@ class PlansFragment : BaseFragment() {
                     onNext = {
                         data = it
                         simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
-                        // TODO rewrite adapters for the expandable recycler views
                         recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories as List<SimpleCategory>)
                     },
                     onError = {

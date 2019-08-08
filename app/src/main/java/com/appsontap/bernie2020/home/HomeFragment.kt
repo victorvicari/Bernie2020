@@ -29,7 +29,7 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         events_button.setOnClickListener {
-            (requireActivity() as FragmentRouter).run { 
+            (requireActivity() as FragmentRouter).run {
                 setItemMenuSelected(R.id.bot_nav_events_map)
             }
         }
@@ -40,19 +40,19 @@ class HomeFragment : BaseFragment() {
             )
         }
         timeline_button.setOnClickListener {
-            (requireActivity() as FragmentRouter).run { 
-               replaceFragment(TimelineFragment.newInstance()) 
+            (requireActivity() as FragmentRouter).run {
+               replaceFragment(TimelineFragment.newInstance())
                 setItemMenuSelected(R.id.bot_nav_more)
             }
         }
-        
-        plans_button.setOnClickListener { 
-            (requireActivity() as FragmentRouter).run { 
+
+        plans_button.setOnClickListener {
+            (requireActivity() as FragmentRouter).run {
                 setItemMenuSelected(R.id.bot_nav_plans)
             }
         }
-        news_button.setOnClickListener { 
-            (requireActivity() as FragmentRouter).run { 
+        news_button.setOnClickListener {
+            (requireActivity() as FragmentRouter).run {
                 replaceWebViewFragmentWithTitle(getString(R.string.news_url),getString(R.string.web_title_news))
                 setItemMenuSelected(R.id.bot_nav_more)
             }
