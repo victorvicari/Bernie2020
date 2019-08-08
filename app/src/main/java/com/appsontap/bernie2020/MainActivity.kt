@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment.newInstance(), HomeFragment.TAG)
-                .addToBackStack(HomeFragment.TAG)
+                .addToBackStack(BACK_STACK_ROOT_TAG)
                 .commit()
         }
     }
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
-            if(supportFragmentManager.getTopFragmentEntry().name == HomeFragment.TAG){
+            if(supportFragmentManager.findFragmentById(R.id.fragment_container) is HomeFragment){
                 finish()
             }else {
                 super.onBackPressed()
