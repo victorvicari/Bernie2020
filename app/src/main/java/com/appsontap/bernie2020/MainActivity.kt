@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentRouter {
 
     lateinit var toggle: ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,11 +38,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d(TAG, "LOOK AT BACKSTACK COUNT: " + supportFragmentManager.backStackEntryCount.toString())
 
         nav_view_bottom.setOnNavigationItemSelectedListener(onBottomNavigationSelectedListener)
-        
+
         if(supportFragmentManager.backStackEntryCount == 0){
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragment_container, HomeFragment.newInstance(), HomeFragment.TAG)
+                .replace(R.id.fragment_container, HomeFragment.newInstance(), HomeFragment.TAG)
+                .addToBackStack(HomeFragment.TAG)
                 .commit()
         }
     }
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        nav_view_bottom.setSelectedItemId(R.id.bot_nav_more)
+        setItemMenuSelected(R.id.bot_nav_more)
 
 
         // will dump all the fragments from the stack when switching to a new top-level fragment
@@ -109,11 +110,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 getString(R.string.timeline) -> fragment = TimelineFragment.newInstance()
                 getString(R.string.drawer_legislation) -> fragment = LegislationFragment.newInstance()
             }
-            
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment, fragment.TAG)
-                .addToBackStack(BACK_STACK_ROOT_TAG)
-                .commit()
+            replaceFragment(fragment)
         }
 
 
@@ -125,7 +122,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            if(supportFragmentManager.getTopFragmentEntry().name == HomeFragment.TAG){
+                finish()
+            }else {
+                super.onBackPressed()
+            }
         }
     }
 
@@ -165,7 +166,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return@OnNavigationItemSelectedListener true
             }
             // TODO add home fragment functionality
-            else -> return@OnNavigationItemSelectedListener false
+            else -> return@OnNavigationItemSelectedListener true
         }
     }
 
@@ -212,4 +213,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
     }
 
+    override fun replaceFragment(fragment: Fragment) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment, fragment.TAG)
+                .addToBackStack(BACK_STACK_ROOT_TAG)
+                .commit()
+    }
+
+    override fun replaceWebViewFragmentWithTitle(url: String, title: String) {
+        loadWebFragment(url, title)
+    }
+
+    override fun setItemMenuSelected(id: Int) {
+        when(id){
+            R.id.bot_nav_home,
+            R.id.bot_nav_more -> {
+                selectBotNavItemWithoutCallback(id)
+            }
+            else -> nav_view_bottom.selectedItemId = id
+        }
+    }
+
+    private fun selectBotNavItemWithoutCallback(id: Int) {
+        nav_view_bottom.setOnNavigationItemSelectedListener(null)
+        nav_view_bottom.selectedItemId = id
+        nav_view_bottom.setOnNavigationItemSelectedListener(onBottomNavigationSelectedListener)
+    }
 }
