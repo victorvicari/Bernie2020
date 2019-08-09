@@ -40,6 +40,10 @@ class WebFragment : Fragment() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+    }
+
     companion object {
         val EXTRA_TITLE = "title"
         val EXTRA_URL = "url"

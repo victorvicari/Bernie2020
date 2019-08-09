@@ -17,9 +17,9 @@ class FavoritesViewModel : ViewModel() {
     val bin = CompositeDisposable()
     val dataEmitter = BehaviorSubject.create<List<Any>>()
 
-    fun fetchPlanData() {
+    fun fetchData() {
         favoritesRepo
-            .fetchPlanData()?.let {
+            .fetchData()?.let {
                 it.subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribeBy(
@@ -34,22 +34,6 @@ class FavoritesViewModel : ViewModel() {
             }
     }
 
-    fun fetchLegislationData() {
-        favoritesRepo
-            .fetchLegislationData()?.let {
-                it.subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribeBy(
-                        onSuccess = { list ->
-                            Log.d(TAG, "onSuccess?!")
-                            dataEmitter.onNext(list)
-                        },
-                        onError = {
-                            Log.e(TAG, "Couldn't get favorites list data ${it.message}", it)
-                        }
-                    ).into(bin)
-            }
-    }
 
     override fun onCleared() {
         super.onCleared()
