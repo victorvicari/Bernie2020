@@ -8,7 +8,7 @@
             android:id="@+id/textview_empty_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/plans_no_search_matches"
+            android:text="@string/legislation_no_search_matches"
             android:gravity="center"
             style="@style/Subheader"
             android:visibility="gone"/>

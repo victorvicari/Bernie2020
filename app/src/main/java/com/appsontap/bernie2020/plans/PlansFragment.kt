@@ -158,7 +158,7 @@ class PlansFragment : BaseFragment() {
                 simpleCategory = SimpleCategory(item.name!!, mutableListOf(), item.id)
             }
             if (item is Plan && simpleCategory != null) {
-                if (item.name?.contains(keyword) == true || item.description?.contains(keyword) == true)
+                if (item.name?.contains(keyword, true) == true || item.description?.contains(keyword, true) == true)
                     simpleCategory.addPlan(item)
             }
             last = item

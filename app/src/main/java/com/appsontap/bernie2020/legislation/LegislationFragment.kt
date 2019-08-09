@@ -137,7 +137,7 @@ class LegislationFragment : BaseFragment() {
     private fun searchDataByKeyword(keyword: String): List<Legislation> {
         val filteredResults = mutableListOf<Legislation>()
         for (item in data) {
-            if (item.name?.contains(keyword) == true || item.description?.contains(keyword) == true) {
+            if (item.name?.contains(keyword, true) == true || item.description?.contains(keyword, true) == true) {
                 filteredResults.add(item)
             }
         }
