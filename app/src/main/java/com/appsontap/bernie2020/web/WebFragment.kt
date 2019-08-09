@@ -42,6 +42,7 @@ class WebFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+        webview.webViewClient = null
     }
 
     companion object {
