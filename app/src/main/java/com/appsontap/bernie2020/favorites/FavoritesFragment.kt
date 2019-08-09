@@ -35,7 +35,8 @@ class FavoritesFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         title = getString(R.string.title_favorites)
         favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
-        viewModel.fetchData()
+        viewModel.fetchPlanData()
+        // viewModel.fetchLegislationData() apparently this just overwrites the values rather than adds to them
         setHasOptionsMenu(true)
     }
 

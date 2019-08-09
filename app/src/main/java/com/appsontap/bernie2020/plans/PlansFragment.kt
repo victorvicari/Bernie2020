@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Plan
@@ -54,6 +55,7 @@ class PlansFragment : BaseFragment() {
         favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
         Log.d(TAG, "FAVORITES ARE: $favorites")
 
+
         if (savedInstanceState == null) {
             viewModel
                 .dataEmitter
@@ -70,6 +72,10 @@ class PlansFragment : BaseFragment() {
                     }
                 ).into(bin)
         }
+
+
+
+
     }
 
     // data for the expandable recycler view must be provided in a list of SimpleCategory objects,
@@ -112,6 +118,7 @@ class PlansFragment : BaseFragment() {
                 val filteredResults = searchDataByKeyword(searchView.query.toString())
                 recycler_view.adapter = context?.let { PlansAdapter(it, filteredResults) }
                 recycler_view.adapter?.notifyDataSetChanged()
+                textview_empty_list.visibility = (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
                 return true
             }
 
@@ -119,6 +126,7 @@ class PlansFragment : BaseFragment() {
                 if (newText.length == 0 && recycler_view != null) {
                     recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
                     recycler_view.adapter?.notifyDataSetChanged()
+                    textview_empty_list.visibility = (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
                 }
                 return true
             }
