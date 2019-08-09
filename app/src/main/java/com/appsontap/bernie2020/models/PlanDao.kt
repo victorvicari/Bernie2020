@@ -18,7 +18,7 @@ interface PlanDao {
     fun getPlan(planId: String) : Single<Plan>
     
     @Query("SELECT * FROM plans_table WHERE id IN (:ids)")
-    fun getPlansForIds(ids: List<String>) : Single<List<Plan>> // changed to List<Any> to concat with other faves
+    fun getPlansForIds(ids: List<String>) : Single<List<Plan>> 
     
     @Insert (onConflict =  OnConflictStrategy.IGNORE)
     fun insert(plan: Plan)

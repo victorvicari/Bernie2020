@@ -207,6 +207,28 @@ abstract class AppDatabase : RoomDatabase() {
                 }
         return Observable.concat(Observable.just(category), getPlansObservable)
     }
+    
+    open fun getFavorites(planIds: List<String>, legIds: List<String>): Single<List<Any>> {
+        val getPlansObservable = 
+            Observable.fromArray(planIds)
+                .flatMapIterable { 
+                    it
+                }
+                .flatMap { id ->
+                     Log.d(TAG, "Fetching favorited plan id $id")
+                    AppDatabase.getDatabase().planDao().getPlan(id).toObservable()
+                }
+        
+        val getLegislationsObservable = 
+            Observable.fromArray(legIds)
+                .flatMapIterable { it }
+                .flatMap { id -> 
+                    Log.d(TAG, "Fetching favorited legislation id $id")
+                    AppDatabase.getDatabase().legislationDao().getLegislation(id).toObservable()
+                }
+        
+        return Observable.concat(getPlansObservable, getLegislationsObservable).toList()
+    }
 
 
     companion object {
