@@ -23,6 +23,7 @@
     <string name="debt_calc_url">https://berniesanders.com/debt/</string>
     <string name="how_to_vote_url">https://voteforbernie.org/</string>
     <string name="volunteer_url">https://act.berniesanders.com/signup/volunteer-bernie-sanders/</string>
+    <string name="donate_url">https://secure.actblue.com/donate/bernieplus</string>
     
     <string name="plans_and_proposals">Plans and Proposals</string>
     <string name="detailed_plans_and_bills">Detailed Plans &amp; Bills</string>
@@ -59,6 +60,7 @@
     <string name="web_title_vote">Voter Registration Info</string>
     <string name="web_title_debt_calculator">College Debt Relief Calculator</string>
     <string name="web_title_volunteer">Volunteer</string>
+    <string name="web_title_donate">Donate</string>
 
     <string name="fragment_title_legislation">Legislation</string>
     <string name="fragment_title_main">Bernie 2020</string>
