@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.appsontap.bernie2020.models.*
+import com.appsontap.bernie2020.models.legislation_details.AttributedText
 import com.appsontap.bernie2020.timeline.Timeline
 import com.google.gson.GsonBuilder
 import io.reactivex.Observable

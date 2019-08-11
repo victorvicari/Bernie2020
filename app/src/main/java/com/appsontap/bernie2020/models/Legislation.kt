@@ -18,5 +18,6 @@ data class Legislation(
     val quote_ids: String?,
     val type: String?,
     val url: String?,
-    val video_ids: String?
+    val video_ids: String?,
+    val detail_ids: String?
 )
