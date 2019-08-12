@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.appsontap.bernie2020.AppDatabase
-import com.appsontap.bernie2020.TAG
+import com.appsontap.bernie2020.util.TAG
 import io.reactivex.Observable
 
 @Entity(tableName = "category_table")

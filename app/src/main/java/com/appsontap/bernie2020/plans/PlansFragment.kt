@@ -9,12 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.RecyclerView
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.SimpleCategory
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
+import com.appsontap.bernie2020.util.IOHelper
+import com.appsontap.bernie2020.util.TAG
+import com.appsontap.bernie2020.util.into
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 import io.reactivex.android.schedulers.AndroidSchedulers

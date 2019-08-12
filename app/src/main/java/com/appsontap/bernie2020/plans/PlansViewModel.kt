@@ -1,16 +1,14 @@
 package com.appsontap.bernie2020.plans
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.appsontap.bernie2020.App
-import com.appsontap.bernie2020.TAG
-import com.appsontap.bernie2020.into
+import com.appsontap.bernie2020.util.TAG
+import com.appsontap.bernie2020.util.into
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 
 /**
  

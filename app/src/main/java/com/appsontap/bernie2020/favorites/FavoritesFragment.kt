@@ -13,10 +13,10 @@ import com.appsontap.bernie2020.legislation.LegislationViewHolder
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.Quote
-import com.appsontap.bernie2020.models.SimpleCategory
 import com.appsontap.bernie2020.plans.PlanViewHolder
-import com.appsontap.bernie2020.plans.PlansFragment
-import com.appsontap.bernie2020.plans.PlansViewModel
+import com.appsontap.bernie2020.util.IOHelper
+import com.appsontap.bernie2020.util.TAG
+import com.appsontap.bernie2020.util.into
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers

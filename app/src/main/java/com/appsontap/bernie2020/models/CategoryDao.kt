@@ -1,12 +1,7 @@
 package com.appsontap.bernie2020.models
 
-import android.util.Log
 import androidx.room.*
-import com.appsontap.bernie2020.AppDatabase
-import com.appsontap.bernie2020.TAG
-import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.rxkotlin.toObservable
 
 
 @Dao

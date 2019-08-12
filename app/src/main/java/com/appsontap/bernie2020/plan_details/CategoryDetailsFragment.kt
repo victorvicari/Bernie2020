@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import com.appsontap.bernie2020.IOHelper
+import com.appsontap.bernie2020.util.IOHelper
 import com.appsontap.bernie2020.R
-import com.appsontap.bernie2020.TAG
+import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.legislation.LegislationViewHolder
 import com.appsontap.bernie2020.legislation_details.LegislationDetailsFragment
 import com.appsontap.bernie2020.models.Category
@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.title_view_holder.view.*
 import kotlinx.android.synthetic.main.fragment_plan_details.*
 import kotlinx.android.synthetic.main.header_view_holder.view.*
 import kotlinx.android.synthetic.main.item_generic.view.*
-import kotlinx.android.synthetic.main.item_legislation.view.*
 import kotlinx.android.synthetic.main.quote_view_holder.view.*
 import java.lang.RuntimeException
 

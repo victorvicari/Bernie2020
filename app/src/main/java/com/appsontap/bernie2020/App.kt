@@ -2,11 +2,10 @@ package com.appsontap.bernie2020
 
 import android.app.Application
 import android.util.Log
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
+import com.appsontap.bernie2020.util.TAG
 
 /**
- Feel the Bern
+Feel the Bern
  */
 class App : Application() {
 
