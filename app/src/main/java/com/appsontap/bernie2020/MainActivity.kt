@@ -15,6 +15,7 @@ import com.appsontap.bernie2020.favorites.FavoritesFragment
 import com.appsontap.bernie2020.home.HomeFragment
 import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.timeline.TimelineFragment
+import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.web.WebFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView

@@ -1,15 +1,9 @@
 package com.appsontap.bernie2020.favorites
 
 import android.content.Context
-import android.util.Log
-import androidx.lifecycle.Transformations.map
-import com.appsontap.bernie2020.App
 import com.appsontap.bernie2020.AppDatabase
-import com.appsontap.bernie2020.IOHelper
-import com.appsontap.bernie2020.TAG
-import io.reactivex.Flowable
+import com.appsontap.bernie2020.util.IOHelper
 import io.reactivex.Single
-import io.reactivex.rxkotlin.zipWith
 import io.reactivex.subjects.BehaviorSubject
 
 class FavoritesRepo(val context: Context) {

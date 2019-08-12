@@ -4,9 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
-import com.appsontap.bernie2020.IOHelper
+import com.appsontap.bernie2020.util.IOHelper
 import com.appsontap.bernie2020.R
-import com.appsontap.bernie2020.TAG
+import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder

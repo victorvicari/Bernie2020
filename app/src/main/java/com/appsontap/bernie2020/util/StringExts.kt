@@ -1,4 +1,4 @@
-package com.appsontap.bernie2020
+package com.appsontap.bernie2020.util
 
 val Any.TAG: String
     get() {

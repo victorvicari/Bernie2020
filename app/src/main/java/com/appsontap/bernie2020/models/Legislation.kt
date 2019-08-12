@@ -2,6 +2,9 @@ package com.appsontap.bernie2020.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 
 @Entity(tableName = "legislation_table")
 data class Legislation(
@@ -19,5 +22,6 @@ data class Legislation(
     val type: String?,
     val url: String?,
     val video_ids: String?,
-    val detail_ids: String?
+    val detail_ids: String?,
+    var markup: JsonElement
 )

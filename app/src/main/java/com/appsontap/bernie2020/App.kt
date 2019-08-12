@@ -2,20 +2,14 @@ package com.appsontap.bernie2020
 
 import android.app.Application
 import android.util.Log
-import com.google.gson.GsonBuilder
+import com.appsontap.bernie2020.util.TAG
 import com.google.gson.JsonArray
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import java.io.BufferedReader
-import java.io.File
-import java.io.FileWriter
 import java.io.InputStreamReader
-import java.util.regex.Pattern
 
 /**
- Feel the Bern
+Feel the Bern
  */
 class App : Application() {
 

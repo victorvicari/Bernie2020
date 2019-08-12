@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.appsontap.bernie2020.IOHelper
-import com.appsontap.bernie2020.TAG
+import com.appsontap.bernie2020.util.IOHelper
+import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.models.Legislation
 import kotlinx.android.synthetic.main.item_legislation.view.*
 

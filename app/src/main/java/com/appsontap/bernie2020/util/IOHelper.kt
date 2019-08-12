@@ -1,8 +1,6 @@
-package com.appsontap.bernie2020
+package com.appsontap.bernie2020.util
 
 import android.content.Context
-import android.R.id.edit
-import android.content.SharedPreferences
 import android.util.Log
 
 

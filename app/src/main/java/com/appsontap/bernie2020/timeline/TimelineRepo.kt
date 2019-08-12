@@ -1,16 +1,10 @@
 package com.appsontap.bernie2020.timeline
 
 import android.annotation.SuppressLint
-import android.util.Log
 import com.appsontap.bernie2020.AppDatabase
-import com.appsontap.bernie2020.TAG
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.toObservable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 
 /**
  * Feel the Bern

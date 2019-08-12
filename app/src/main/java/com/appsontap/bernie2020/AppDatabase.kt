@@ -6,15 +6,14 @@ import android.util.Log
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.appsontap.bernie2020.models.*
-import com.appsontap.bernie2020.models.legislation_details.AttributedText
-import com.appsontap.bernie2020.timeline.Timeline
+import com.appsontap.bernie2020.util.Converters
+import com.appsontap.bernie2020.util.TAG
 import com.google.gson.GsonBuilder
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -22,6 +21,7 @@ import java.io.InputStreamReader
 
  */
 @Database(entities = [Category::class, Plan::class, Quote::class, Legislation::class, TimelineItem::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     override fun createOpenHelper(config: DatabaseConfiguration?): SupportSQLiteOpenHelper {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

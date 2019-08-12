@@ -1,12 +1,6 @@
-package com.appsontap.bernie2020
+package com.appsontap.bernie2020.util
 
-import android.app.Activity
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.appsontap.bernie2020.Constants.Companion.BACK_STACK_ROOT_TAG
-import com.appsontap.bernie2020.web.WebFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 

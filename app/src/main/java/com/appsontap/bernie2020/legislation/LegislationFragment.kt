@@ -8,18 +8,15 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import com.appsontap.bernie2020.*
-import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Legislation
-import com.appsontap.bernie2020.models.Plan
-import com.appsontap.bernie2020.models.SimpleCategory
-import com.appsontap.bernie2020.plans.PlansFragment
+import com.appsontap.bernie2020.util.IOHelper
+import com.appsontap.bernie2020.util.TAG
+import com.appsontap.bernie2020.util.into
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_legislation.*
 import kotlinx.android.synthetic.main.fragment_legislation.recycler_view
-import kotlinx.android.synthetic.main.item_legislation.*
-import kotlinx.android.synthetic.main.item_legislation.view.*
 
 
 /**
