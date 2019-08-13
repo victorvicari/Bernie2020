@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -31,7 +32,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         toolbar.setTitleTextColor(getColor(R.color.white))
         setSupportActionBar(toolbar)
-        toggle = ActionBarDrawerToggle(this, drawer, toolbar, 0, 0)
+        toggle = object: ActionBarDrawerToggle(this, drawer, toolbar, 0,    0) {
+            override fun onDrawerClosed(drawerView: View) {
+                setItemMenuSelected(getIdFromCurrentFragment())
+                super.onDrawerClosed(drawerView)
+            }
+        }
+
 
         drawer.addDrawerListener(toggle)
         toggle.syncState()
@@ -151,6 +158,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
+
     private val onBottomNavigationSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {
 
         when(it.itemId) {
@@ -183,7 +191,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+
     private fun toggleDrawer() {
+        setItemMenuSelected(getIdFromCurrentFragment())
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
@@ -235,6 +245,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun replaceWebViewFragmentWithTitle(url: String, title: String) {
         loadWebFragment(url, title)
+    }
+
+    fun getIdFromCurrentFragment() : Int {
+        Log.d(TAG, "LOOK AT ME I'M GETTING THE ID")
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        when(currentFragment) {
+            is HomeFragment -> return R.id.bot_nav_home
+            is PlansFragment -> return R.id.bot_nav_plans
+            is WebFragment -> {
+                if(supportActionBar?.title == getString(R.string.web_title_canvass)) {
+                    return R.id.bot_nav_canvass
+                } else if (supportActionBar?.title == getString(R.string.web_title_events)) {
+                    return R.id.bot_nav_events_map
+                } else {
+                    return R.id.bot_nav_more
+                }
+            }
+            else -> return R.id.bot_nav_more
+        }
     }
 
     override fun setItemMenuSelected(id: Int) {
