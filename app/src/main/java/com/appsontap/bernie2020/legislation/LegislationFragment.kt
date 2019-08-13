@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Legislation
+import com.appsontap.bernie2020.plan_details.UiState
 import com.appsontap.bernie2020.util.IOHelper
 import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.util.into
@@ -23,9 +25,11 @@ import kotlinx.android.synthetic.main.fragment_legislation.recycler_view
  * Feel the Bern
  */
 class LegislationFragment : BaseFragment() {
-    val repo = LegislationRepo()
+    private val viewModel: LegislationViewModel by lazy {
+        ViewModelProviders.of(this).get(LegislationViewModel::class.java)
+    }
     private lateinit var favorites: Set<String>
-    private lateinit var data: List<Legislation>
+    private lateinit var uiState: UiState.ListReady
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,14 +45,19 @@ class LegislationFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        repo
-            .getLegislation()
+        viewModel
+            .dataEmitter
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
-                onSuccess = { legislation ->
-                    recycler_view.adapter = LegislationAdapter(legislation)
-                    data = legislation
+                onNext = { uiState ->
+                    when (uiState) {
+                        is UiState.ListReady -> {
+                            this.uiState = uiState
+                            @Suppress("UNCHECKED_CAST")
+                            recycler_view.adapter = LegislationAdapter(uiState.items as List<Legislation>)
+                        }
+                    }
                 },
                 onError = {
                     Log.e(TAG, "${it.message}", it)
@@ -74,8 +83,7 @@ class LegislationFragment : BaseFragment() {
                     R.layout.item_legislation,
                     parent,
                     false
-                )
-            )
+                ), uiState)
         }
 
         override fun getItemCount(): Int {
@@ -83,15 +91,14 @@ class LegislationFragment : BaseFragment() {
         }
 
         override fun onBindViewHolder(holder: LegislationViewHolder, position: Int) {
-            context?.let { holder.bind(items[position], it, IOHelper.loadFavoritesFromSharedPrefs(it)) }
+            holder.bind(items[position], IOHelper.loadFavoritesFromSharedPrefs(requireContext()))
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater!!.inflate(R.menu.options_menu_searchable, menu)
         // Associate searchable configuration with the SearchView
-        val searchManager = activity!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu!!.findItem(R.id.action_search).actionView as SearchView
         searchView.setSearchableInfo(
             searchManager.getSearchableInfo(activity!!.componentName)
@@ -108,7 +115,7 @@ class LegislationFragment : BaseFragment() {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.length == 0 && recycler_view != null) {
-                    recycler_view.adapter =LegislationAdapter(data)
+                    recycler_view.adapter = LegislationAdapter(uiState.items as List<Legislation>)
                     recycler_view.adapter?.notifyDataSetChanged()
                     textview_empty_list.visibility =
                         (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
@@ -123,7 +130,7 @@ class LegislationFragment : BaseFragment() {
             }
 
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                recycler_view.adapter = LegislationAdapter(data)
+                recycler_view.adapter = LegislationAdapter(uiState.items as List<Legislation>)
                 recycler_view.adapter?.notifyDataSetChanged()
                 return true
             }
@@ -133,9 +140,17 @@ class LegislationFragment : BaseFragment() {
 
     private fun searchDataByKeyword(keyword: String): List<Legislation> {
         val filteredResults = mutableListOf<Legislation>()
-        for (item in data) {
-            if (item.name?.contains(keyword, true) == true || item.description?.contains(keyword, true) == true) {
-                filteredResults.add(item)
+        for (item in uiState.items) {
+            when (item) {
+                is Legislation -> {
+                    if (item.name?.contains(keyword, true) == true || item.description?.contains(
+                            keyword,
+                            true
+                        ) == true
+                    ) {
+                        filteredResults.add(item)
+                    }
+                }
             }
         }
         return filteredResults

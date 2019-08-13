@@ -3,6 +3,7 @@ package com.appsontap.bernie2020.favorites
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.appsontap.bernie2020.App
+import com.appsontap.bernie2020.plan_details.UiState
 import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.util.into
 import io.reactivex.disposables.CompositeDisposable
@@ -13,7 +14,7 @@ import io.reactivex.subjects.BehaviorSubject
 class FavoritesViewModel : ViewModel() {
     val favoritesRepo = FavoritesRepo(App.get())
     val bin = CompositeDisposable()
-    val dataEmitter = BehaviorSubject.create<List<Any>>()
+    val dataEmitter = BehaviorSubject.create<UiState.ListReady>()
 
     fun fetchData() {
         favoritesRepo
@@ -23,7 +24,7 @@ class FavoritesViewModel : ViewModel() {
                     .subscribeBy(
                         onSuccess = { list ->
                             Log.d(TAG, "onSuccess?!")
-                            dataEmitter.onNext(list)
+                            dataEmitter.onNext(UiState.ListReady(list, setOf()))
                         },
                         onError = {
                             Log.e(TAG, "Couldn't get favorites list data ${it.message}", it)
