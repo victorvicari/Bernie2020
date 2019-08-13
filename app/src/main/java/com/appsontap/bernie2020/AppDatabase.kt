@@ -228,7 +228,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase.getDatabase().legislationDao().getLegislation(id).toObservable()
                 }
         
-        return Observable.concat(getPlansObservable, getLegislationsObservable).toList()
+        return Observable.concat(getPlansObservable, getLegislationsObservable).toList() as Single<List<Any>>
     }
 
 

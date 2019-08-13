@@ -117,8 +117,7 @@ class CategoryDetailsFragment : Fragment() {
                         R.layout.item_legislation,
                         parent,
                         false
-                    )
-                )
+                    ), uiState)
                 // temporary placeholder for non-specific items
                 R.layout.item_generic -> return ItemViewHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -162,7 +161,7 @@ class CategoryDetailsFragment : Fragment() {
                 }
                 is LegislationViewHolder -> {
                     when (val item = uiState.items[position]) {
-                        is Legislation -> context?.let { holder.bind(item, it, IOHelper.loadFavoritesFromSharedPrefs(it)) }
+                        is Legislation -> holder.bind(item, IOHelper.loadFavoritesFromSharedPrefs(requireContext()))
                     }
                 }
                 is QuoteViewHolder -> {
@@ -174,8 +173,8 @@ class CategoryDetailsFragment : Fragment() {
                     when (val item = uiState.items[position]) {
                         is Plan -> {
                             holder.setTextViewName(item.name)
-                            context?.let { holder.setOnClickListener(it, item) }
-                            context?.let { holder.setupFavoriteCheckbox(it, item.id, favorites) }
+                             holder.setOnClickListener(requireContext(), item) 
+                             holder.setupFavoriteCheckbox(requireContext(), item.id, favorites)
                         }
                     }
                 }
@@ -219,23 +218,6 @@ class CategoryDetailsFragment : Fragment() {
         }
 
         inner class ItemViewHolder(itemView: View) : BaseViewHolder(itemView) {
-            init {
-                itemView.setOnClickListener {
-                    if (uiState.items[adapterPosition] is Legislation) {
-                        val legislation = uiState.items[adapterPosition]
-                        requireActivity()
-                            .supportFragmentManager
-                            .beginTransaction()
-                            .replace(
-                                R.id.fragment_container,
-                                LegislationDetailsFragment.newInstance(),
-                                LegislationDetailsFragment.TAG
-                            )
-                            .addToBackStack(LegislationDetailsFragment.TAG)
-                            .commit()
-                    }
-                }
-            }
             fun bind(description: String?){
                 description?.let { 
                     itemView.item_name.text = it

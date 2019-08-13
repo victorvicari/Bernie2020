@@ -13,6 +13,7 @@ import com.appsontap.bernie2020.legislation.LegislationViewHolder
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.Quote
+import com.appsontap.bernie2020.plan_details.UiState
 import com.appsontap.bernie2020.plans.PlanViewHolder
 import com.appsontap.bernie2020.util.IOHelper
 import com.appsontap.bernie2020.util.TAG
@@ -28,7 +29,7 @@ class FavoritesFragment : BaseFragment() {
     private val viewModel: FavoritesViewModel by lazy {
         ViewModelProviders.of(this).get(FavoritesViewModel::class.java)
     }
-    private lateinit var data: List<Any>
+    private lateinit var uiState: UiState.ListReady
     private lateinit var favorites: Set<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +54,9 @@ class FavoritesFragment : BaseFragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onNext = {
-                        data = it
+                        uiState = it
                         recycler_view.adapter =
-                            FavoritesAdapter(requireContext(), it)
+                            FavoritesAdapter(requireContext(), uiState.items)
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
@@ -80,7 +81,7 @@ class FavoritesFragment : BaseFragment() {
                         parent,
                         false
                     )
-                )
+                , uiState)
             }
             throw RuntimeException("Invalid view type")
         }
@@ -99,14 +100,14 @@ class FavoritesFragment : BaseFragment() {
                     when (val item = favoriteItems?.get(position)) {
                         is Plan -> {
                             holder.setTextViewName(item.name)
-                            context?.let { holder.setOnClickListener(it, item) }
-                            context?.let { holder.setupFavoriteCheckbox(it, item.id, favorites) }
+                            holder.setOnClickListener(context, item) 
+                            holder.setupFavoriteCheckbox(context, item.id, favorites)
                         }
                     }
                 }
                 is LegislationViewHolder -> {
                     when (val item = favoriteItems?.get(position)) {
-                        is Legislation -> context?.let { holder.bind(item, it, IOHelper.loadFavoritesFromSharedPrefs(it)) }
+                        is Legislation -> holder.bind(item, IOHelper.loadFavoritesFromSharedPrefs(context))
                     }
                 }
             }
