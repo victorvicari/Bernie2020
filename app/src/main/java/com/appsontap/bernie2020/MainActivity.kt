@@ -126,26 +126,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
-            if(supportFragmentManager.findFragmentById(R.id.fragment_container) is HomeFragment){
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+            if(currentFragment is HomeFragment){
                 finish()
-            }else {
-                super.onBackPressed()
+            } else if (currentFragment is WebFragment) {
+                if(!(currentFragment as WebFragment).onBackPressed()) {
+                    popStackAndLoadHomeFragment()
+                }
+            } else {
+                popStackAndLoadHomeFragment()
+                // super.onBackPressed()
             }
         }
+    }
+
+    private fun popStackAndLoadHomeFragment() {
+        supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.fragment_container, HomeFragment.newInstance(),
+                HomeFragment.TAG
+            )
+            .addToBackStack(BACK_STACK_ROOT_TAG)
+            .commit()
     }
 
     private val onBottomNavigationSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {
 
         when(it.itemId) {
             R.id.bot_nav_home -> {
-                supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                supportFragmentManager.beginTransaction()
-                    .replace(
-                        R.id.fragment_container, HomeFragment.newInstance(),
-                        HomeFragment.TAG
-                    )
-                    .addToBackStack(BACK_STACK_ROOT_TAG)
-                    .commit()
+                popStackAndLoadHomeFragment()
                 return@OnNavigationItemSelectedListener true 
             }
             R.id.bot_nav_events_map -> {

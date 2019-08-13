@@ -45,6 +45,16 @@ class WebFragment : Fragment() {
         webview.webViewClient = null
     }
 
+    // returns false if there's no history to go back to
+    fun onBackPressed() : Boolean {
+        if(webview.canGoBack()) {
+            webview.goBack()
+            return true
+        } else {
+            return false
+        }
+    }
+
     companion object {
         val EXTRA_TITLE = "title"
         val EXTRA_URL = "url"
