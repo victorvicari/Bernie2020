@@ -2,7 +2,7 @@ package com.appsontap.bernie2020.plans
 
 import android.content.Context
 import android.util.Log
-import com.appsontap.bernie2020.AppDatabase
+import com.appsontap.bernie2020.database.AppDatabase
 import com.appsontap.bernie2020.util.TAG
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject

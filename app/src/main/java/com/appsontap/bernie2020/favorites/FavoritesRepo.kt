@@ -1,7 +1,7 @@
 package com.appsontap.bernie2020.favorites
 
 import android.content.Context
-import com.appsontap.bernie2020.AppDatabase
+import com.appsontap.bernie2020.database.AppDatabase
 import com.appsontap.bernie2020.util.IOHelper
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject

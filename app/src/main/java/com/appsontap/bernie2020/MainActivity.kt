@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if(currentFragment is HomeFragment){
                 finish()
             } else if (currentFragment is WebFragment) {
-                if(!(currentFragment as WebFragment).onBackPressed()) {
+                if(!currentFragment.onBackPressed()) {
                     popStackAndLoadHomeFragment()
                 }
             } else {
@@ -249,20 +249,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun getIdFromCurrentFragment() : Int {
         Log.d(TAG, "LOOK AT ME I'M GETTING THE ID")
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-        when(currentFragment) {
-            is HomeFragment -> return R.id.bot_nav_home
-            is PlansFragment -> return R.id.bot_nav_plans
+        return when(supportFragmentManager.findFragmentById(R.id.fragment_container)) {
+            is HomeFragment -> R.id.bot_nav_home
+            is PlansFragment -> R.id.bot_nav_plans
             is WebFragment -> {
-                if(supportActionBar?.title == getString(R.string.web_title_canvass)) {
-                    return R.id.bot_nav_canvass
-                } else if (supportActionBar?.title == getString(R.string.web_title_events)) {
-                    return R.id.bot_nav_events_map
-                } else {
-                    return R.id.bot_nav_more
+                when {
+                    supportActionBar?.title == getString(R.string.web_title_canvass) -> R.id.bot_nav_canvass
+                    supportActionBar?.title == getString(R.string.web_title_events) -> R.id.bot_nav_events_map
+                    else -> R.id.bot_nav_more
                 }
             }
-            else -> return R.id.bot_nav_more
+            else -> R.id.bot_nav_more
         }
     }
 

@@ -1,10 +1,12 @@
-package com.appsontap.bernie2020
+package com.appsontap.bernie2020.database
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteOpenHelper
+import com.appsontap.bernie2020.App
+import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.models.*
 import com.appsontap.bernie2020.util.Converters
 import com.appsontap.bernie2020.util.TAG
@@ -148,7 +150,7 @@ abstract class AppDatabase : RoomDatabase() {
             }
             .flatMapIterable { it }
             .flatMap { 
-                AppDatabase.getDatabase().categoryDao().getCategoryForId(it).toObservable()
+                getDatabase().categoryDao().getCategoryForId(it).toObservable()
             }.toList()
     }
     
@@ -160,7 +162,7 @@ abstract class AppDatabase : RoomDatabase() {
             }
             .flatMapIterable { it }
             .flatMap {
-                AppDatabase.getDatabase().planDao().getPlan(it).toObservable()
+                getDatabase().planDao().getPlan(it).toObservable()
             }.toList()
     }
     
@@ -176,7 +178,7 @@ abstract class AppDatabase : RoomDatabase() {
             .flatMapIterable { it }
             .flatMap { 
                 Log.d(TAG, "Fetching legislation: $it for category: ${category.id}")
-                AppDatabase.getDatabase().legislationDao().getLegislation(it).toObservable()
+                getDatabase().legislationDao().getLegislation(it).toObservable()
             }.toList()
     }
 
@@ -193,7 +195,7 @@ abstract class AppDatabase : RoomDatabase() {
             }
             .flatMap {
                 Log.d(TAG, "Fetching quote: $it for category: ${category.id}")
-                AppDatabase.getDatabase().quoteDao().getQuote(it).toObservable()
+                getDatabase().quoteDao().getQuote(it).toObservable()
             }.toList()
     }
 
@@ -204,7 +206,7 @@ abstract class AppDatabase : RoomDatabase() {
                     it
                 }.flatMap { id ->
                     Log.d(TAG, "plan id $id")
-                    AppDatabase.getDatabase().planDao().getPlan(id).toObservable()
+                    getDatabase().planDao().getPlan(id).toObservable()
                 }
         return Observable.concat(Observable.just(category), getPlansObservable)
     }
@@ -217,7 +219,7 @@ abstract class AppDatabase : RoomDatabase() {
                 }
                 .flatMap { id ->
                      Log.d(TAG, "Fetching favorited plan id $id")
-                    AppDatabase.getDatabase().planDao().getPlan(id).toObservable()
+                    getDatabase().planDao().getPlan(id).toObservable()
                 }
         
         val getLegislationsObservable = 
@@ -225,7 +227,7 @@ abstract class AppDatabase : RoomDatabase() {
                 .flatMapIterable { it }
                 .flatMap { id -> 
                     Log.d(TAG, "Fetching favorited legislation id $id")
-                    AppDatabase.getDatabase().legislationDao().getLegislation(id).toObservable()
+                    getDatabase().legislationDao().getLegislation(id).toObservable()
                 }
         
         return Observable.concat(getPlansObservable, getLegislationsObservable).toList() as Single<List<Any>>

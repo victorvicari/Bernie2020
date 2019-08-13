@@ -236,9 +236,9 @@ class CategoryDetailsFragment : Fragment() {
         const val EXTRA_CATEGORY_ID = "extra_category_id"
         const val EXTRA_PLAN_ID = "extra_plan_id"
         fun newInstance(args: Bundle): CategoryDetailsFragment {
-            val fragment = CategoryDetailsFragment()
-            fragment.arguments = args
-            return fragment
+            return CategoryDetailsFragment().apply { 
+                this.arguments = args
+            }
 
         }
     }

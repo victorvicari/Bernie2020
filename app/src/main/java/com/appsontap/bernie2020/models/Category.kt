@@ -3,7 +3,7 @@ package com.appsontap.bernie2020.models
 import android.util.Log
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.appsontap.bernie2020.AppDatabase
+import com.appsontap.bernie2020.database.AppDatabase
 import com.appsontap.bernie2020.util.TAG
 import io.reactivex.Observable
 

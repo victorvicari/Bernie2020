@@ -1,12 +1,10 @@
 package com.appsontap.bernie2020.plan_details
 
 import com.appsontap.bernie2020.App
-import com.appsontap.bernie2020.AppDatabase
-import com.appsontap.bernie2020.Constants
+import com.appsontap.bernie2020.database.AppDatabase
 import com.appsontap.bernie2020.R
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.rxkotlin.toObservable
 
 /**
  * Feel the Bern

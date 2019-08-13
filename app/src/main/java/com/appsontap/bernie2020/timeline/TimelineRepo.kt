@@ -1,7 +1,7 @@
 package com.appsontap.bernie2020.timeline
 
 import android.annotation.SuppressLint
-import com.appsontap.bernie2020.AppDatabase
+import com.appsontap.bernie2020.database.AppDatabase
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toObservable

@@ -49,6 +49,7 @@ class LegislationDetailsFragment : Fragment() {
         override fun getItem(position: Int): Fragment {
             when(position){
                 2 -> return WebFragment.newInstance(Bundle().apply { 
+                    this.putString(WebFragment.EXTRA_TITLE, legislation.name)
                     this.putString(WebFragment.EXTRA_URL, legislation.url)
                 })
             }

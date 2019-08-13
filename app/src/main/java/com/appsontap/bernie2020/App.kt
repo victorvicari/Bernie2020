@@ -2,6 +2,7 @@ package com.appsontap.bernie2020
 
 import android.app.Application
 import android.util.Log
+import com.appsontap.bernie2020.database.AppDatabase
 import com.appsontap.bernie2020.util.TAG
 
 /**
