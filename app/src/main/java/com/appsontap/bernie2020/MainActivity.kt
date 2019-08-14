@@ -137,12 +137,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if(currentFragment is HomeFragment){
                 finish()
             } else if (currentFragment is WebFragment) {
-                if(!currentFragment.onBackPressed()) {
+                if(!currentFragment.onBackPressed() && supportFragmentManager.backStackEntryCount <= 1) {
                     popStackAndLoadHomeFragment()
                 }
+                else {
+                    super.onBackPressed()
+                }
             } else {
-                popStackAndLoadHomeFragment()
-                // super.onBackPressed()
+                if(supportFragmentManager.backStackEntryCount <= 1) {
+                    popStackAndLoadHomeFragment()
+                } else {
+                    super.onBackPressed()
+                }
             }
         }
     }
