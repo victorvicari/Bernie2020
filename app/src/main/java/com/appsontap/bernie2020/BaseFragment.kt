@@ -13,7 +13,9 @@ open class BaseFragment : Fragment(){
     override fun onStart() {
         super.onStart()
         title?.let { 
-            (requireActivity() as AppCompatActivity).supportActionBar?.setTitle(it)
+            //https://stackoverflow.com/questions/15576224/how-to-display-android-actionbar-title-without-truncation-occurring
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = ""
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
         }
     }
 }

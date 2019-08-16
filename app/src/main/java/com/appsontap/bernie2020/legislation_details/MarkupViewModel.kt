@@ -1,15 +1,25 @@
 package com.appsontap.bernie2020.legislation_details
 
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
-import com.google.gson.JsonArray
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 
 /**
  * Copyright (c) 2019 Pandora Media, Inc.
  */
-class MarkupViewModel : ViewModel(){
-    fun viewLoaded(markup: String){
-       val json = Gson().fromJson(markup, JsonArray::class.java)
+class MarkupViewModel : ViewModel() {
+    private val emitter = BehaviorSubject.create<UiState>()
+    private val parser = MarkupParser()
+    
+    fun viewLoaded(markupString: String) {
+        parser.parse(markupString)
+        val text = SpannableAttributedTextImpl()
+        text.builder = parser.parse(markupString)
         
+        emitter.onNext(UiState.MarkUpReady(text))
+    }
+
+    fun uiReady(): Observable<UiState> {
+        return emitter.hide()
     }
 }

@@ -10,12 +10,18 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.R
 import kotlinx.android.synthetic.main.fragment_web.*
 
-class WebFragment : Fragment() {
+class WebFragment : BaseFragment() {
     val viewModel: WebViewModel by lazy {
         ViewModelProviders.of(this).get(WebViewModel::class.java)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        title = arguments?.getString(EXTRA_TITLE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -26,7 +32,6 @@ class WebFragment : Fragment() {
         super.onStart()
         webview.settings.javaScriptEnabled = true
         webview.loadUrl(arguments?.getString(EXTRA_URL))
-        (activity as AppCompatActivity).supportActionBar?.title = arguments?.getString(EXTRA_TITLE)
         webview.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
@@ -46,7 +51,7 @@ class WebFragment : Fragment() {
     }
 
     // returns false if there's no history to go back to
-    fun onBackPressed() : Boolean {
+     fun onBackPressed() : Boolean {
         if(webview.canGoBack()) {
             webview.goBack()
             return true
@@ -56,8 +61,8 @@ class WebFragment : Fragment() {
     }
 
     companion object {
-        val EXTRA_TITLE = "title"
-        val EXTRA_URL = "url"
+        const val EXTRA_TITLE = "title"
+        const val EXTRA_URL = "url"
         fun newInstance(args: Bundle): WebFragment {
             val fragment = WebFragment()
             fragment.arguments = args

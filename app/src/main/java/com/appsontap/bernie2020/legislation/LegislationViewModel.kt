@@ -8,11 +8,9 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
-/**
- * Copyright (c) 2019 Pandora Media, Inc.
- */
+
 class LegislationViewModel : ViewModel() {
-    val repo = LegislationRepo()
+    private val repo = LegislationRepo()
     val dataEmitter = BehaviorSubject.create<UiState>()
     fun fetchData() {
         repo.getLegislation()

@@ -1,6 +1,5 @@
 package com.appsontap.bernie2020.legislation
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,10 +7,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.legislation_details.LegislationDetailsFragment
-import com.appsontap.bernie2020.util.IOHelper
-import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.plan_details.UiState
+import com.appsontap.bernie2020.util.IOHelper
+import com.appsontap.bernie2020.util.TAG
 import kotlinx.android.synthetic.main.item_legislation.view.*
 
 class LegislationViewHolder(itemView: View, private val uiState: UiState.ListReady) : RecyclerView.ViewHolder(itemView){

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
@@ -19,13 +20,14 @@ import java.lang.RuntimeException
 /**
  * Feel the Bern
  */
-class LegislationDetailsFragment : Fragment() {
+class LegislationDetailsFragment : BaseFragment() {
 
     lateinit var legislation : Legislation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          arguments?.let {  
             legislation = it.getParcelable(EXTRA_KEY_LEGISLATION)!!
+             title = legislation.name
          }
     }
 
@@ -40,7 +42,7 @@ class LegislationDetailsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val adapter = LegislationPagerAdapter(requireActivity().supportFragmentManager)
+        val adapter = LegislationPagerAdapter(childFragmentManager)
         pager.adapter = adapter
         tab_layout.setupWithViewPager(pager)
     }
@@ -48,6 +50,21 @@ class LegislationDetailsFragment : Fragment() {
     inner class LegislationPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
         override fun getItem(position: Int): Fragment {
             when(position){
+                0 -> return MarkupFragment.newInstance(Bundle().apply { 
+                    this.putString(MarkupFragment.EXTRA_MARKUP, (legislation.markup as JsonArray)[0].toString())
+                })
+                1 -> {
+                    if((legislation.markup as JsonArray).size() > 1){
+                       return MarkupFragment.newInstance(Bundle().apply { 
+                    this.putString(MarkupFragment.EXTRA_MARKUP, (legislation.markup as JsonArray)[1].toString())
+                }) 
+                    }else{
+                        return WebFragment.newInstance(Bundle().apply { 
+                    this.putString(WebFragment.EXTRA_TITLE, legislation.name)
+                    this.putString(WebFragment.EXTRA_URL, legislation.url)
+                })
+                    }
+                }
                 2 -> return WebFragment.newInstance(Bundle().apply { 
                     this.putString(WebFragment.EXTRA_TITLE, legislation.name)
                     this.putString(WebFragment.EXTRA_URL, legislation.url)
@@ -67,13 +84,17 @@ class LegislationDetailsFragment : Fragment() {
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return when(position){
-                0 -> getString(R.string.summary)
-                1 -> getString(R.string.details)
-                2 -> getString(R.string.entire_bill)
-                else -> throw RuntimeException("Unhandled page title for Legislation $legislation")
-
+             when(position){
+                0 -> return getString(R.string.summary)
+                1 -> {
+                    if((legislation.markup as JsonArray).size() == 1){
+                            return getString(R.string.entire_bill)
+                        }
+                   return getString(R.string.details)
+                }
+                2 -> return getString(R.string.entire_bill)
             }
+            throw RuntimeException("Unhandled page title for Legislation $legislation")
         }
     }
  

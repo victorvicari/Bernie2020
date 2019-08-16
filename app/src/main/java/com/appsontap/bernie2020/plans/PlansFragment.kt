@@ -67,7 +67,7 @@ class PlansFragment : BaseFragment() {
                     onNext = {
                         data = it
                         simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
-                        recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories as List<SimpleCategory>)
+                        recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
@@ -178,12 +178,12 @@ class PlansFragment : BaseFragment() {
         ExpandableRecyclerViewAdapter<CategoryViewHolder, PlanViewHolder>(data) {
 
         override fun onCreateGroupViewHolder(parent: ViewGroup?, viewType: Int): CategoryViewHolder {
-            var view = LayoutInflater.from(context).inflate(R.layout.item_plan_category, parent, false)
+            val view = LayoutInflater.from(context).inflate(R.layout.item_plan_category, parent, false)
             return CategoryViewHolder(view)
         }
 
         override fun onCreateChildViewHolder(parent: ViewGroup?, viewType: Int): PlanViewHolder {
-            var view = LayoutInflater.from(context).inflate(R.layout.item_plan, parent, false)
+            val view = LayoutInflater.from(context).inflate(R.layout.item_plan, parent, false)
             return PlanViewHolder(view)
         }
 

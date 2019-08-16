@@ -6,35 +6,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import com.appsontap.bernie2020.util.IOHelper
+import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.R
-import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.legislation.LegislationViewHolder
-import com.appsontap.bernie2020.legislation_details.LegislationDetailsFragment
 import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.Quote
 import com.appsontap.bernie2020.plans.PlanViewHolder
+import com.appsontap.bernie2020.util.IOHelper
+import com.appsontap.bernie2020.util.TAG
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.title_view_holder.view.*
 import kotlinx.android.synthetic.main.fragment_plan_details.*
 import kotlinx.android.synthetic.main.header_view_holder.view.*
 import kotlinx.android.synthetic.main.item_generic.view.*
 import kotlinx.android.synthetic.main.quote_view_holder.view.*
-import java.lang.RuntimeException
+import kotlinx.android.synthetic.main.title_view_holder.view.*
 
 /**
  * Feel the Bern
  */
-class CategoryDetailsFragment : Fragment() {
-    var categoryId: String? = null
-    var planId: String? = null
+class CategoryDetailsFragment : BaseFragment() {
+    private var categoryId: String? = null
+    private var planId: String? = null
     lateinit var favorites: Set<String>
     private val viewModel: CategoryDetailsViewModel by lazy {
         ViewModelProviders.of(this).get(CategoryDetailsViewModel::class.java)
@@ -50,6 +48,7 @@ class CategoryDetailsFragment : Fragment() {
                 planId = getString(EXTRA_PLAN_ID)
             }
         }
+        title = getString(R.string.plans_and_proposals)
         Log.d(
             TAG,
             "LOOK AT BACKSTACK COUNT: " + (activity as AppCompatActivity).supportFragmentManager.backStackEntryCount.toString()
@@ -92,7 +91,7 @@ class CategoryDetailsFragment : Fragment() {
     }
 
 
-    inner class ProposalDetailAdapter(val uiState: UiState.ListReady) :
+    inner class ProposalDetailAdapter(private val uiState: UiState.ListReady) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -197,9 +196,7 @@ class CategoryDetailsFragment : Fragment() {
         }
 
 
-        open inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        }
+        open inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
         inner class HeaderViewHolder(itemView: View) : BaseViewHolder(itemView) {
             fun bind(title: String?) {

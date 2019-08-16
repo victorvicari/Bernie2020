@@ -95,6 +95,7 @@ class LegislationFragment : BaseFragment() {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater!!.inflate(R.menu.options_menu_searchable, menu)
         // Associate searchable configuration with the SearchView
@@ -114,7 +115,7 @@ class LegislationFragment : BaseFragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if (newText.length == 0 && recycler_view != null) {
+                if (newText.isEmpty() && recycler_view != null) {
                     recycler_view.adapter = LegislationAdapter(uiState.items as List<Legislation>)
                     recycler_view.adapter?.notifyDataSetChanged()
                     textview_empty_list.visibility =
