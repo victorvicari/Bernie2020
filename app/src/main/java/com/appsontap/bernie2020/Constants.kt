@@ -5,10 +5,10 @@ package com.appsontap.bernie2020
  */
 class Constants{
     companion object{
-        val FRAGMENT_MANAGER = "_fragment_manager_"
-        val CATEGORY_KEY = "key_category"
-        val PROPOSALS_KEY = "key_proposals"
-        val BACK_STACK_ROOT_TAG = "root_fragment"
+        const val FRAGMENT_MANAGER = "_fragment_manager_"
+        const val CATEGORY_KEY = "key_category"
+        const val PROPOSALS_KEY = "key_proposals"
+        const val BACK_STACK_ROOT_TAG = "root_fragment"
 
     }
 }

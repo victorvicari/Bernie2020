@@ -8,12 +8,9 @@ import io.reactivex.Single
  */
 class TimelineViewModel : ViewModel(){
 
-    val repo = TimelineRepo()
+    private val repo = TimelineRepo()
 
     fun timelineReady() : Single<Timeline> {
         return repo.buildTimeline()
-    }
-    override fun onCleared() {
-        super.onCleared()
     }
 }

@@ -1,5 +1,6 @@
 package com.appsontap.bernie2020.web
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,17 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.R
 import kotlinx.android.synthetic.main.fragment_web.*
 
 class WebFragment : BaseFragment() {
-    val viewModel: WebViewModel by lazy {
-        ViewModelProviders.of(this).get(WebViewModel::class.java)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +23,7 @@ class WebFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_web, container, false)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onStart() {
         super.onStart()
         webview.settings.javaScriptEnabled = true
@@ -52,11 +48,11 @@ class WebFragment : BaseFragment() {
 
     // returns false if there's no history to go back to
      fun onBackPressed() : Boolean {
-        if(webview.canGoBack()) {
+        return if(webview.canGoBack()) {
             webview.goBack()
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 

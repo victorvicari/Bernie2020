@@ -125,7 +125,7 @@ class PlansFragment : BaseFragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if (newText.length == 0 && recycler_view != null) {
+                if (newText.isEmpty() && recycler_view != null) {
                     recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
                     recycler_view.adapter?.notifyDataSetChanged()
                     textview_empty_list.visibility = (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
@@ -167,7 +167,7 @@ class PlansFragment : BaseFragment() {
         }
         // check if the category is empty and remove it
         for (i in (categories.size - 1) downTo 0) {
-            if (categories.get(i).plans.isEmpty()) {
+            if (categories[i].plans.isEmpty()) {
                 categories.removeAt(i)
             }
         }

@@ -7,8 +7,8 @@ import java.lang.RuntimeException
  * Feel the Bern
  */
 class Timeline {
-    var sections = mutableListOf<Section>()
-    val flattenedList = mutableListOf<Any>()
+    private var sections = mutableListOf<Section>()
+    private val flattenedList = mutableListOf<Any>()
 
     fun insert(section: Section) {
         sections.add(section)
@@ -44,8 +44,7 @@ class Timeline {
     
     fun getTypeForPosition(position: Int): ViewType {
         flatten()
-        val item = flattenedList[position]
-         when(item){
+        when(val item = flattenedList[position]){
              is String -> return ViewType.YEAR
              is TimelineItem -> {
                  item.image_url?.let { 

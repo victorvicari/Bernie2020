@@ -14,8 +14,8 @@ import io.reactivex.subjects.BehaviorSubject
  
  */
 class PlansViewModel : ViewModel() {
-    val plansRepo = PlansRepo(App.get())
-    val bin = CompositeDisposable()
+    private val plansRepo = PlansRepo(App.get())
+    private val bin = CompositeDisposable()
     val dataEmitter = BehaviorSubject.create<List<Any>>()
 
     fun fetchData() {
@@ -28,8 +28,8 @@ class PlansViewModel : ViewModel() {
                             Log.d(TAG, "onSuccess?!")
                             dataEmitter.onNext(list)
                         },
-                        onError = {
-                            Log.e(TAG, "Couldn't get plan list data ${it.message}", it)
+                        onError = { error ->
+                            Log.e(TAG, "Couldn't get plan list data ${error.message}", error)
                         }
                     ).into(bin)
             }

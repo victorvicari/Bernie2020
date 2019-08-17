@@ -8,7 +8,7 @@ class IOHelper {
 
 
     companion object{
-        const val PREFS_FAVORITES = "favorites"
+        private const val PREFS_FAVORITES = "favorites"
 
         fun addFavoriteToSharedPrefs(context: Context, id: String) {
             val pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
@@ -21,7 +21,7 @@ class IOHelper {
             Log.d(TAG, idSet.toString())
             val editor = pref.edit()
             editor.putStringSet(PREFS_FAVORITES, idSet)
-            editor.commit()
+            editor.apply()
         }
 
         fun removeFavoriteFromSharedPrefs(context: Context, id: String) {
@@ -32,7 +32,7 @@ class IOHelper {
                 Log.d(TAG, idSet.toString())
                 val editor = pref.edit()
                 editor.putStringSet(PREFS_FAVORITES, idSet)
-                editor.commit()
+                editor.apply()
             }
         }
 

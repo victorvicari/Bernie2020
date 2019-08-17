@@ -65,7 +65,7 @@ class FavoritesFragment : BaseFragment() {
         }
     }
 
-    inner class FavoritesAdapter(var context: Context, var favoriteItems: List<Any>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class FavoritesAdapter(var context: Context, private var favoriteItems: List<Any>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             when(viewType) {
                 R.layout.item_plan -> return PlanViewHolder(

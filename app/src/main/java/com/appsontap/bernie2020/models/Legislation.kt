@@ -5,10 +5,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "legislation_table")
 data class Legislation(
@@ -69,6 +66,7 @@ data class Legislation(
         writeString(markup.toString())
     }
 
+    @Suppress("unused")
     companion object {
         @JvmField
         val CREATOR: Parcelable.Creator<Legislation> = object : Parcelable.Creator<Legislation> {

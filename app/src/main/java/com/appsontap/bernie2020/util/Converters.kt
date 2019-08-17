@@ -1,9 +1,7 @@
 package com.appsontap.bernie2020.util
 
 import androidx.room.TypeConverter
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 
 /**

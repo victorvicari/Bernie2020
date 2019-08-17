@@ -22,9 +22,9 @@ class TimelineRepo{
             .getDatabase()
             .timelineDao()
             .getAll()
-            .map { 
-                it.sortedBy { it.year.toInt() }
-                it
+            .map { list ->
+                list.sortedBy { it.year.toInt() }
+                list
             }
             .flatMapObservable { it.toObservable() }
             .doOnNext {

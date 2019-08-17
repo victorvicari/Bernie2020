@@ -1,5 +1,6 @@
 package com.appsontap.bernie2020.legislation
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.appsontap.bernie2020.plan_details.UiState
@@ -12,6 +13,7 @@ import io.reactivex.subjects.BehaviorSubject
 class LegislationViewModel : ViewModel() {
     private val repo = LegislationRepo()
     val dataEmitter = BehaviorSubject.create<UiState>()
+    @SuppressLint("CheckResult")
     fun fetchData() {
         repo.getLegislation()
             .subscribeOn(Schedulers.io())

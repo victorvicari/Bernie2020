@@ -30,7 +30,7 @@ import com.appsontap.bernie2020.BaseFragment
  */
 class TimelineFragment : BaseFragment() {
 
-    val viewModel: TimelineViewModel by lazy {
+    private val viewModel: TimelineViewModel by lazy {
         ViewModelProviders.of(this).get(TimelineViewModel::class.java)
     }
 

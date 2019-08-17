@@ -1,7 +1,5 @@
 package com.appsontap.bernie2020.models
 
-import android.os.Parcel
-import android.os.Parcelable
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 
 class SimpleCategory(val name: String, val plans: MutableList<Plan>, val id: String) : ExpandableGroup<Plan>(name, plans) {

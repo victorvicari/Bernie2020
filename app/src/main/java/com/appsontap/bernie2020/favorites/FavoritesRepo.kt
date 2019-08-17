@@ -41,7 +41,7 @@ class FavoritesRepo(val context: Context) {
         return AppDatabase.getDatabase()
             .planDao()
             .getPlansForIds(planIds)
-            .map { it as List<Any> }
+            .map { it }
          //the following leads to java.lang.IllegalArgumentException: Sequence contains more than one element!
     }
 
@@ -62,7 +62,7 @@ class FavoritesRepo(val context: Context) {
         return AppDatabase.getDatabase()
             .legislationDao()
             .getLegislationsForIds(legislationIds)
-            .map { it as List<Any> }
+            .map { it }
     }
 }
 

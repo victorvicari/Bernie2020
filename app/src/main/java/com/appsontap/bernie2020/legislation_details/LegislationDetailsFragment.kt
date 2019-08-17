@@ -35,11 +35,6 @@ class LegislationDetailsFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_legislation_details, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
     override fun onStart() {
         super.onStart()
         val adapter = LegislationPagerAdapter(childFragmentManager)
@@ -54,15 +49,15 @@ class LegislationDetailsFragment : BaseFragment() {
                     this.putString(MarkupFragment.EXTRA_MARKUP, (legislation.markup as JsonArray)[0].toString())
                 })
                 1 -> {
-                    if((legislation.markup as JsonArray).size() > 1){
-                       return MarkupFragment.newInstance(Bundle().apply { 
-                    this.putString(MarkupFragment.EXTRA_MARKUP, (legislation.markup as JsonArray)[1].toString())
-                }) 
+                    return if((legislation.markup as JsonArray).size() > 1){
+                        MarkupFragment.newInstance(Bundle().apply {
+                            this.putString(MarkupFragment.EXTRA_MARKUP, (legislation.markup as JsonArray)[1].toString())
+                        })
                     }else{
-                        return WebFragment.newInstance(Bundle().apply { 
-                    this.putString(WebFragment.EXTRA_TITLE, legislation.name)
-                    this.putString(WebFragment.EXTRA_URL, legislation.url)
-                })
+                        WebFragment.newInstance(Bundle().apply {
+                            this.putString(WebFragment.EXTRA_TITLE, legislation.name)
+                            this.putString(WebFragment.EXTRA_URL, legislation.url)
+                        })
                     }
                 }
                 2 -> return WebFragment.newInstance(Bundle().apply { 

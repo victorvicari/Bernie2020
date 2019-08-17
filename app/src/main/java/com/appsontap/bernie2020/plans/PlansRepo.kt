@@ -11,8 +11,7 @@ import io.reactivex.subjects.BehaviorSubject
  
  */
 class PlansRepo(val context: Context) {
-    val dataEmitter = BehaviorSubject.create<MutableList<Any>>()
-    
+
     fun fetchData(): Single<MutableList<Any>>? {
         return AppDatabase
             .getDatabase()

@@ -13,9 +13,6 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class HomeFragment : BaseFragment() {
-    private val viewModel: HomeFragmentViewModel by lazy {
-        ViewModelProviders.of(this).get(HomeFragmentViewModel::class.java)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,10 +66,6 @@ class HomeFragment : BaseFragment() {
         super.onStart()
         (requireActivity() as FragmentRouter).setItemMenuSelected(R.id.bot_nav_home)
 
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
     companion object {

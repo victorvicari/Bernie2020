@@ -12,13 +12,13 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 class FavoritesViewModel : ViewModel() {
-    val favoritesRepo = FavoritesRepo(App.get())
-    val bin = CompositeDisposable()
+    private val favoritesRepo = FavoritesRepo(App.get())
+    private val bin = CompositeDisposable()
     val dataEmitter = BehaviorSubject.create<UiState.ListReady>()
 
     fun fetchData() {
         favoritesRepo
-            .fetchData()?.let {
+            .fetchData().let {
                 it.subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribeBy(
@@ -26,8 +26,8 @@ class FavoritesViewModel : ViewModel() {
                             Log.d(TAG, "onSuccess?!")
                             dataEmitter.onNext(UiState.ListReady(list, setOf()))
                         },
-                        onError = {
-                            Log.e(TAG, "Couldn't get favorites list data ${it.message}", it)
+                        onError = { error ->
+                            Log.e(TAG, "Couldn't get favorites list data ${error.message}", error)
                         }
                     ).into(bin)
             }
