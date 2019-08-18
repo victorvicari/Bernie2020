@@ -32,8 +32,10 @@ class CategoryDetailRepo {
             }.flatMap {
                 AppDatabase.getDatabase().getLegislationForCategory(it)
             }.map {
-                result.add(App.get().resources.getString(R.string.detailed_plans_and_bills))
-                titleIndexes.add(result.size - 1)
+                if(it.isNotEmpty()) {
+                    result.add(App.get().resources.getString(R.string.detailed_plans_and_bills))
+                    titleIndexes.add(result.size - 1)
+                }
                 //add all the legislation for the first category
                 it.forEach { legislation ->
                     result.add(legislation)
@@ -43,8 +45,10 @@ class CategoryDetailRepo {
             }.flatMap {
                 AppDatabase.getDatabase().getCategoriesForPlan(it)
             }.map {
-                result.add(App.get().resources.getString(R.string.more_plans))
-                titleIndexes.add(result.size - 1)
+                if(it.isNotEmpty()) {
+                    result.add(App.get().resources.getString(R.string.more_plans))
+                    titleIndexes.add(result.size - 1)
+                }
                 it.forEach { category ->
                     result.add(category)
                 }
