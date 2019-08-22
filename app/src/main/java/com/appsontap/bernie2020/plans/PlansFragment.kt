@@ -3,6 +3,7 @@ package com.appsontap.bernie2020.plans
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,8 @@ import kotlinx.android.synthetic.main.item_plan_category.view.*
 
 class PlansFragment : BaseFragment() {
 
+    private lateinit var mListState: Parcelable
+    private var mBundleRecyclerViewState = Bundle()
     private val viewModel: PlansViewModel by lazy {
         ViewModelProviders.of(this).get(PlansViewModel::class.java)
     }
@@ -46,6 +49,10 @@ class PlansFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_plans, container, false)
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(
@@ -53,14 +60,13 @@ class PlansFragment : BaseFragment() {
             "LOOK AT BACKSTACK COUNT: " + (activity as AppCompatActivity).supportFragmentManager.backStackEntryCount.toString()
         )
 
-        (activity as AppCompatActivity).supportActionBar!!.setTitle(getString(R.string.fragment_title_plans))
+        (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.fragment_title_plans)
         favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
         Log.d(TAG, "FAVORITES ARE: $favorites")
 
 
-        if (savedInstanceState == null) {
             viewModel
-                .dataEmitter
+                .dataReady()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -68,14 +74,16 @@ class PlansFragment : BaseFragment() {
                         data = it
                         simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
                         recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
+
+//                        if (mBundleRecyclerViewState.getParcelable<Parcelable>(TAG) != null) {
+//                            mListState = mBundleRecyclerViewState.getParcelable(TAG)
+//                            recycler_view.layoutManager?.onRestoreInstanceState(mListState)
+//                        }
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
                     }
                 ).into(bin)
-        }
-
-
 
 
     }
@@ -104,7 +112,18 @@ class PlansFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         bin.clear()
+    }
+
+    
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+//        mBundleRecyclerViewState = Bundle()
+//        mListState = recycler_view.layoutManager!!.onSaveInstanceState()!!
+//        mBundleRecyclerViewState.putParcelable(TAG, mListState)
+//        (recycler_view.adapter as PlansAdapter).onSaveInstanceState(outState)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -120,7 +139,8 @@ class PlansFragment : BaseFragment() {
                 val filteredResults = searchDataByKeyword(searchView.query.toString())
                 recycler_view.adapter = context?.let { PlansAdapter(it, filteredResults) }
                 recycler_view.adapter?.notifyDataSetChanged()
-                textview_empty_list.visibility = (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
+                textview_empty_list.visibility =
+                    (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
                 return true
             }
 
@@ -128,7 +148,8 @@ class PlansFragment : BaseFragment() {
                 if (newText.isEmpty() && recycler_view != null) {
                     recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
                     recycler_view.adapter?.notifyDataSetChanged()
-                    textview_empty_list.visibility = (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
+                    textview_empty_list.visibility =
+                        (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
                 }
                 return true
             }

@@ -4,9 +4,6 @@ import androidx.fragment.app.FragmentManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-/**
- 
- */
     fun Disposable.into(compositeDisposable: CompositeDisposable?) {
         compositeDisposable?.let {
             if (it.isDisposed) {

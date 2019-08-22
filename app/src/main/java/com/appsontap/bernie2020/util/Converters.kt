@@ -5,7 +5,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 
 /**
- * Copyright (c) 2019 Pandora Media, Inc.
+ * These are converters for Room to serialize complex objects to primitives
  */
 class Converters{
     @TypeConverter

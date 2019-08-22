@@ -37,6 +37,8 @@ dependencies {
     def latestAppCompat = '26.1.0'
     def room_version = "2.1.0"
 
+    // debugImplementation because LeakCanary should only run in debug builds.
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-2'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
