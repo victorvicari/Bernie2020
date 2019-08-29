@@ -19,5 +19,7 @@
     <color name="colorPrimaryDark">#055694</color>
     <color name="colorPrimaryDarker">#1A237E</color>
     <color name="colorAccent">#EA504E</color>
+    
+    <color name="homeScreenBackground">#002033</color>
 
 </resources>

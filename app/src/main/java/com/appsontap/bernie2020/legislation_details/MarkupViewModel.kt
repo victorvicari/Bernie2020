@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
-/**
- * Copyright (c) 2019 Pandora Media, Inc.
- */
+
 class MarkupViewModel : ViewModel() {
     private val emitter = BehaviorSubject.create<UiState>()
     private val parser = MarkupParser()
