@@ -2,10 +2,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@color/white"/>
+        android:drawable="@color/homeScreenBackground"/>
 
     <item
             android:gravity="center"
-            android:drawable="@drawable/ic_bernie_logo"/>
+            android:drawable="@drawable/bernie_plus_wordmark"/>
 
 </layer-list>

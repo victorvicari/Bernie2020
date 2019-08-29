@@ -6,9 +6,7 @@ import android.os.Bundle
 
 
 
-/**
- * Copyright (c) 2019 Pandora Media, Inc.
- */
+
 class SplashScreenActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
