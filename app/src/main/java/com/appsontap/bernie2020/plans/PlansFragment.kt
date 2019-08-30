@@ -49,10 +49,6 @@ class PlansFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_plans, container, false)
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(
@@ -74,11 +70,6 @@ class PlansFragment : BaseFragment() {
                         data = it
                         simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
                         recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
-
-//                        if (mBundleRecyclerViewState.getParcelable<Parcelable>(TAG) != null) {
-//                            mListState = mBundleRecyclerViewState.getParcelable(TAG)
-//                            recycler_view.layoutManager?.onRestoreInstanceState(mListState)
-//                        }
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
@@ -119,11 +110,6 @@ class PlansFragment : BaseFragment() {
     
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-//        mBundleRecyclerViewState = Bundle()
-//        mListState = recycler_view.layoutManager!!.onSaveInstanceState()!!
-//        mBundleRecyclerViewState.putParcelable(TAG, mListState)
-//        (recycler_view.adapter as PlansAdapter).onSaveInstanceState(outState)
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

@@ -30,6 +30,8 @@ class LegislationFragment : BaseFragment() {
     }
     private lateinit var favorites: Set<String>
     private lateinit var uiState: UiState.ListReady
+    private var expandListener : MenuItem.OnActionExpandListener? = null
+    private var queryTextListener : SearchView.OnQueryTextListener? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,7 +106,8 @@ class LegislationFragment : BaseFragment() {
         searchView.setSearchableInfo(
             searchManager.getSearchableInfo(activity!!.componentName)
         )
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        
+        queryTextListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val filteredResults = searchDataByKeyword(searchView.query.toString())
                 recycler_view.adapter = LegislationAdapter(filteredResults)
@@ -123,9 +126,11 @@ class LegislationFragment : BaseFragment() {
                 }
                 return true
             }
-        })
+        }
+        
+        searchView.setOnQueryTextListener(queryTextListener)
         // listens for the back button press to reset the adapter to the full list
-        val expandListener = object : MenuItem.OnActionExpandListener {
+        expandListener = object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                 return true
             }
@@ -137,6 +142,13 @@ class LegislationFragment : BaseFragment() {
             }
         }
         menu.findItem(R.id.action_search).setOnActionExpandListener(expandListener)
+    }
+
+    override fun onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu()
+        expandListener = null
+        queryTextListener = null
+        
     }
 
     private fun searchDataByKeyword(keyword: String): List<Legislation> {

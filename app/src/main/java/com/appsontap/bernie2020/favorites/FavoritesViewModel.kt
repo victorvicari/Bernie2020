@@ -23,7 +23,7 @@ class FavoritesViewModel : ViewModel() {
                     .observeOn(Schedulers.io())
                     .subscribeBy(
                         onSuccess = { list ->
-                            Log.d(TAG, "onSuccess?!")
+                            Log.d(TAG, "onSuccess")
                             dataEmitter.onNext(UiState.ListReady(list, setOf()))
                         },
                         onError = { error ->
