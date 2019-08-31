@@ -1,5 +1,6 @@
 package com.appsontap.bernie2020.favorites
 
+import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.legislation.LegislationViewHolder
 import com.appsontap.bernie2020.models.Legislation
@@ -21,7 +23,9 @@ import com.appsontap.bernie2020.util.into
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_favorites.*
 import kotlinx.android.synthetic.main.fragment_plans.*
+import kotlinx.android.synthetic.main.fragment_plans.recycler_view
 import java.lang.RuntimeException
 
 class FavoritesFragment : BaseFragment() {
@@ -37,7 +41,6 @@ class FavoritesFragment : BaseFragment() {
         title = getString(R.string.title_favorites)
         favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
         viewModel.fetchData()
-        // viewModel.fetchLegislationData() apparently this just overwrites the values rather than adds to them
         setHasOptionsMenu(true)
     }
 
@@ -55,8 +58,12 @@ class FavoritesFragment : BaseFragment() {
                 .subscribeBy(
                     onNext = {
                         uiState = it
-                        recycler_view.adapter =
-                            FavoritesAdapter(requireContext(), uiState.items)
+                        if(uiState.items.isEmpty()){
+                            showEmptyView()
+                        }else {
+                            recycler_view.adapter =
+                                FavoritesAdapter(requireContext(), uiState.items)
+                        }
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
@@ -65,6 +72,17 @@ class FavoritesFragment : BaseFragment() {
         }
     }
 
+    private fun showEmptyView() {
+        empty_lottieAnimationView.addAnimatorUpdateListener { valueAnimator ->
+            if (add_favorites_textview.visibility == View.INVISIBLE && valueAnimator.isRunning) {
+                add_favorites_textview.visibility = View.VISIBLE
+            }
+        }
+        empty_view_container.visibility = View.VISIBLE
+
+        empty_lottieAnimationView.playAnimation()
+    }
+    
     inner class FavoritesAdapter(var context: Context, private var favoriteItems: List<Any>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             when(viewType) {
@@ -81,7 +99,8 @@ class FavoritesFragment : BaseFragment() {
                         parent,
                         false
                     )
-                , uiState)
+                    , uiState
+                )
             }
             throw RuntimeException("Invalid view type")
         }
