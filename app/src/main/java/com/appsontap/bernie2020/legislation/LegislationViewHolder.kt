@@ -12,8 +12,13 @@ import com.appsontap.bernie2020.plan_details.UiState
 import com.appsontap.bernie2020.util.IOHelper
 import com.appsontap.bernie2020.util.TAG
 import kotlinx.android.synthetic.main.item_legislation.view.*
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 
-class LegislationViewHolder(itemView: View, private val uiState: UiState.ListReady) : RecyclerView.ViewHolder(itemView){
+
+class LegislationViewHolder(itemView: View, private val uiState: UiState.ListReady) :
+    RecyclerView.ViewHolder(itemView) {
 
     init {
         itemView.setOnClickListener {
@@ -25,7 +30,7 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
                     .supportFragmentManager
                     .beginTransaction()
                     .replace(
-                        R.id.fragment_container,
+                        com.appsontap.bernie2020.R.id.fragment_container,
                         LegislationDetailsFragment.newInstance(args),
                         LegislationDetailsFragment.TAG
                     )
@@ -33,19 +38,28 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
                     .commit()
             }
         }
+        if(adapterPosition >= 0 && adapterPosition < uiState.items.size && uiState.items[adapterPosition] is Legislation) {
+            val legislation = uiState.items[adapterPosition] as Legislation
+            itemView.checkbox_legislation_favorite?.setOnClickListener {
+                if (itemView.checkbox_legislation_favorite.isChecked) {
+                    IOHelper.addFavoriteToSharedPrefs(itemView.context, legislation.id)
+                } else {
+                    IOHelper.removeFavoriteFromSharedPrefs(itemView.context, legislation.id)
+                }
+            }
+        }
+
+        itemView.imageview_legislation_share?.setOnClickListener {
+            val sendIntent = Intent()
+            sendIntent.action = Intent.ACTION_SEND
+            sendIntent.putExtra(Intent.EXTRA_TEXT, (uiState.items[adapterPosition] as Legislation).name)
+            sendIntent.type = "text/plain"
+            itemView.context.startActivity(Intent.createChooser(sendIntent, "Placeholder Text"))
+        }
     }
-    
-    fun bind(legislation: Legislation, favorites: Set<String>){
+
+    fun bind(legislation: Legislation, favorites: Set<String>) {
         itemView.textview_legislation_name.text = legislation.name
         itemView.checkbox_legislation_favorite?.isChecked = favorites.contains(legislation.id)
-
-        itemView.checkbox_legislation_favorite?.setOnClickListener {
-            if(itemView.checkbox_legislation_favorite.isChecked) {
-                IOHelper.addFavoriteToSharedPrefs(itemView.context, legislation.id)
-            } else {
-                IOHelper.removeFavoriteFromSharedPrefs(itemView.context, legislation.id)
-            }
-            Log.d(TAG, "FAVORITES: $favorites")
-        }
     }
 }
