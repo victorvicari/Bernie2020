@@ -36,6 +36,8 @@ abstract class AppDatabase : RoomDatabase() {
     override fun clearAllTables() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+    
+    
 
     abstract fun categoryDao(): CategoryDao
 
@@ -104,7 +106,7 @@ abstract class AppDatabase : RoomDatabase() {
                     Log.d(TAG, "Built legislation")
                 },
                 onError = {
-                    Log.e(TAG, "Couldn't build legislations \n ${it.message}", it)
+                    Log.w(TAG, "Did not build legislations \n ${it.message}", it)
                 }
             )
         

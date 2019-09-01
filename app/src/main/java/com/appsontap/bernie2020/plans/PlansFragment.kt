@@ -103,15 +103,9 @@ class PlansFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         bin.clear()
     }
-
     
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater!!.inflate(R.menu.options_menu_searchable, menu)
         // Associate searchable configuration with the SearchView
