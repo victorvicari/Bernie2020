@@ -139,6 +139,13 @@ class CategoryDetailsFragment : BaseFragment() {
                         false
                     )
                 )
+                R.layout.item_category -> return CategoryViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_category,
+                        parent,
+                        false
+                    ), uiState
+                )
             }
 
             throw RuntimeException("Invalid view type")
@@ -177,6 +184,13 @@ class CategoryDetailsFragment : BaseFragment() {
                         }
                     }
                 }
+                is CategoryViewHolder -> {
+                    when(val item = uiState.items[position]){
+                        is Category -> {
+                            holder.bind(item.name)
+                        }
+                    }
+                }
 
             }
         }
@@ -191,6 +205,7 @@ class CategoryDetailsFragment : BaseFragment() {
                 is Quote -> return R.layout.quote_view_holder
                 is Legislation -> return R.layout.item_legislation
                 is Plan -> return R.layout.item_plan
+                is Category -> return R.layout.item_category
             }
             return R.layout.item_generic
         }

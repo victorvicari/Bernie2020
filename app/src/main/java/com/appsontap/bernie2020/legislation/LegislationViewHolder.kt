@@ -40,8 +40,8 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
         }
         if(adapterPosition >= 0 && adapterPosition < uiState.items.size && uiState.items[adapterPosition] is Legislation) {
             val legislation = uiState.items[adapterPosition] as Legislation
-            itemView.checkbox_legislation_favorite?.setOnClickListener {
-                if (itemView.checkbox_legislation_favorite.isChecked) {
+            itemView.checkbox_favorite?.setOnClickListener {
+                if (itemView.checkbox_favorite.isChecked) {
                     IOHelper.addFavoriteToSharedPrefs(itemView.context, legislation.id)
                 } else {
                     IOHelper.removeFavoriteFromSharedPrefs(itemView.context, legislation.id)
@@ -59,7 +59,7 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
     }
 
     fun bind(legislation: Legislation, favorites: Set<String>) {
-        itemView.textview_legislation_name.text = legislation.name
-        itemView.checkbox_legislation_favorite?.isChecked = favorites.contains(legislation.id)
+        itemView.textview_name.text = legislation.name
+        itemView.checkbox_favorite?.isChecked = favorites.contains(legislation.id)
     }
 }
