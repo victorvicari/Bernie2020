@@ -30,7 +30,7 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
                     .supportFragmentManager
                     .beginTransaction()
                     .replace(
-                        com.appsontap.bernie2020.R.id.fragment_container,
+                        R.id.fragment_container,
                         LegislationDetailsFragment.newInstance(args),
                         LegislationDetailsFragment.TAG
                     )
@@ -50,10 +50,11 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
         }
 
         itemView.imageview_legislation_share?.setOnClickListener {
-            val sendIntent = Intent()
-            sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(Intent.EXTRA_TEXT, (uiState.items[adapterPosition] as Legislation).name)
-            sendIntent.type = "text/plain"
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, (uiState.items[adapterPosition] as Legislation).name)
+                type = "text/plain"
+            }
             itemView.context.startActivity(Intent.createChooser(sendIntent, "Placeholder Text"))
         }
     }
