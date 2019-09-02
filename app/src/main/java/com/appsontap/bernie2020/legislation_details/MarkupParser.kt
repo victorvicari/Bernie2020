@@ -14,7 +14,11 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 
-
+/**
+ * Parse the markup json from legislation.json
+ * Convert it into a SpannabeStringBuilder
+ * TODO make this return SpannableAttributedTextImpl instead so we can writes tests for this class.
+ */
 class MarkupParser {
     fun parse(markupString: String): SpannableStringBuilder {
         val markupArray = Gson().fromJson(markupString, JsonArray::class.java)

@@ -46,23 +46,24 @@ class LegislationDetailsFragment : BaseFragment() {
         override fun getItem(position: Int): Fragment {
             when(position){
                 0 -> return MarkupFragment.newInstance(Bundle().apply { 
-                    this.putString(MarkupFragment.EXTRA_MARKUP, (legislation.markup as JsonArray)[0].toString())
+                    putString(MarkupFragment.EXTRA_MARKUP, (legislation.markup as JsonArray)[0].toString())
                 })
                 1 -> {
                     return if((legislation.markup as JsonArray).size() > 1){
                         MarkupFragment.newInstance(Bundle().apply {
-                            this.putString(MarkupFragment.EXTRA_MARKUP, (legislation.markup as JsonArray)[1].toString())
+                            putString(MarkupFragment.EXTRA_MARKUP, (legislation.markup as JsonArray)[1].toString())
                         })
                     }else{
+                        //TODO put a web button in the toolbar for this fragment so you can open it in the browser instead of just looking at the webview
                         WebFragment.newInstance(Bundle().apply {
-                            this.putString(WebFragment.EXTRA_TITLE, legislation.name)
-                            this.putString(WebFragment.EXTRA_URL, legislation.url)
+                            putString(WebFragment.EXTRA_TITLE, legislation.name)
+                            putString(WebFragment.EXTRA_URL, legislation.url)
                         })
                     }
                 }
                 2 -> return WebFragment.newInstance(Bundle().apply { 
-                    this.putString(WebFragment.EXTRA_TITLE, legislation.name)
-                    this.putString(WebFragment.EXTRA_URL, legislation.url)
+                    putString(WebFragment.EXTRA_TITLE, legislation.name)
+                    putString(WebFragment.EXTRA_URL, legislation.url)
                 })
             }
             return CategoryDetailsFragment.newInstance(Bundle())

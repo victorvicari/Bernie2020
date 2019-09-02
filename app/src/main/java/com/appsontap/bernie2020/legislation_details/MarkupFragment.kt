@@ -15,7 +15,12 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_markup.*
 
-
+/**
+ * This Fragment is used in a pager adapter
+ * It displays one big string, ultimately.
+ * This string is formatted with color and other attributes.
+ * The MarkupParser parses a markup json from legislation.json
+ */
 class MarkupFragment : BaseFragment() {
 
     private val viewModel: MarkupViewModel by lazy {
@@ -27,9 +32,6 @@ class MarkupFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        arguments?.getString(EXTRA_MARKUP)?.let {
-            viewModel.viewLoaded(it)
-        }
         viewModel.uiReady()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -43,6 +45,10 @@ class MarkupFragment : BaseFragment() {
                     Log.e(TAG, "Couldn't build legislation detail text ${it.message}", it)
                 })
             .into(bin)
+
+        arguments?.getString(EXTRA_MARKUP)?.let {
+            viewModel.viewLoaded(it)
+        }
     }
 
     override fun onDestroyView() {
