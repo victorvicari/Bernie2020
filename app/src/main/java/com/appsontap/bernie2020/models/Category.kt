@@ -14,7 +14,7 @@ data class Category(
     val legislation_ids: String?,
     val links: String?,
     val main_quote_id: String?,
-    val name: String?,
+    val name: String,
     val proposal_ids: String?,
     val quote_ids: String?,
     val related_category_ids: String?,

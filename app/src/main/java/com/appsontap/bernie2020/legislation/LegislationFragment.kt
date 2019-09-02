@@ -65,6 +65,8 @@ class LegislationFragment : BaseFragment() {
                     Log.e(TAG, "${it.message}", it)
                 }
             ).into(bin)
+        
+        viewModel.fetchData()
     }
 
     override fun onStop() {
