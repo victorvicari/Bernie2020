@@ -49,7 +49,7 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
             }
         }
 
-        itemView.imageview_legislation_share?.setOnClickListener {
+        itemView.imageview_share?.setOnClickListener {
             val sendIntent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, (uiState.items[adapterPosition] as Legislation).name)
