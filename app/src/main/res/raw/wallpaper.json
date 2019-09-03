@@ -1,0 +1,27 @@
+[
+  {
+    "id": "wp00",
+    "year": "Default",
+    "wallpaper_resource": "wallpaper"
+  },
+  {
+    "id": "wp1",
+    "year": "Default",
+    "wallpaper_resource": "wallpaper2"
+  },
+  {
+    "id": "wp2",
+    "year": "Default",
+    "wallpaper_resource": "wallpaper3"
+  },
+  {
+    "id": "wp3",
+    "year": "Default",
+    "wallpaper_resource": "wallpaper4"
+  },
+  {
+    "id": "wp4",
+    "year": "Default",
+    "wallpaper_resource": "wallpaper_test"
+  }
+]

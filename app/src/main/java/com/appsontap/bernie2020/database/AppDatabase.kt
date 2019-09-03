@@ -22,7 +22,7 @@ import java.io.InputStreamReader
 /**
 
  */
-@Database(entities = [Category::class, Plan::class, Quote::class, Legislation::class, TimelineItem::class], version = 1)
+@Database(entities = [Category::class, Plan::class, Quote::class, Legislation::class, TimelineItem::class,WallpaperItem::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     override fun createOpenHelper(config: DatabaseConfiguration?): SupportSQLiteOpenHelper {
@@ -49,6 +49,8 @@ abstract class AppDatabase : RoomDatabase() {
     
     abstract fun timelineDao(): TimelineItemDao
 
+    abstract fun wallpaperDao(): WallPaperItemDao
+
     @SuppressLint("CheckResult")
     fun populateDatabase(context: Context) {
         val gson = GsonBuilder().create()
@@ -72,6 +74,9 @@ abstract class AppDatabase : RoomDatabase() {
         val timelineInput = reader.use { it.readText() }
         val timeline = gson.fromJson(timelineInput, Array<TimelineItem>::class.java)
 
+        reader = BufferedReader(InputStreamReader(context.resources.openRawResource(R.raw.wallpaper))) //EdChange
+        val wallpaperInput = reader.use { it.readText() }
+        val wallpaper = gson.fromJson(wallpaperInput, Array<WallpaperItem>::class.java)
 
         categories.toObservable()
             .doOnNext { category ->
@@ -139,6 +144,21 @@ abstract class AppDatabase : RoomDatabase() {
                 },
                 onError = {
                     Log.e(TAG, "Couldn't build timeline ${it.message}", it)
+                }
+            )
+
+        wallpaper.toObservable()
+            .doOnNext{
+                getDatabase().wallpaperDao().insert(it)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribeBy(
+                onComplete = {
+                    Log.d(TAG, "Built Wallpaper")
+                },
+                onError = {
+                    Log.e(TAG, "Couldn't build wallpaper ${it.message}", it)
                 }
             )
     }

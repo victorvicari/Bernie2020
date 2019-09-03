@@ -17,6 +17,7 @@ import com.appsontap.bernie2020.home.HomeFragment
 import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.timeline.TimelineFragment
 import com.appsontap.bernie2020.util.TAG
+import com.appsontap.bernie2020.wallpaper2.Wallpaper2Fragment
 import com.appsontap.bernie2020.web.WebFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -119,7 +120,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 getString(R.string.timeline) -> fragment = TimelineFragment.newInstance()
                 getString(R.string.drawer_legislation) -> fragment = LegislationFragment.newInstance()
                 getString(R.string.drawer_favorites) -> fragment = FavoritesFragment.newInstance()
-
+                getString(R.string.wallpapers) -> fragment = Wallpaper2Fragment.newInstance()
             }
             replaceFragment(fragment)
         }
