@@ -75,7 +75,7 @@ class TimelineFragment : BaseFragment() {
                         )
                     )
                 R.layout.timeline_image_viewholder ->
-                    ImageDescriptionViewHolder2(
+                    ImageDescriptionViewHolder(
                         LayoutInflater.from(parent.context).inflate(
                             R.layout.timeline_image_viewholder,
                             parent,
@@ -101,9 +101,9 @@ class TimelineFragment : BaseFragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             when (holder) {
                 is YearViewHolder -> holder.bind(timeline.getItemAtPosition(position) as String)
-                is ImageDescriptionViewHolder2 -> {
+                is ImageDescriptionViewHolder -> {
                     val item = timeline.getItemAtPosition(position) as TimelineItem
-                    holder.bind(item.image_url!!, item.description, item.image_resource)
+                    holder.bind(item)
                 }
                 is TextViewHolder -> {
                     val item = timeline.getItemAtPosition(position) as TimelineItem
@@ -126,29 +126,19 @@ class TimelineFragment : BaseFragment() {
             }
         }
 
-        inner class ImageDescriptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            fun bind(url: String, description: String) {
-                Glide.with(itemView).load(url).into(itemView.image_view)
-                itemView.image_description_text_view.text = description
-                itemView.image_view.setOnClickListener {
-                    val i = Intent(Intent.ACTION_VIEW)
-                    i.data = Uri.parse(url)
-                    startActivity(i)
-                }
-            }
-        }
 
-        inner class ImageDescriptionViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            fun bind(url: String, description: String, img_resource: String?) {
-                if (img_resource!=null){
-                    val id = resources.getIdentifier(img_resource, "drawable", activity!!.packageName)
+
+        inner class ImageDescriptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            fun bind(timelineitem:TimelineItem) {
+                //url: String, description: String, img_resource: String?
+                if (timelineitem.image_resource!=null){
+                    val id = resources.getIdentifier(timelineitem.image_resource, "drawable", requireActivity().packageName)
                     itemView.image_view.setImageResource(id)
-                    //itemView.image_view.setBackground(getResources().getDrawable(id))
                 }
-                itemView.image_description_text_view.text = description
+                itemView.image_description_text_view.text = timelineitem.description
                 itemView.image_view.setOnClickListener {
                     val i = Intent(Intent.ACTION_VIEW)
-                    i.data = Uri.parse(url)
+                    i.data = Uri.parse(timelineitem.article_url)
                     startActivity(i)
                 }
             }
