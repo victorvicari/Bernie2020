@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+   <!-- TODO remove as it is now defunct -->
+
+    <group android:checkableBehavior="single">
+
+        <item
+                android:id="@+id/home"
+                android:title="@string/home"/>
+        <item
+                android:id="@+id/plans"
+                android:title="@string/plans"
+                />
+        <item
+                android:id="@+id/events"
+                android:title="@string/events_map"/>
+        <item
+                android:id="@+id/timeline"
+                android:title="@string/timeline" />
+        <item
+                android:id="@+id/canvas"
+                android:title="@string/canvas"/>
+        <item
+                android:id="@+id/news"
+                android:title="@string/news"/>
+        <item
+                android:id="@+id/taxes"
+                android:title="@string/taxes"/>
+        <item
+                android:id="@+id/jobs"
+                android:title="@string/jobs"/>
+        <item
+                android:id="@+id/press"
+                android:title="@string/press"/>
+        <item
+                android:id="@+id/podcast"
+                android:title="@string/podcast"/>
+    </group>
+</menu>

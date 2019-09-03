@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/homeScreenBackground"
+        >
+
+<ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            >
+
+    <ImageView
+            android:id="@+id/logo_image_view"
+            android:layout_width="200dp"
+            android:layout_height="125dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:src="@drawable/bernie_plus_wordmark"
+            android:layout_marginStart="16dp"
+            />
+
+    <ImageView
+            android:id="@+id/events_button"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            app:layout_constraintWidth_max="180dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo_image_view"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground" 
+            android:background="@drawable/home_btn_events"
+            />
+
+    <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideline"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"/>
+
+    <ImageView
+            android:id="@+id/plans_button"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            app:layout_constraintWidth_max="180dp"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo_image_view"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="@drawable/home_btn_plans"
+            />
+
+    <ImageView
+            android:id="@+id/news_button"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            app:layout_constraintWidth_max="180dp"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/plans_button"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="@drawable/home_btn_news"
+            />
+
+
+    <ImageView
+            android:id="@+id/timeline_button"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            app:layout_constraintWidth_max="180dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/events_button"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="@drawable/home_btn_timeline"
+            />
+
+        <ImageView
+                android:id="@+id/donate_button"
+                android:layout_width="381dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="80dp"
+                android:background="@drawable/donate_btn"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timeline_button"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
+                 />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <ImageView
+            android:id="@+id/volunteer_button"
+            android:layout_width="415dp"
+            android:layout_height="77dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:scaleType="fitCenter"
+            android:src="@drawable/vol_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

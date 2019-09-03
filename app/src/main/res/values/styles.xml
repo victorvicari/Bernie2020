@@ -1,0 +1,67 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/sourcesanspro_regular</item>
+    </style>
+    
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash_screen_background</item>
+    </style>
+
+    <style name="Header" parent="AppTheme">
+        <item name="android:fontFamily">@font/lora_bold</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/text_header_size</item>
+    </style>
+
+    <style name="Subheader" parent="AppTheme">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/text_subheader_size</item>
+    </style>
+    
+    <style name="quote" parent="AppTheme">
+         <item name="android:fontFamily">@font/sourcesanspro_italic</item>
+    </style>
+
+    <style name="SubheaderBlue" parent="AppTheme">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textSize">@dimen/text_subheader_size</item>
+    </style>
+
+    <style name="Legislation" parent="AppTheme">
+        <item name="android:textColor">@color/colorPrimaryDarker</item>
+        <item name="android:textSize">@dimen/text_legislation_size</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ToolbarTheme" parent="AppTheme.AppBarOverlay">
+        <item name="android:fontFamily">@font/lora_bold</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <dimen name="text_header_size">20sp</dimen>
+    <dimen name="text_subheader_size">18sp</dimen>
+    <dimen name="text_legislation_size">16sp</dimen>
+
+
+</resources>

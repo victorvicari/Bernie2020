@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">Bernie+</string>
+    <string name="home">Home</string>
+    <string name="plans">Plans</string>
+    <string name="events_map">Events Map</string>
+    <string name="canvas">Canvas</string>
+    <string name="timeline">Timeline</string>
+    <string name="legislation">Legislation</string>
+    <string name="wallpapers">Wallpapers</string>
+    <string name="news">News</string>
+    <string name="taxes">Taxes</string>
+    <string name="jobs">Jobs</string>
+    <string name="press">Press</string>
+    <string name="podcast">Podcast</string>
+
+    <string name="events_url" translatable="false">https://map.berniesanders.com/</string>
+    <string name="bern_url" translatable="false">https://app.berniesanders.com/</string>
+    <string name="news_url" translatable="false">https://twitter.com/BernieSanders</string>
+    <string name="taxes_url" translatable="false">https://berniesanders.com/tax-returns/</string>
+    <string name="jobs_url" translatable="false">https://boards.greenhouse.io/bernie2020</string>
+    <string name="press_url" translatable="false">https://berniesanders.com/press/</string>
+    <string name="podcast_url" translatable="false">https://berniesanders.com/podcast/</string>
+    <string name="debt_calc_url">https://berniesanders.com/debt/</string>
+    <string name="how_to_vote_url">https://voteforbernie.org/</string>
+    <string name="volunteer_url">https://act.berniesanders.com/signup/volunteer-bernie-sanders/</string>
+    <string name="donate_url">https://secure.actblue.com/donate/bernieplus</string>
+    
+    <string name="plans_and_proposals">Plans and Proposals</string>
+    <string name="detailed_plans_and_bills">Detailed Plans &amp; Bills</string>
+    <string name="statements">Statements</string>
+    <string name="more_plans">More Plans</string>
+
+    <string name="title_canvass">Canvass</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Plans</string>
+    <string name="title_notifications">Events Map</string>
+    <string name="title_plans">Plans</string>
+    <string name="title_map">Map</string>
+    <string name="title_donate">Donate</string>
+    <string name="title_more">More</string>
+
+    <string name="drawer_timeline">Timeline</string>
+    <string name="drawer_legislation">Legislation</string>
+    <string name="drawer_debt_calculator">Debt Calculator</string>
+    <string name="drawer_wallpapers">Wallpapers</string>
+    <string name="drawer_news">News</string>
+    <string name="drawer_taxes">Tax Returns</string>
+    <string name="drawer_jobs">Jobs</string>
+    <string name="drawer_press">Press</string>
+    <string name="drawer_podcast">Podcast</string>
+    <string name="drawer_how_to_vote">How to Vote</string>
+
+    <string name="web_title_events">Events</string>
+    <string name="web_title_canvass">Bern App</string>
+    <string name="web_title_news">Bernie\'s Twitter</string>
+    <string name="web_title_taxes">Bernie\'s Tax Returns</string>
+    <string name="web_title_jobs">Jobs</string>
+    <string name="web_title_press">Press</string>
+    <string name="web_title_podcast">Hear the Bern</string>
+    <string name="web_title_vote">Voter Registration Info</string>
+    <string name="web_title_debt_calculator">College Debt Relief Calculator</string>
+    <string name="web_title_volunteer">Volunteer</string>
+    <string name="web_title_donate">Donate</string>
+
+    <string name="fragment_title_legislation">Legislation</string>
+    <string name="fragment_title_main">Bernie 2020</string>
+    <string name="fragment_title_plan_detail">Plan Details</string>
+    <string name="fragment_title_plans">Plans</string>
+    <string name="fragment_title_web">Web Resource</string>
+
+    <string name="options_menu_search">Search</string>
+    <string name="options_menu_search_hint">Search</string>
+    <string name="options_menu_open_in_browser">Open in Browser</string>
+    
+    <string name="plans_and_bills">Plans \n &amp; Bills</string>
+    <string name="upcoming_events">Upcoming \n Events</string>
+    <string name="volunteer_with_bernie">Volunteer with Bernie</string>
+    <string name="donate_to_bernie">Donate to Bernie</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="drawer_favorites">Favorites</string>
+    <string name="plans_no_search_matches">No plans match your keyword search.\nPlease try another!</string>
+    <string name="legislation_no_search_matches">No legislation matches your keyword search.\\nPlease try another!</string>
+    <string name="summary">Summary</string>
+    <string name="details">Details</string>
+    <string name="entire_bill">Entire Bill</string>
+    <string name="share_legislation">Share Bernie\'s Legislation</string>
+    <string name="add_to_favorites">Add some favorites!</string>
+
+
+</resources>
