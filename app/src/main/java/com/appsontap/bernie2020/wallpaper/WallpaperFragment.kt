@@ -5,7 +5,6 @@ import android.app.WallpaperManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -23,22 +22,18 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import android.widget.BaseAdapter
 import android.widget.ImageView
-import android.widget.Toast
 import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.models.WallpaperItem
 import kotlinx.android.synthetic.main.fragment_wallpaper.*
-import android.graphics.drawable.BitmapDrawable
-
-
 
 
 /**
  * Feel the Bern
  */
-class Wallpaper2Fragment : BaseFragment() {
+class WallpaperFragment : BaseFragment() {
 
-    private val viewModel: Wallpaper2ViewModel by lazy {
-        ViewModelProviders.of(this).get(Wallpaper2ViewModel::class.java)
+    private val viewModel: WallpaperViewModel by lazy {
+        ViewModelProviders.of(this).get(WallpaperViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +41,11 @@ class Wallpaper2Fragment : BaseFragment() {
         title = getString(R.string.wallpapers)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_wallpaper, container, false)
     }
 
@@ -58,16 +57,16 @@ class Wallpaper2Fragment : BaseFragment() {
             .subscribeBy(
                 onSuccess = {
                     val wallpaperAdapter = adapter_wallpaper2(activity!!, it)
-                    gridview.adapter= wallpaperAdapter
+                    gridview.adapter = wallpaperAdapter
                     gridview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
                         try {
                             val builder = AlertDialog.Builder(activity)
                             builder.setTitle("Wallpapers")
                             builder.setMessage("Are you want to change your phones wallpaper?")
-                            builder.setPositiveButton("YES"){dialog, which ->
-                                changeBackground(it,position)
+                            builder.setPositiveButton("YES") { dialog, which ->
+                                changeBackground(it, position)
                             }
-                            builder.setNegativeButton("No"){dialog, which ->dialog.cancel() }
+                            builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
                             val dialog: AlertDialog = builder.create()
                             dialog.show()
 
@@ -82,13 +81,15 @@ class Wallpaper2Fragment : BaseFragment() {
     }
 
     //Rescales the chosen bitmap to the size of the phone screen and sets it as the current wallpaper
-    fun changeBackground(wp :Wallpaper2b, position: Int ){
+    fun changeBackground(wp: List<WallpaperItem>, position: Int) {
+
         val metrics = DisplayMetrics()
-        val windowManager = activity!!.applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-       windowManager.defaultDisplay.getMetrics(metrics)
+        val windowManager =
+            activity!!.applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        windowManager.defaultDisplay.getMetrics(metrics)
         val height = metrics.heightPixels
         val width = metrics.widthPixels
-        val current_wp = wp.getItemAtPosition(position) as WallpaperItem
+        val current_wp = wp.getOrNull(position) as WallpaperItem
         val id = resources.getIdentifier(current_wp.wallpaper_resource, "drawable", activity!!.packageName)
 
         //Also need to take the navigation bar into account to properly resize the image
@@ -97,8 +98,9 @@ class Wallpaper2Fragment : BaseFragment() {
         if (resourceId > 0) {
             navigationBarHeight = resources.getDimensionPixelSize(resourceId)
         }
-        val bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, id), width, height+ navigationBarHeight, true)
-        val wallpaperManager =  WallpaperManager.getInstance(activity!!.applicationContext)
+        val bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, id), width, height + navigationBarHeight, true
+        )
+        val wallpaperManager = WallpaperManager.getInstance(activity!!.applicationContext)
         wallpaperManager.setBitmap(bitmap)
     }
 
@@ -107,24 +109,27 @@ class Wallpaper2Fragment : BaseFragment() {
         bin.clear()
     }
 
-   inner class adapter_wallpaper2(private val mContext: Context, private val wallpapers: Wallpaper2b) : BaseAdapter() {
+    inner class adapter_wallpaper2(
+        private val mContext: Context,
+        private val wallpapers: List<WallpaperItem>
+    ) : BaseAdapter() {
 
         override fun getCount(): Int {
-            return wallpapers.totalItemCount()
+            return wallpapers.size
         }
 
-       override fun getItemId(position: Int): Long {
-           return position.toLong()
-       }
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
 
-       override fun getItem(position: Int): Any? {
-           return null
-       }
+        override fun getItem(position: Int): Any? {
+            return null
+        }
 
-       //Sets the thumbnails within the gridView
+        //Sets the thumbnails within the gridView
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             var convertView = convertView
-            val thumbnail = wallpapers.getItemAtPosition(position) as WallpaperItem
+            val thumbnail = wallpapers.get(position) as WallpaperItem
             if (convertView == null) {
                 val layoutInflater = LayoutInflater.from(mContext)
                 convertView = layoutInflater.inflate(R.layout.grid_wallpaper, null)
@@ -138,8 +143,8 @@ class Wallpaper2Fragment : BaseFragment() {
     }
 
     companion object {
-        fun newInstance(): Wallpaper2Fragment {
-            return Wallpaper2Fragment()
+        fun newInstance(): WallpaperFragment {
+            return WallpaperFragment()
         }
     }
 }

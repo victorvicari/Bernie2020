@@ -6,6 +6,5 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "wallpaper_table")
 data class WallpaperItem(
     @PrimaryKey val id: String,
-    val year: String,
     val wallpaper_resource: String?
     )
