@@ -137,7 +137,7 @@ class TimelineFragment : BaseFragment() {
                 itemView.image_description_text_view.text = timelineitem.description
                 itemView.image_view.setOnClickListener {
                     val i = Intent(Intent.ACTION_VIEW)
-                    i.data = Uri.parse(timelineitem.article_url)
+                    i.data = Uri.parse(timelineitem.image_url)
                     startActivity(i)
                 }
             }
