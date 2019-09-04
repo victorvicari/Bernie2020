@@ -129,8 +129,7 @@ class TimelineFragment : BaseFragment() {
 
 
         inner class ImageDescriptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            fun bind(timelineitem:TimelineItem) {
-                //url: String, description: String, img_resource: String?
+            fun bind(timelineitem: TimelineItem) {
                 if (timelineitem.image_resource!=null){
                     val id = resources.getIdentifier(timelineitem.image_resource, "drawable", requireActivity().packageName)
                     itemView.image_view.setImageResource(id)
