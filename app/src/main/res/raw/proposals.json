@@ -946,17 +946,6 @@
     "created_at": null
   },
   {
-    "id": "p86",
-    "name": null,
-    "category_ids": null,
-    "legislation_ids": null,
-    "quote_ids": null,
-    "video_ids": null,
-    "links": null,
-    "description": null,
-    "created_at": null
-  },
-  {
     "id": "p87",
     "name": "Eliminate private prisons and detention centers.",
     "category_ids": "c15",
@@ -967,61 +956,7 @@
     "description": null,
     "created_at": null
   },
-  {
-    "id": "p88",
-    "name": null,
-    "category_ids": null,
-    "legislation_ids": null,
-    "quote_ids": null,
-    "video_ids": null,
-    "links": null,
-    "description": null,
-    "created_at": null
-  },
-  {
-    "id": "p89",
-    "name": null,
-    "category_ids": null,
-    "legislation_ids": null,
-    "quote_ids": null,
-    "video_ids": null,
-    "links": null,
-    "description": null,
-    "created_at": null
-  },
-  {
-    "id": "p90",
-    "name": null,
-    "category_ids": null,
-    "legislation_ids": null,
-    "quote_ids": null,
-    "video_ids": null,
-    "links": null,
-    "description": null,
-    "created_at": null
-  },
-  {
-    "id": "p91",
-    "name": null,
-    "category_ids": null,
-    "legislation_ids": null,
-    "quote_ids": null,
-    "video_ids": null,
-    "links": null,
-    "description": null,
-    "created_at": null
-  },
-  {
-    "id": "p92",
-    "name": null,
-    "category_ids": null,
-    "legislation_ids": null,
-    "quote_ids": null,
-    "video_ids": null,
-    "links": null,
-    "description": null,
-    "created_at": null
-  },
+
   {
     "id": "p93",
     "name": "Enact a Green New Deal not just to save the planet, but to protect our most vulnerable communities. We must end the scourge of environmental racism, and at the same time create green jobs to support and rebuild the local economies of affected communities.",
@@ -1443,7 +1378,7 @@
   {
     "id": "p131",
     "name": "Invest in rural broadband buildout and reinstate net neutrality rules, which have protected rural small businesses and internet users from predatory practices by telecommunications giants.",
-    "category_ids": "c19, c33",
+    "category_ids": "c19 c33",
     "legislation_ids": null,
     "quote_ids": null,
     "video_ids": null,
@@ -3379,7 +3314,7 @@
   {
     "id": "p307",
     "name": "Green New Deal: Transportation - Build regional high-speed rail.",
-    "category_ids": "c5 ",
+    "category_ids": "c5",
     "legislation_ids": null,
     "quote_ids": null,
     "video_ids": null,

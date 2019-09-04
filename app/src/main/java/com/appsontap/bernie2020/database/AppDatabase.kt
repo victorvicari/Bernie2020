@@ -224,7 +224,20 @@ abstract class AppDatabase : RoomDatabase() {
                 }
         return Observable.concat(Observable.just(category), getPlansObservable)
     }
-    
+
+    open fun getCategoryWithPlans(plan: Plan): Observable<Any> {
+        val getCategoriesObservable =
+            Observable.fromArray(plan.getCategoryIds())
+                .flatMapIterable {
+                    it
+                }.flatMap { id ->
+                    Log.d(TAG, "cat id $id")
+                    getDatabase().categoryDao().getCategoryForId(id).toObservable()
+                }
+        return Observable.concat(Observable.just(plan), getCategoriesObservable)
+    }
+
+
     open fun getFavorites(planIds: List<String>, legIds: List<String>): Single<List<Any>> {
         val getPlansObservable = 
             Observable.fromArray(planIds)

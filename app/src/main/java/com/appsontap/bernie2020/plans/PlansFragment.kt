@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+import com.airbnb.lottie.utils.MiscUtils
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Plan
@@ -20,6 +21,7 @@ import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.util.into
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -68,7 +70,9 @@ class PlansFragment : BaseFragment() {
                 .subscribeBy(
                     onNext = {
                         data = it
-                        simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
+                        // simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
+                        simpleCategories = getSimpleCategoriesFromAllItems(it)
+                        Log.d("DID DATA DO IT?", simpleCategories.toString())
                         recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
                     },
                     onError = {
@@ -77,6 +81,22 @@ class PlansFragment : BaseFragment() {
                 ).into(bin)
 
 
+    }
+
+    private fun getSimpleCategoriesFromAllItems(catsAndPlans: List<Any>): List<SimpleCategory> {
+        val categories = (catsAndPlans.filter {
+            it is Category
+        } as List<Category>).toSet().sortedBy { it -> it.id.substring(1).toInt() }
+
+        val simpCategories = mutableListOf<SimpleCategory>()
+        for(category in categories) {
+            simpCategories.add(SimpleCategory(category.name,
+                catsAndPlans.filter {
+                    it is Plan && it.category_ids?.split(" ")!!.contains(category.id)
+            } as MutableList<Plan>, category.id))
+        }
+        Log.d(TAG, simpCategories.toString())
+        return simpCategories
     }
 
     // data for the expandable recycler view must be provided in a list of SimpleCategory objects,
@@ -98,6 +118,7 @@ class PlansFragment : BaseFragment() {
             }
             last = item
         }
+
         return categories
     }
 
