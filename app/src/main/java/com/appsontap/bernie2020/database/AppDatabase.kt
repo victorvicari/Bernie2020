@@ -77,22 +77,34 @@ abstract class AppDatabase : RoomDatabase() {
             .doOnNext { category ->
                 getDatabase().categoryDao().insert(category)
             }
-            .flatMap {
-                plans.toObservable()
-            }
-            .doOnNext { plan ->
-                getDatabase().planDao().insert(plan)
-            }
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .subscribeBy(
                 onComplete = {
-                    Log.d(TAG, "Built categories and plans")
+                    Log.d(TAG, "Built categories")
                 },
                 onError = {
                     Log.e(TAG, "Error writing to database ${it.message}", it)
                 }
             )
+        
+          plans.toObservable()
+            .doOnNext { plan ->
+                Log.d(TAG, "Inserting plan ${plan.id}")
+                getDatabase().planDao().insert(plan)
+            }
+              .subscribeOn(Schedulers.io())
+              .observeOn(Schedulers.io())
+              .subscribeBy(
+                  onComplete = {
+                      Log.d(TAG, "Built plans")
+
+                  },
+                  onError = {
+                      Log.e(TAG, "Couldn't build plans ${it.message}", it)
+
+                  }
+              )
         
         legislation
             .toObservable()
