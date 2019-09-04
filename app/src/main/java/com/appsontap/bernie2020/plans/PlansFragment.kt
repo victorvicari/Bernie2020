@@ -27,6 +27,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_plans.*
 import kotlinx.android.synthetic.main.item_plan_category.view.*
+import java.util.*
 
 
 class PlansFragment : BaseFragment() {
@@ -94,6 +95,27 @@ class PlansFragment : BaseFragment() {
                 catsAndPlans.filter {
                     it is Plan && it.category_ids?.split(" ")!!.contains(category.id)
             } as MutableList<Plan>, category.id))
+        }
+        Log.d(TAG, simpCategories.toString())
+        return simpCategories
+    }
+
+    private fun getSimpleCategoriesByKeyword(catsAndPlans: List<Any>, keyword: String) : MutableList<SimpleCategory> {
+        val locale = Locale.getDefault()
+        val lowerCaseKeyword = keyword.toLowerCase(locale)
+        val categories = (catsAndPlans.filter {
+            it is Category
+        } as List<Category>).toSet().sortedBy { it -> it.id.substring(1).toInt() }
+
+        val simpCategories = mutableListOf<SimpleCategory>()
+        for(category in categories) {
+            simpCategories.add(SimpleCategory(category.name,
+                catsAndPlans.filter {
+                    it is Plan
+                        && it.category_ids?.split(" ")?.contains(category.id) ?: false
+                        && (it.name?.toLowerCase(locale)?.contains(lowerCaseKeyword) ?: false
+                            || it.description?.toLowerCase(locale)?.contains(lowerCaseKeyword) ?: false)
+                } as MutableList<Plan>, category.id))
         }
         Log.d(TAG, simpCategories.toString())
         return simpCategories
@@ -171,22 +193,22 @@ class PlansFragment : BaseFragment() {
     }
 
     private fun searchDataByKeyword(keyword: String): List<SimpleCategory> {
-        val categories = mutableListOf<SimpleCategory>()
-        var simpleCategory: SimpleCategory? = null
-        var last = Any()
-        for (item in data) {
-            if (item is Category) {
-                if (last is Plan && simpleCategory != null) {
-                    categories.add(simpleCategory)
-                }
-                simpleCategory = SimpleCategory(item.name!!, mutableListOf(), item.id)
-            }
-            if (item is Plan && simpleCategory != null) {
-                if (item.name?.contains(keyword, true) == true || item.description?.contains(keyword, true) == true)
-                    simpleCategory.addPlan(item)
-            }
-            last = item
-        }
+        val categories = getSimpleCategoriesByKeyword(data, keyword)
+//        var simpleCategory: SimpleCategory? = null
+//        var last = Any()
+//        for (item in data) {
+//            if (item is Category) {
+//                if (last is Plan && simpleCategory != null) {
+//                    categories.add(simpleCategory)
+//                }
+//                simpleCategory = SimpleCategory(item.name!!, mutableListOf(), item.id)
+//            }
+//            if (item is Plan && simpleCategory != null) {
+//                if (item.name?.contains(keyword, true) == true || item.description?.contains(keyword, true) == true)
+//                    simpleCategory.addPlan(item)
+//            }
+//            last = item
+//        }
         // check if the category is empty and remove it
         for (i in (categories.size - 1) downTo 0) {
             if (categories[i].plans.isEmpty()) {
