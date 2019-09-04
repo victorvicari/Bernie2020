@@ -74,9 +74,7 @@ class Wallpaper2Fragment : BaseFragment() {
                         } catch (e: Exception) {
                             Log.e(TAG, "Cannot set image as wallpaper", e)
                         }
-
                     })
-
                 },
                 onError = {
                     Log.e(TAG, "Couldn't display Wallpaper2 ${it.message}", it)
@@ -87,24 +85,19 @@ class Wallpaper2Fragment : BaseFragment() {
     fun changeBackground(wp :Wallpaper2b, position: Int ){
         val metrics = DisplayMetrics()
         val windowManager = activity!!.applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        windowManager.defaultDisplay.getMetrics(metrics)
+       windowManager.defaultDisplay.getMetrics(metrics)
         val height = metrics.heightPixels
         val width = metrics.widthPixels
-
         val current_wp = wp.getItemAtPosition(position) as WallpaperItem
         val id = resources.getIdentifier(current_wp.wallpaper_resource, "drawable", activity!!.packageName)
-        val bm = BitmapFactory.decodeResource(resources, id)
-        val w = bm.width
-        val h = bm.height
 
-
-        Log.d("Hellos1", Integer.toString(width))
-        Log.d("Hellos1", Integer.toString(height))
-        Log.d("Hellos1", Integer.toString(w))
-        Log.d("Hellos1", Integer.toString(h))
-
-
-        val bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, id), width, height, true)
+        //Also need to take the navigation bar into account to properly resize the image
+        var navigationBarHeight = 0
+        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            navigationBarHeight = resources.getDimensionPixelSize(resourceId)
+        }
+        val bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, id), width, height+ navigationBarHeight, true)
         val wallpaperManager =  WallpaperManager.getInstance(activity!!.applicationContext)
         wallpaperManager.setBitmap(bitmap)
     }
