@@ -17,6 +17,7 @@ import com.appsontap.bernie2020.home.HomeFragment
 import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.timeline.TimelineFragment
 import com.appsontap.bernie2020.util.TAG
+import com.appsontap.bernie2020.wallpaper2.WallpaperFragment
 import com.appsontap.bernie2020.web.WebFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -27,11 +28,13 @@ import kotlinx.android.synthetic.main.content_main.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentRouter {
 
     lateinit var toggle: ActionBarDrawerToggle
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         toolbar.setTitleTextColor(getColor(R.color.white))
         setSupportActionBar(toolbar)
+
         toggle = object: ActionBarDrawerToggle(this, drawer, toolbar, 0,    0) {
             override fun onDrawerClosed(drawerView: View) {
                 setItemMenuSelected(getIdFromCurrentFragment())
@@ -119,7 +122,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 getString(R.string.timeline) -> fragment = TimelineFragment.newInstance()
                 getString(R.string.drawer_legislation) -> fragment = LegislationFragment.newInstance()
                 getString(R.string.drawer_favorites) -> fragment = FavoritesFragment.newInstance()
-
+                getString(R.string.wallpapers) -> fragment = WallpaperFragment.newInstance()
             }
             replaceFragment(fragment)
         }

@@ -1,0 +1,152 @@
+package com.appsontap.bernie2020.wallpaper2
+
+import android.app.AlertDialog
+import android.app.WallpaperManager
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Bundle
+import android.util.DisplayMetrics
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.AdapterView
+import androidx.lifecycle.ViewModelProviders
+import com.appsontap.bernie2020.R
+import com.appsontap.bernie2020.util.TAG
+import com.appsontap.bernie2020.util.into
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
+import android.widget.BaseAdapter
+import android.widget.ImageView
+import com.appsontap.bernie2020.BaseFragment
+import com.appsontap.bernie2020.models.WallpaperItem
+import kotlinx.android.synthetic.main.fragment_wallpaper.*
+
+
+/**
+ * Feel the Bern
+ */
+class WallpaperFragment : BaseFragment() {
+
+    private val viewModel: WallpaperViewModel by lazy {
+        ViewModelProviders.of(this).get(WallpaperViewModel::class.java)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        title = getString(R.string.wallpapers)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_wallpaper, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.Wallpaper2Ready()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    val wallpaperAdapter = adapter_wallpaper2(activity!!, it)
+                    gridview.adapter = wallpaperAdapter
+                    gridview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
+                        try {
+                            val builder = AlertDialog.Builder(activity)
+                            builder.setTitle("Wallpapers")
+                            builder.setMessage("Are you want to change your phones wallpaper?")
+                            builder.setPositiveButton("YES") { dialog, which ->
+                                changeBackground(it, position)
+                            }
+                            builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
+                            val dialog: AlertDialog = builder.create()
+                            dialog.show()
+
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Cannot set image as wallpaper", e)
+                        }
+                    })
+                },
+                onError = {
+                    Log.e(TAG, "Couldn't display Wallpaper2 ${it.message}", it)
+                }).into(bin)
+    }
+
+    //Rescales the chosen bitmap to the size of the phone screen and sets it as the current wallpaper
+    fun changeBackground(wp: List<WallpaperItem>, position: Int) {
+
+        val metrics = DisplayMetrics()
+        val windowManager =
+            activity!!.applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        windowManager.defaultDisplay.getMetrics(metrics)
+        val height = metrics.heightPixels
+        val width = metrics.widthPixels
+        val current_wp = wp.getOrNull(position) as WallpaperItem
+        val id = resources.getIdentifier(current_wp.wallpaper_resource, "drawable", activity!!.packageName)
+
+        //Also need to take the navigation bar into account to properly resize the image
+        var navigationBarHeight = 0
+        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            navigationBarHeight = resources.getDimensionPixelSize(resourceId)
+        }
+        val bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, id), width, height + navigationBarHeight, true
+        )
+        val wallpaperManager = WallpaperManager.getInstance(activity!!.applicationContext)
+        wallpaperManager.setBitmap(bitmap)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bin.clear()
+    }
+
+    inner class adapter_wallpaper2(
+        private val mContext: Context,
+        private val wallpapers: List<WallpaperItem>
+    ) : BaseAdapter() {
+
+        override fun getCount(): Int {
+            return wallpapers.size
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getItem(position: Int): Any? {
+            return null
+        }
+
+        //Sets the thumbnails within the gridView
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            var convertView = convertView
+            val thumbnail = wallpapers.get(position) as WallpaperItem
+            if (convertView == null) {
+                val layoutInflater = LayoutInflater.from(mContext)
+                convertView = layoutInflater.inflate(R.layout.grid_wallpaper, null)
+            }
+
+            val imageView = convertView!!.findViewById(R.id.imageview_wallpaper) as ImageView
+            val id = resources.getIdentifier(thumbnail.wallpaper_resource, "drawable", activity!!.packageName)
+            imageView.setImageResource(id)
+            return convertView
+        }
+    }
+
+    companion object {
+        fun newInstance(): WallpaperFragment {
+            return WallpaperFragment()
+        }
+    }
+}
+
+
