@@ -2,6 +2,7 @@ package com.appsontap.bernie2020.plans
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -27,6 +28,8 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_plans.*
 import kotlinx.android.synthetic.main.item_plan_category.view.*
+import org.json.JSONArray
+import org.json.JSONException
 import java.util.*
 
 
@@ -75,6 +78,19 @@ class PlansFragment : BaseFragment() {
                         simpleCategories = getSimpleCategoriesFromAllItems(it)
                         Log.d("DID DATA DO IT?", simpleCategories.toString())
                         recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
+
+                        val sharedPref = requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
+                        var states: BooleanArray? = null
+                        try {
+                            val jsonArray = JSONArray(sharedPref.getString("ITEMS", "[]"))
+                            states = BooleanArray(jsonArray.length())
+                            for (i in 0 until jsonArray.length()) {
+                                states[i] = jsonArray.getBoolean(i)
+                            }
+                            (recycler_view.adapter as PlansAdapter).restoreExpandedState(states)
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
@@ -148,7 +164,7 @@ class PlansFragment : BaseFragment() {
         super.onDestroyView()
         bin.clear()
     }
-    
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater!!.inflate(R.menu.options_menu_searchable, menu)
         // Associate searchable configuration with the SearchView
@@ -250,6 +266,52 @@ class PlansFragment : BaseFragment() {
                 holder?.expand()
             }
         }
+
+        fun getExpandedState(): BooleanArray {
+            val expandedState = BooleanArray(groups.size)
+            var stateIndex = 0
+            for (i in 0 until itemCount) {
+                if (stateIndex < expandedState.size && getItemViewType(i) == 2) {
+                    expandedState[stateIndex] = isGroupExpanded(i)
+                    stateIndex++
+                }
+            }
+            return expandedState
+        }
+
+        fun restoreExpandedState(expandedState: BooleanArray) {
+            Log.d(TAG, "restoreExpandedState: " + Arrays.toString(expandedState))
+            var stateIndex = 0
+            for (i in 0 until itemCount) {
+                if (getItemViewType(i) == 2) {
+                    if (stateIndex < expandedState.size && expandedState[stateIndex]) {
+                        toggleGroup(i)
+                    }
+                    stateIndex++
+                }
+            }
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        val sharedPref = requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        val jsonArray = JSONArray()
+        val states = (recycler_view.adapter as PlansAdapter).getExpandedState()
+        for (b in states) {
+            jsonArray.put(b)
+        }
+        editor.putString("ITEMS", jsonArray.toString())
+        editor.apply()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
 
     }
 
