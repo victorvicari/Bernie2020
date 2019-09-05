@@ -30,17 +30,5 @@ class PlansRepo(val context: Context) {
                 AppDatabase.getDatabase().getCategoryWithPlans(it)
             }
             .toList()
-//            .getDatabase()
-//            .categoryDao()
-//            .getAll()
-//            .flattenAsObservable { it }
-//            .filter{
-//                it.proposal_ids != null
-//            }
-//            .flatMap {
-//                Log.d(TAG, "Category id ${it.id}")
-//                AppDatabase.getDatabase().getPlansWithCategory(it)
-//            }
-//            .toList()
     }
 }
