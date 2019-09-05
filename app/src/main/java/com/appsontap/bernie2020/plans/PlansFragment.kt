@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
+import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.SimpleCategory
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
@@ -23,7 +24,10 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_legislation.*
 import kotlinx.android.synthetic.main.fragment_plans.*
+import kotlinx.android.synthetic.main.fragment_plans.recycler_view
+import kotlinx.android.synthetic.main.fragment_plans.textview_empty_list
 import kotlinx.android.synthetic.main.item_plan_category.view.*
 
 
@@ -37,6 +41,10 @@ class PlansFragment : BaseFragment() {
     private lateinit var data: List<Any>
     private lateinit var simpleCategories: List<SimpleCategory>
     private lateinit var favorites: Set<String>
+    private var expandListener : MenuItem.OnActionExpandListener? = null
+    private var queryTextListener : SearchView.OnQueryTextListener? = null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,10 +122,11 @@ class PlansFragment : BaseFragment() {
         searchView.setSearchableInfo(
             searchManager.getSearchableInfo(activity!!.componentName)
         )
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+        queryTextListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val filteredResults = searchDataByKeyword(searchView.query.toString())
-                recycler_view.adapter = context?.let { PlansAdapter(it, filteredResults) }
+                recycler_view.adapter = PlansAdapter(requireContext(), filteredResults)
                 recycler_view.adapter?.notifyDataSetChanged()
                 textview_empty_list.visibility =
                     (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
@@ -126,16 +135,17 @@ class PlansFragment : BaseFragment() {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty() && recycler_view != null) {
-                    recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
+                    recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
                     recycler_view.adapter?.notifyDataSetChanged()
                     textview_empty_list.visibility =
                         (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
                 }
                 return true
             }
-        })
+        }
+        searchView.setOnQueryTextListener(queryTextListener)
         // listens for the back button press to reset the adapter to the full list
-        val expandListener = object : MenuItem.OnActionExpandListener {
+        expandListener = object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                 return true
             }
@@ -148,6 +158,13 @@ class PlansFragment : BaseFragment() {
         }
         menu.findItem(R.id.action_search).setOnActionExpandListener(expandListener)
     }
+
+    override fun onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu()
+        expandListener = null
+        queryTextListener = null
+    }
+
 
     private fun searchDataByKeyword(keyword: String): List<SimpleCategory> {
         val categories = mutableListOf<SimpleCategory>()
