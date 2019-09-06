@@ -52,6 +52,9 @@ class TimelineFragment : BaseFragment() {
             .subscribeBy(
                 onSuccess = {
                     recycler_view.adapter = TimelineAdapter(it)
+                    val sectionItemDecoration = RecyclerSectionItemDecoration2(resources.getDimensionPixelSize(R.dimen.header), true,it)
+                    recycler_view.addItemDecoration(sectionItemDecoration)
+
                 },
                 onError = {
                     Log.e(TAG, "Couldn't display timeline ${it.message}", it)
@@ -62,6 +65,9 @@ class TimelineFragment : BaseFragment() {
         super.onDestroyView()
         bin.clear()
     }
+
+
+
 
     inner class TimelineAdapter(val timeline: Timeline) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
