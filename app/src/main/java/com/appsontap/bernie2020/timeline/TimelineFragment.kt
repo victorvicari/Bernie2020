@@ -1,5 +1,7 @@
 package com.appsontap.bernie2020.timeline
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,10 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.R
+import com.appsontap.bernie2020.models.TimelineItem
 import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.util.into
-import com.appsontap.bernie2020.models.TimelineItem
 import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -19,10 +22,6 @@ import kotlinx.android.synthetic.main.fragment_timeline.*
 import kotlinx.android.synthetic.main.timeline_image_viewholder.view.*
 import kotlinx.android.synthetic.main.timeline_text_viewholder.view.*
 import kotlinx.android.synthetic.main.timeline_year_viewholder.view.*
-import java.lang.RuntimeException
-import android.content.Intent
-import android.net.Uri
-import com.appsontap.bernie2020.BaseFragment
 
 
 /**
@@ -52,6 +51,8 @@ class TimelineFragment : BaseFragment() {
             .subscribeBy(
                 onSuccess = {
                     recycler_view.adapter = TimelineAdapter(it)
+                    val sectionItemDecoration = RecyclerSectionItemDecoration2(resources.getDimensionPixelSize(R.dimen.header), true,it)
+                    recycler_view.addItemDecoration(sectionItemDecoration)
                 },
                 onError = {
                     Log.e(TAG, "Couldn't display timeline ${it.message}", it)
@@ -103,7 +104,7 @@ class TimelineFragment : BaseFragment() {
                 is YearViewHolder -> holder.bind(timeline.getItemAtPosition(position) as String)
                 is ImageDescriptionViewHolder -> {
                     val item = timeline.getItemAtPosition(position) as TimelineItem
-                    holder.bind(item.image_url!!, item.description)
+                    holder.bind(item)
                 }
                 is TextViewHolder -> {
                     val item = timeline.getItemAtPosition(position) as TimelineItem
@@ -126,13 +127,18 @@ class TimelineFragment : BaseFragment() {
             }
         }
 
+
+
         inner class ImageDescriptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            fun bind(url: String, description: String) {
-                Glide.with(itemView).load(url).into(itemView.image_view)
-                itemView.image_description_text_view.text = description
+            fun bind(timelineitem: TimelineItem) {
+                if (timelineitem.image_resource!=null){
+                    val id = resources.getIdentifier(timelineitem.image_resource, "drawable", requireActivity().packageName)
+                    itemView.image_view.setImageResource(id)
+                }
+                itemView.image_description_text_view.text = timelineitem.description
                 itemView.image_view.setOnClickListener {
                     val i = Intent(Intent.ACTION_VIEW)
-                    i.data = Uri.parse(url)
+                    i.data = Uri.parse(timelineitem.image_url)
                     startActivity(i)
                 }
             }

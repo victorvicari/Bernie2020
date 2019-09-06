@@ -17,5 +17,6 @@ data class TimelineItem(
     val quote_ids: String?,
     val related_links: String?,
     val video_url: String?,
-    val year: String
+    val year: String,
+    val image_resource: String?
 )
