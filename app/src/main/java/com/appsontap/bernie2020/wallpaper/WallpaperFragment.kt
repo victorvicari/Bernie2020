@@ -22,8 +22,10 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import androidx.fragment.app.FragmentActivity
 import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.models.WallpaperItem
+import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
 import kotlinx.android.synthetic.main.fragment_wallpaper.*
 
 
@@ -60,16 +62,16 @@ class WallpaperFragment : BaseFragment() {
                     gridview.adapter = wallpaperAdapter
                     gridview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
                         try {
-                            val builder = AlertDialog.Builder(activity)
-                            builder.setTitle("Wallpapers")
-                            builder.setMessage("Are you want to change your phones wallpaper?")
-                            builder.setPositiveButton("YES") { dialog, which ->
-                                changeBackground(it, position)
-                            }
-                            builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
-                            val dialog: AlertDialog = builder.create()
-                            dialog.show()
-
+                            val args = Bundle()
+                            args.putString("wpTag", it.get(position).wallpaper_resource)
+                            (context as FragmentActivity).supportFragmentManager.beginTransaction()
+                                .replace(
+                                    R.id.fragment_container,
+                                    viewWallpaperFragment.newInstance(args),
+                                    CategoryDetailsFragment.TAG
+                                )
+                                .addToBackStack(CategoryDetailsFragment.TAG)
+                                .commit()
                         } catch (e: Exception) {
                             Log.e(TAG, "Cannot set image as wallpaper", e)
                         }
@@ -78,30 +80,6 @@ class WallpaperFragment : BaseFragment() {
                 onError = {
                     Log.e(TAG, "Couldn't display Wallpaper2 ${it.message}", it)
                 }).into(bin)
-    }
-
-    //Rescales the chosen bitmap to the size of the phone screen and sets it as the current wallpaper
-    fun changeBackground(wp: List<WallpaperItem>, position: Int) {
-
-        val metrics = DisplayMetrics()
-        val windowManager =
-            activity!!.applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        windowManager.defaultDisplay.getMetrics(metrics)
-        val height = metrics.heightPixels
-        val width = metrics.widthPixels
-        val current_wp = wp.getOrNull(position) as WallpaperItem
-        val id = resources.getIdentifier(current_wp.wallpaper_resource, "drawable", activity!!.packageName)
-
-        //Also need to take the navigation bar into account to properly resize the image
-        var navigationBarHeight = 0
-        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        if (resourceId > 0) {
-            navigationBarHeight = resources.getDimensionPixelSize(resourceId)
-        }
-        val bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, id), width, height + navigationBarHeight, true
-        )
-        val wallpaperManager = WallpaperManager.getInstance(activity!!.applicationContext)
-        wallpaperManager.setBitmap(bitmap)
     }
 
     override fun onDestroyView() {
