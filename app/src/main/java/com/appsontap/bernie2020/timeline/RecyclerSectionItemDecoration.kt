@@ -66,10 +66,7 @@ class RecyclerSectionItemDecoration(
                     title = timelineItem.year
                 }
             } else {
-                //title = "1962"
-                // Log.d("Hellos123", Resources.getSystem().getString(R.string.canvas))
                 title = mContext.getString(R.string.first_timeline_year)
-                // title= "1962"
 
 
             }

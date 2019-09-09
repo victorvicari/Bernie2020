@@ -54,7 +54,7 @@ class TimelineFragment : BaseFragment() {
             .subscribeBy(
                 onSuccess = {
                     recycler_view.adapter = TimelineAdapter(it)
-                    val sectionItemDecoration = RecyclerSectionItemDecoration(context!!, true, it)
+                    val sectionItemDecoration = RecyclerSectionItemDecoration(requireContext(), true, it)
                     recycler_view.addItemDecoration(sectionItemDecoration)
                 },
                 onError = {
