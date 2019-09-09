@@ -1,7 +1,6 @@
 package com.appsontap.bernie2020.timeline
 
 import com.appsontap.bernie2020.models.TimelineItem
-import java.lang.RuntimeException
 
 /**
  * Feel the Bern
