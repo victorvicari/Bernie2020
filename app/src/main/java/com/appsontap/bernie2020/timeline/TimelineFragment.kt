@@ -14,7 +14,6 @@ import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.models.TimelineItem
 import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.util.into
-import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -38,7 +37,11 @@ class TimelineFragment : BaseFragment() {
         title = getString(R.string.drawer_timeline)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_timeline, container, false)
     }
 
@@ -51,7 +54,7 @@ class TimelineFragment : BaseFragment() {
             .subscribeBy(
                 onSuccess = {
                     recycler_view.adapter = TimelineAdapter(it)
-                    val sectionItemDecoration = RecyclerSectionItemDecoration2(resources.getDimensionPixelSize(R.dimen.header), true,it)
+                    val sectionItemDecoration = RecyclerSectionItemDecoration(context!!, true, it)
                     recycler_view.addItemDecoration(sectionItemDecoration)
                 },
                 onError = {
@@ -64,7 +67,8 @@ class TimelineFragment : BaseFragment() {
         bin.clear()
     }
 
-    inner class TimelineAdapter(val timeline: Timeline) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class TimelineAdapter(val timeline: Timeline) :
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return when (viewType) {
                 R.layout.timeline_year_viewholder ->
@@ -128,11 +132,14 @@ class TimelineFragment : BaseFragment() {
         }
 
 
-
         inner class ImageDescriptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             fun bind(timelineitem: TimelineItem) {
-                if (timelineitem.image_resource!=null){
-                    val id = resources.getIdentifier(timelineitem.image_resource, "drawable", requireActivity().packageName)
+                timelineitem.image_resource?.let {
+                    val id = resources.getIdentifier(
+                        timelineitem.image_resource,
+                        "drawable",
+                        requireActivity().packageName
+                    )
                     itemView.image_view.setImageResource(id)
                 }
                 itemView.image_description_text_view.text = timelineitem.description

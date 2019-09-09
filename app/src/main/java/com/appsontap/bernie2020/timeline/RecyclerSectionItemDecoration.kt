@@ -1,7 +1,12 @@
 package com.appsontap.bernie2020.timeline
 
+import android.content.Context
+import android.content.res.Resources
+import android.content.res.Resources.getSystem
 import android.graphics.Canvas
 import android.graphics.Rect
+import android.provider.Settings.Global.getString
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +19,8 @@ import com.appsontap.bernie2020.models.TimelineItem
 /**
  * Feel the Bern
  */
-class RecyclerSectionItemDecoration2(
-    private val headerOffset: Int,
+class RecyclerSectionItemDecoration(
+    private val mContext: Context,
     private val sticky: Boolean,
     private val timeline: Timeline
 ) :
@@ -45,7 +50,7 @@ class RecyclerSectionItemDecoration2(
 
 
         var previousHeader: CharSequence = ""
-        var title: CharSequence = ""
+        var title: String = ""
 
         for (i in 0 until parent.childCount) {
             val child = parent.getChildAt(i)
@@ -55,16 +60,20 @@ class RecyclerSectionItemDecoration2(
                 if (timeline.getTypeForPosition(position - 1) == ViewType.YEAR) {
                     title = timeline.getItemAtPosition(position - 1).toString()
                 } else {
-                    val (_, _, _, _, _, _, _, _, _, _, _, _, year) = timeline.getItemAtPosition(
+                    val timelineItem = timeline.getItemAtPosition(
                         position - 1
                     ) as TimelineItem
-                    title = year
+                    title = timelineItem.year
                 }
             } else {
-                title = "1962"
+                //title = "1962"
+                // Log.d("Hellos123", Resources.getSystem().getString(R.string.canvas))
+                title = mContext.getString(R.string.first_timeline_year)
+                // title= "1962"
+
 
             }
-            header!!.text = title
+            header?.text = title
             if (previousHeader != title) {
                 drawHeader(c, child, headerView!!)
                 previousHeader = title
@@ -91,6 +100,8 @@ class RecyclerSectionItemDecoration2(
         return LayoutInflater.from(parent.context).inflate(R.layout.view_header, parent, false)
     }
 
+    //For setting the size of the header/year blocks. Essentially you draw one R.id.tv_header for every date not just the header.
+    // Each one only occupies the space of a year section in the recyclerview, not the entire screen.
     private fun fixLayoutSize(view: View, parent: ViewGroup) {
         val widthSpec = View.MeasureSpec.makeMeasureSpec(
             parent.width,
@@ -111,9 +122,7 @@ class RecyclerSectionItemDecoration2(
             parent.paddingTop + parent.paddingBottom,
             view.layoutParams.height
         )
-
         view.measure(childWidth, childHeight)
-
         view.layout(0, 0, view.measuredWidth, view.measuredHeight)
     }
 
