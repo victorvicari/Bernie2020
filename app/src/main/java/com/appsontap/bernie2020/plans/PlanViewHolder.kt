@@ -17,12 +17,6 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
         planView.textview_proposal_item_name.text = name
     }
 
-    fun setTextViewDesc(desc: String?) {
-        // removed to not show the description in the summary view
-        planView.textview_proposal_item_desc.text = ""
-        // planView.textview_proposal_item_desc.text = desc
-    }
-
     fun setOnClickListener
                 (context: Context, plan: Plan?) {
         planView.textview_proposal_item_name.setOnClickListener {
