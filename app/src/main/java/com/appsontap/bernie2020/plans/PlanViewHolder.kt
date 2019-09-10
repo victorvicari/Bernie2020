@@ -17,10 +17,6 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
         planView.textview_proposal_item_name.text = name
     }
 
-    fun setTextViewDesc(desc: String?) {
-        planView.textview_proposal_item_desc.text = desc
-    }
-
     fun setOnClickListener
                 (context: Context, plan: Plan?) {
         planView.textview_proposal_item_name.setOnClickListener {

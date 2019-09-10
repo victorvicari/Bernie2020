@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+import com.airbnb.lottie.utils.MiscUtils
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
 import com.appsontap.bernie2020.models.Legislation
@@ -21,6 +22,7 @@ import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.util.into
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -29,6 +31,7 @@ import kotlinx.android.synthetic.main.fragment_plans.*
 import kotlinx.android.synthetic.main.fragment_plans.recycler_view
 import kotlinx.android.synthetic.main.fragment_plans.textview_empty_list
 import kotlinx.android.synthetic.main.item_plan_category.view.*
+import java.util.*
 
 
 class PlansFragment : BaseFragment() {
@@ -76,7 +79,9 @@ class PlansFragment : BaseFragment() {
                 .subscribeBy(
                     onNext = {
                         data = it
-                        simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
+                        // simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
+                        simpleCategories = getSimpleCategoriesFromAllItems(it)
+                        Log.d(TAG, simpleCategories.toString())
                         recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
                     },
                     onError = {
@@ -85,6 +90,46 @@ class PlansFragment : BaseFragment() {
                 ).into(bin)
 
 
+    }
+
+    private fun getSimpleCategoriesFromAllItems(catsAndPlans: List<Any>): List<SimpleCategory> {
+        // retrieve all category objects from the list of mixed categories and plans
+        val categories = (catsAndPlans.filter {
+            it is Category
+        } as List<Category>).toSet().sortedBy { it -> it.id.substring(1).toInt() }
+
+        // from each category, create a SimpleCategory object that contains the name of the category
+        // and the list of plans that are associated with said category.
+        val simpCategories = mutableListOf<SimpleCategory>()
+        for(category in categories) {
+            simpCategories.add(SimpleCategory(category.name,
+                catsAndPlans.filter {
+                    it is Plan && it.category_ids?.split(" ")!!.contains(category.id)
+            } as MutableList<Plan>, category.id))
+        }
+        Log.d(TAG, simpCategories.toString())
+        return simpCategories
+    }
+
+    private fun getSimpleCategoriesByKeyword(catsAndPlans: List<Any>, keyword: String) : MutableList<SimpleCategory> {
+        val locale = Locale.getDefault()
+        val lowerCaseKeyword = keyword.toLowerCase(locale)
+        val categories = (catsAndPlans.filter {
+            it is Category
+        } as List<Category>).toSet().sortedBy { it -> it.id.substring(1).toInt() }
+
+        val simpCategories = mutableListOf<SimpleCategory>()
+        for(category in categories) {
+            simpCategories.add(SimpleCategory(category.name,
+                catsAndPlans.filter {
+                    it is Plan
+                        && it.category_ids?.split(" ")?.contains(category.id) ?: false
+                        && (it.name?.toLowerCase(locale)?.contains(lowerCaseKeyword) ?: false
+                            || it.description?.toLowerCase(locale)?.contains(lowerCaseKeyword) ?: false)
+                } as MutableList<Plan>, category.id))
+        }
+        Log.d(TAG, simpCategories.toString())
+        return simpCategories
     }
 
     // data for the expandable recycler view must be provided in a list of SimpleCategory objects,
@@ -106,6 +151,7 @@ class PlansFragment : BaseFragment() {
             }
             last = item
         }
+
         return categories
     }
 
@@ -167,22 +213,7 @@ class PlansFragment : BaseFragment() {
 
 
     private fun searchDataByKeyword(keyword: String): List<SimpleCategory> {
-        val categories = mutableListOf<SimpleCategory>()
-        var simpleCategory: SimpleCategory? = null
-        var last = Any()
-        for (item in data) {
-            if (item is Category) {
-                if (last is Plan && simpleCategory != null) {
-                    categories.add(simpleCategory)
-                }
-                simpleCategory = SimpleCategory(item.name!!, mutableListOf(), item.id)
-            }
-            if (item is Plan && simpleCategory != null) {
-                if (item.name?.contains(keyword, true) == true || item.description?.contains(keyword, true) == true)
-                    simpleCategory.addPlan(item)
-            }
-            last = item
-        }
+        val categories = getSimpleCategoriesByKeyword(data, keyword)
         // check if the category is empty and remove it
         for (i in (categories.size - 1) downTo 0) {
             if (categories[i].plans.isEmpty()) {
@@ -213,7 +244,6 @@ class PlansFragment : BaseFragment() {
         ) {
             val proposal = (group as SimpleCategory).items[childIndex]
             holder?.setTextViewName(proposal.name)
-            holder?.setTextViewDesc(proposal.description)
             holder?.setOnClickListener(context, proposal)
             holder?.setupFavoriteCheckbox(context, proposal.id, favorites)
             favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
@@ -247,114 +277,5 @@ class PlansFragment : BaseFragment() {
             return PlansFragment()
         }
     }
-
-//    internal class PlansAdapter(val context: Context, val data: List<Any>) :
-//        RecyclerView.Adapter<PlansAdapter.BaseViewHolder>() {
-//        lateinit var recyclerView: RecyclerView
-//
-//        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-//
-//
-//            when (viewType) {
-//                R.layout.title_view_holder -> return CategoryViewHolder(
-//                    LayoutInflater.from(parent.context).inflate(
-//                        R.layout.title_view_holder,
-//                        parent,
-//                        false
-//                    )
-//                )
-//                R.layout.item_view_holder -> return PlanViewHolder(
-//                    LayoutInflater.from(parent.context).inflate(
-//                        R.layout.item_view_holder,
-//                        parent,
-//                        false
-//                    )
-//                )
-//            }
-//
-//            throw RuntimeException("Invalid viewholder type")
-//        }
-//
-//        override fun getItemCount(): Int {
-//            return data.size
-//        }
-//
-//        override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-//            when (holder) {
-//                is CategoryViewHolder -> {
-//                    holder.itemView.category_title.text = (data[position] as Category).name
-//                }
-//                is PlanViewHolder -> {
-//                    holder.itemView.plan_text.text = (data[position] as Plan).name
-//                }
-//            }
-//        }
-//
-//        override fun getItemViewType(position: Int): Int {
-//            when (data[position]) {
-//                is Category -> return R.layout.title_view_holder
-//                is Plan -> return R.layout.item_view_holder
-//            }
-//
-//            throw RuntimeException("Unsupported View Type")
-//        }
-//
-//        override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-//            super.onAttachedToRecyclerView(recyclerView)
-//            this.recyclerView = recyclerView
-//        }
-//
-//        open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-//
-//        inner class CategoryViewHolder(itemView: View) : BaseViewHolder(itemView) {
-//            init {
-//                itemView.setOnClickListener {
-//                    val args = Bundle()
-//                    val itemPosition = recyclerView.findContainingViewHolder(itemView)?.adapterPosition
-//                    if (itemPosition == RecyclerView.NO_POSITION) {
-//                        Log.e(TAG, "Invalid position clicked, try again?")
-//                        return@setOnClickListener
-//                    }
-//                    val id = (data[itemPosition!!] as Category).id
-//                    args.putString(CategoryDetailsFragment.EXTRA_CATEGORY_ID, id)
-//
-//                    (context as FragmentActivity).supportFragmentManager.beginTransaction()
-//                        .replace(
-//                            R.id.fragment_container,
-//                            CategoryDetailsFragment.newInstance(args),
-//                            CategoryDetailsFragment.TAG
-//                        )
-//                        .addToBackStack(CategoryDetailsFragment.TAG).commit()
-//                }
-//            }
-//        }
-//
-//        inner class PlanViewHolder(itemView: View) : BaseViewHolder(itemView) {
-//            init {
-//                itemView.more_image.setColorFilter(itemView.resources.getColor(R.color.secondaryColor))
-//                itemView.setOnClickListener {
-//                    val args = Bundle()
-//                    val itemPosition = recyclerView.findContainingViewHolder(itemView)?.adapterPosition
-//                    if (itemPosition == RecyclerView.NO_POSITION) {
-//                        Log.e(TAG, "Invalid position clicked, try again?")
-//                        return@setOnClickListener
-//                    }
-//                    val id = (data[itemPosition!!] as Plan).id
-//                    args.putString(CategoryDetailsFragment.EXTRA_PLAN_ID, id)
-//
-//                    (context as FragmentActivity).supportFragmentManager.beginTransaction()
-//                        .replace(
-//                            R.id.fragment_container,
-//                            CategoryDetailsFragment.newInstance(args),
-//                            CategoryDetailsFragment.TAG
-//                        )
-//                        .addToBackStack(CategoryDetailsFragment.TAG).commit()
-//                }
-//            }
-//
-//        }
-//
-//    }
-
 
 }
