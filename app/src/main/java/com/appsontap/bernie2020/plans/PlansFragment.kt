@@ -85,10 +85,13 @@ class PlansFragment : BaseFragment() {
     }
 
     private fun getSimpleCategoriesFromAllItems(catsAndPlans: List<Any>): List<SimpleCategory> {
+        // retrieve all category objects from the list of mixed categories and plans
         val categories = (catsAndPlans.filter {
             it is Category
         } as List<Category>).toSet().sortedBy { it -> it.id.substring(1).toInt() }
 
+        // from each category, create a SimpleCategory object that contains the name of the category
+        // and the list of plans that are associated with said category.
         val simpCategories = mutableListOf<SimpleCategory>()
         for(category in categories) {
             simpCategories.add(SimpleCategory(category.name,
