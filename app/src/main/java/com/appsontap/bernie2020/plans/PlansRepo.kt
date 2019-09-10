@@ -23,9 +23,6 @@ class PlansRepo(val context: Context) {
             .flattenAsObservable {
                 it
             }
-            .filter {
-                it.category_ids != null
-            }
             .flatMap {
                 AppDatabase.getDatabase().getCategoryWithPlans(it)
             }
