@@ -73,7 +73,7 @@ class PlansFragment : BaseFragment() {
                         data = it
                         // simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
                         simpleCategories = getSimpleCategoriesFromAllItems(it)
-                        Log.d("DID DATA DO IT?", simpleCategories.toString())
+                        Log.d(TAG, simpleCategories.toString())
                         recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
                     },
                     onError = {
