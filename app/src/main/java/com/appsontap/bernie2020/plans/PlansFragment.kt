@@ -224,7 +224,6 @@ class PlansFragment : BaseFragment() {
         ) {
             val proposal = (group as SimpleCategory).items[childIndex]
             holder?.setTextViewName(proposal.name)
-            holder?.setTextViewDesc(proposal.description)
             holder?.setOnClickListener(context, proposal)
             holder?.setupFavoriteCheckbox(context, proposal.id, favorites)
             favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
