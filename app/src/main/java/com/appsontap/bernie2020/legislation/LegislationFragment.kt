@@ -101,7 +101,7 @@ class LegislationFragment : BaseFragment() {
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.options_menu_searchable, menu)
+        inflater?.inflate(R.menu.options_menu_searchable, menu)
         // Associate searchable configuration with the SearchView
         val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu!!.findItem(R.id.action_search).actionView as SearchView

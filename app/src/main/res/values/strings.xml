@@ -79,7 +79,7 @@
     <string name="title_favorites">Favorites</string>
     <string name="drawer_favorites">Favorites</string>
     <string name="plans_no_search_matches">No plans match your keyword search.\nPlease try another!</string>
-    <string name="legislation_no_search_matches">No legislation matches your keyword search.\\nPlease try another!</string>
+    <string name="legislation_no_search_matches">No legislation matches your keyword search.\nPlease try another!</string>
     <string name="summary">Summary</string>
     <string name="details">Details</string>
     <string name="entire_bill">Entire Bill</string>
