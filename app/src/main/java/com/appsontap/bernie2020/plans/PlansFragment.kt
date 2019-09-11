@@ -42,7 +42,7 @@ class PlansFragment : BaseFragment() {
         ViewModelProviders.of(this).get(PlansViewModel::class.java)
     }
     private lateinit var data: List<Any>
-    private lateinit var simpleCategories: List<SimpleCategory>
+    private var simpleCategories: List<SimpleCategory>? = null
     private lateinit var favorites: Set<String>
     private var expandListener : MenuItem.OnActionExpandListener? = null
     private var queryTextListener : SearchView.OnQueryTextListener? = null
@@ -82,7 +82,7 @@ class PlansFragment : BaseFragment() {
                         // simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
                         simpleCategories = getSimpleCategoriesFromAllItems(it)
                         Log.d(TAG, simpleCategories.toString())
-                        recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
+                        simpleCategories?.let{ cats-> recycler_view.adapter = PlansAdapter(requireContext(), cats)}
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
@@ -180,11 +180,14 @@ class PlansFragment : BaseFragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if (newText.isEmpty() && recycler_view != null) {
-                    recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
-                    recycler_view.adapter?.notifyDataSetChanged()
-                    textview_empty_list.visibility =
-                        (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
+
+                simpleCategories?.let {
+                    if (newText.isEmpty()) {
+                        recycler_view.adapter = PlansAdapter(requireContext(), it)
+                        recycler_view.adapter?.notifyDataSetChanged()
+                        textview_empty_list.visibility =
+                            (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
+                    }
                 }
                 return true
             }
@@ -197,8 +200,10 @@ class PlansFragment : BaseFragment() {
             }
 
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
-                recycler_view.adapter?.notifyDataSetChanged()
+                simpleCategories?.let {
+                    recycler_view.adapter =  PlansAdapter(requireContext(), it)
+                    recycler_view.adapter?.notifyDataSetChanged()
+                }
                 return true
             }
         }
