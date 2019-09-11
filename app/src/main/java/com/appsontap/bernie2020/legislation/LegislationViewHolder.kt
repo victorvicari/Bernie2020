@@ -38,15 +38,12 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
                     .commit()
             }
         }
-
         itemView.checkbox_favorite?.setOnClickListener {
-            if (adapterPosition >= 0 && adapterPosition < uiState.items.size) {
-                val legislation = uiState.items[adapterPosition] as Legislation
-                if (itemView.checkbox_favorite.isChecked) {
-                    IOHelper.addFavoriteToSharedPrefs(itemView.context, legislation.id)
-                } else {
-                    IOHelper.removeFavoriteFromSharedPrefs(itemView.context, legislation.id)
-                }
+            val legislation = uiState.items[adapterPosition] as Legislation
+            if (itemView.checkbox_favorite.isChecked) {
+                IOHelper.addFavoriteToSharedPrefs(itemView.context, legislation.id)
+            } else {
+                IOHelper.removeFavoriteFromSharedPrefs(itemView.context, legislation.id)
             }
         }
 
