@@ -19,6 +19,9 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_legislation.*
 import kotlinx.android.synthetic.main.fragment_legislation.recycler_view
+import androidx.recyclerview.widget.LinearLayoutManager
+
+
 
 
 /**
@@ -58,6 +61,10 @@ class LegislationFragment : BaseFragment() {
                             this.uiState = uiState
                             @Suppress("UNCHECKED_CAST")
                             recycler_view.adapter = LegislationAdapter(uiState.items as List<Legislation>)
+                            (recycler_view.layoutManager as LinearLayoutManager).scrollToPosition(
+                                IOHelper.loadLegislationScrollStateFromSharedPrefs(context)
+                            )
+
                         }
                     }
                 },
@@ -71,6 +78,9 @@ class LegislationFragment : BaseFragment() {
 
     override fun onStop() {
         super.onStop()
+        val lastFirstVisiblePosition =
+            (recycler_view.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        IOHelper.saveLegislationScrollStateToSharedPrefs(context, lastFirstVisiblePosition)
         bin.clear()
     }
 
