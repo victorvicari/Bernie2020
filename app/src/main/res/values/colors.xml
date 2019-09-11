@@ -21,5 +21,6 @@
     <color name="colorAccent">#EA504E</color>
     
     <color name="homeScreenBackground">#002033</color>
+    <color name="timelineImageText">#002033</color>
 
 </resources>
