@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.utils.MiscUtils
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
@@ -88,6 +89,9 @@ class PlansFragment : BaseFragment() {
                                 states[i] = jsonArray.getBoolean(i)
                             }
                             (recycler_view.adapter as PlansAdapter).restoreExpandedState(states)
+                            (recycler_view.layoutManager as LinearLayoutManager).scrollToPosition(
+                                IOHelper.loadPlansScrollStateFromSharedPrefs(context)
+                            )
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
@@ -305,6 +309,10 @@ class PlansFragment : BaseFragment() {
         }
         editor.putString("ITEMS", jsonArray.toString())
         editor.apply()
+
+        val lastFirstVisiblePosition =
+            (recycler_view.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        IOHelper.savePlansScrollStateToSharedPrefs(context, lastFirstVisiblePosition)
     }
 
     override fun onResume() {
