@@ -182,7 +182,7 @@ class PlansFragment : BaseFragment() {
             override fun onQueryTextChange(newText: String): Boolean {
 
                 simpleCategories?.let {
-                    if (newText.isEmpty()) {
+                    if (newText.isEmpty() && recycler_view != null) {
                         recycler_view.adapter = PlansAdapter(requireContext(), it)
                         recycler_view.adapter?.notifyDataSetChanged()
                         textview_empty_list.visibility =
