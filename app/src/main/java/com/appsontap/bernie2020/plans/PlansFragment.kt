@@ -87,7 +87,6 @@ class PlansFragment : BaseFragment() {
                         simpleCategories = getSimpleCategoriesFromAllItems(it)
                         Log.d(TAG, simpleCategories.toString())
                         simpleCategories?.let{ cats-> recycler_view.adapter = PlansAdapter(requireContext(), cats)}
-                        recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
 
                         val sharedPref = requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
                         var states: BooleanArray? = null
@@ -326,17 +325,18 @@ class PlansFragment : BaseFragment() {
 
     override fun onPause() {
         super.onPause()
-
-        val sharedPref = requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        val jsonArray = JSONArray()
-        val states = (recycler_view.adapter as PlansAdapter).getExpandedState()
-        for (b in states) {
-            jsonArray.put(b)
+        if(recycler_view.adapter != null) {
+            val sharedPref =
+                requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
+            val editor = sharedPref.edit()
+            val jsonArray = JSONArray()
+            val states = (recycler_view.adapter as PlansAdapter).getExpandedState()
+            for (b in states) {
+                jsonArray.put(b)
+            }
+            editor.putString("ITEMS", jsonArray.toString())
+            editor.apply()
         }
-        editor.putString("ITEMS", jsonArray.toString())
-        editor.apply()
-
         val lastFirstVisiblePosition =
             (recycler_view.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         IOHelper.savePlansScrollStateToSharedPrefs(context, lastFirstVisiblePosition)
