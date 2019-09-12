@@ -321,22 +321,33 @@ class PlansFragment : BaseFragment() {
             }
         }
 
-    }
+        override fun onGroupExpanded(positionStart: Int, itemCount: Int) {
+            super.onGroupExpanded(positionStart, itemCount)
+            saveState()
+        }
 
-    override fun onPause() {
-        super.onPause()
-        if(recycler_view.adapter != null) {
+        override fun onGroupCollapsed(positionStart: Int, itemCount: Int) {
+            super.onGroupCollapsed(positionStart, itemCount)
+            saveState()
+        }
+
+        fun saveState() {
             val sharedPref =
                 requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
             val editor = sharedPref.edit()
             val jsonArray = JSONArray()
-            val states = (recycler_view.adapter as PlansAdapter).getExpandedState()
+            val states = getExpandedState()
             for (b in states) {
                 jsonArray.put(b)
             }
             editor.putString("ITEMS", jsonArray.toString())
             editor.apply()
         }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
         val lastFirstVisiblePosition =
             (recycler_view.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         IOHelper.savePlansScrollStateToSharedPrefs(context, lastFirstVisiblePosition)
