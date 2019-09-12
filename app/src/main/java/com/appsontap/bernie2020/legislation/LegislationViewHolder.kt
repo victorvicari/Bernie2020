@@ -12,8 +12,13 @@ import com.appsontap.bernie2020.plan_details.UiState
 import com.appsontap.bernie2020.util.IOHelper
 import com.appsontap.bernie2020.util.TAG
 import kotlinx.android.synthetic.main.item_legislation.view.*
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 
-class LegislationViewHolder(itemView: View, private val uiState: UiState.ListReady) : RecyclerView.ViewHolder(itemView){
+
+class LegislationViewHolder(itemView: View, private val uiState: UiState.ListReady) :
+    RecyclerView.ViewHolder(itemView) {
 
     init {
         itemView.setOnClickListener {
@@ -33,19 +38,27 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
                     .commit()
             }
         }
-    }
-    
-    fun bind(legislation: Legislation, favorites: Set<String>){
-        itemView.textview_name.text = legislation.name
-        itemView.checkbox_favorite?.isChecked = favorites.contains(legislation.id)
-
         itemView.checkbox_favorite?.setOnClickListener {
-            if(itemView.checkbox_favorite.isChecked) {
+            val legislation = uiState.items[adapterPosition] as Legislation
+            if (itemView.checkbox_favorite.isChecked) {
                 IOHelper.addFavoriteToSharedPrefs(itemView.context, legislation.id)
             } else {
                 IOHelper.removeFavoriteFromSharedPrefs(itemView.context, legislation.id)
             }
-            Log.d(TAG, "FAVORITES: $favorites")
         }
+
+        itemView.imageview_share?.setOnClickListener {
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, (uiState.items[adapterPosition] as Legislation).name)
+                type = "text/plain"
+            }
+            itemView.context.startActivity(Intent.createChooser(sendIntent, "Placeholder Text"))
+        }
+    }
+
+    fun bind(legislation: Legislation, favorites: Set<String>) {
+        itemView.textview_name.text = legislation.name
+        itemView.checkbox_favorite?.isChecked = favorites.contains(legislation.id)
     }
 }

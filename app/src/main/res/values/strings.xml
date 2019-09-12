@@ -15,7 +15,7 @@
 
     <string name="events_url" translatable="false">https://map.berniesanders.com/</string>
     <string name="bern_url" translatable="false">https://app.berniesanders.com/</string>
-    <string name="news_url" translatable="false">https://twitter.com/BernieSanders</string>
+    <string name="news_url" translatable="false">https://bernie.substack.com/</string>
     <string name="taxes_url" translatable="false">https://berniesanders.com/tax-returns/</string>
     <string name="jobs_url" translatable="false">https://boards.greenhouse.io/bernie2020</string>
     <string name="press_url" translatable="false">https://berniesanders.com/press/</string>
@@ -52,7 +52,7 @@
 
     <string name="web_title_events">Events</string>
     <string name="web_title_canvass">Bern App</string>
-    <string name="web_title_news">Bernie\'s Twitter</string>
+    <string name="web_title_news">Bern Notice</string>
     <string name="web_title_taxes">Bernie\'s Tax Returns</string>
     <string name="web_title_jobs">Jobs</string>
     <string name="web_title_press">Press</string>
@@ -79,12 +79,11 @@
     <string name="title_favorites">Favorites</string>
     <string name="drawer_favorites">Favorites</string>
     <string name="plans_no_search_matches">No plans match your keyword search.\nPlease try another!</string>
-    <string name="legislation_no_search_matches">No legislation matches your keyword search.\\nPlease try another!</string>
+    <string name="legislation_no_search_matches">No legislation matches your keyword search.\nPlease try another!</string>
     <string name="summary">Summary</string>
     <string name="details">Details</string>
     <string name="entire_bill">Entire Bill</string>
     <string name="share_legislation">Share Bernie\'s Legislation</string>
     <string name="add_to_favorites">Add some favorites!</string>
-
-
+    <string name="first_timeline_year">1962</string>
 </resources>

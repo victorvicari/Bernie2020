@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.utils.MiscUtils
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
+import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.SimpleCategory
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
@@ -27,7 +28,10 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_legislation.*
 import kotlinx.android.synthetic.main.fragment_plans.*
+import kotlinx.android.synthetic.main.fragment_plans.recycler_view
+import kotlinx.android.synthetic.main.fragment_plans.textview_empty_list
 import kotlinx.android.synthetic.main.item_plan_category.view.*
 import org.json.JSONArray
 import org.json.JSONException
@@ -42,8 +46,12 @@ class PlansFragment : BaseFragment() {
         ViewModelProviders.of(this).get(PlansViewModel::class.java)
     }
     private lateinit var data: List<Any>
-    private lateinit var simpleCategories: List<SimpleCategory>
+    private var simpleCategories: List<SimpleCategory>? = null
     private lateinit var favorites: Set<String>
+    private var expandListener : MenuItem.OnActionExpandListener? = null
+    private var queryTextListener : SearchView.OnQueryTextListener? = null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +85,8 @@ class PlansFragment : BaseFragment() {
                         data = it
                         // simpleCategories = getSimpleCategoriesFromCategoriesAndPlans(it)
                         simpleCategories = getSimpleCategoriesFromAllItems(it)
-                        Log.d("DID DATA DO IT?", simpleCategories.toString())
+                        Log.d(TAG, simpleCategories.toString())
+                        simpleCategories?.let{ cats-> recycler_view.adapter = PlansAdapter(requireContext(), cats)}
                         recycler_view.adapter = PlansAdapter(requireContext(), simpleCategories)
 
                         val sharedPref = requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
@@ -95,6 +104,7 @@ class PlansFragment : BaseFragment() {
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
+
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
@@ -105,10 +115,13 @@ class PlansFragment : BaseFragment() {
     }
 
     private fun getSimpleCategoriesFromAllItems(catsAndPlans: List<Any>): List<SimpleCategory> {
+        // retrieve all category objects from the list of mixed categories and plans
         val categories = (catsAndPlans.filter {
             it is Category
         } as List<Category>).toSet().sortedBy { it -> it.id.substring(1).toInt() }
 
+        // from each category, create a SimpleCategory object that contains the name of the category
+        // and the list of plans that are associated with said category.
         val simpCategories = mutableListOf<SimpleCategory>()
         for(category in categories) {
             simpCategories.add(SimpleCategory(category.name,
@@ -177,10 +190,11 @@ class PlansFragment : BaseFragment() {
         searchView.setSearchableInfo(
             searchManager.getSearchableInfo(activity!!.componentName)
         )
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+        queryTextListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val filteredResults = searchDataByKeyword(searchView.query.toString())
-                recycler_view.adapter = context?.let { PlansAdapter(it, filteredResults) }
+                recycler_view.adapter = PlansAdapter(requireContext(), filteredResults)
                 recycler_view.adapter?.notifyDataSetChanged()
                 textview_empty_list.visibility =
                     (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
@@ -188,29 +202,42 @@ class PlansFragment : BaseFragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if (newText.isEmpty() && recycler_view != null) {
-                    recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
-                    recycler_view.adapter?.notifyDataSetChanged()
-                    textview_empty_list.visibility =
-                        (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
+
+                simpleCategories?.let {
+                    if (newText.isEmpty() && recycler_view != null) {
+                        recycler_view.adapter = PlansAdapter(requireContext(), it)
+                        recycler_view.adapter?.notifyDataSetChanged()
+                        textview_empty_list.visibility =
+                            (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
+                    }
                 }
                 return true
             }
-        })
+        }
+        searchView.setOnQueryTextListener(queryTextListener)
         // listens for the back button press to reset the adapter to the full list
-        val expandListener = object : MenuItem.OnActionExpandListener {
+        expandListener = object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                 return true
             }
 
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                recycler_view.adapter = context?.let { PlansAdapter(it, simpleCategories) }
-                recycler_view.adapter?.notifyDataSetChanged()
+                simpleCategories?.let {
+                    recycler_view.adapter =  PlansAdapter(requireContext(), it)
+                    recycler_view.adapter?.notifyDataSetChanged()
+                }
                 return true
             }
         }
         menu.findItem(R.id.action_search).setOnActionExpandListener(expandListener)
     }
+
+    override fun onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu()
+        expandListener = null
+        queryTextListener = null
+    }
+
 
     private fun searchDataByKeyword(keyword: String): List<SimpleCategory> {
         val categories = getSimpleCategoriesByKeyword(data, keyword)

@@ -20,11 +20,8 @@ class PlansRepo(val context: Context) {
             .getDatabase()
             .planDao()
             .getAll()
-           .flattenAsObservable {
-                Log.d("in the flatten", it.toString())
-                it }
-            .filter {
-                it.category_ids != null
+            .flattenAsObservable {
+                it
             }
             .flatMap {
                 AppDatabase.getDatabase().getCategoryWithPlans(it)

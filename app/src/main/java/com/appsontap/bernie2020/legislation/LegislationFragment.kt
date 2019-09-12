@@ -19,6 +19,9 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_legislation.*
 import kotlinx.android.synthetic.main.fragment_legislation.recycler_view
+import androidx.recyclerview.widget.LinearLayoutManager
+
+
 
 
 /**
@@ -58,6 +61,10 @@ class LegislationFragment : BaseFragment() {
                             this.uiState = uiState
                             @Suppress("UNCHECKED_CAST")
                             recycler_view.adapter = LegislationAdapter(uiState.items as List<Legislation>)
+                            (recycler_view.layoutManager as LinearLayoutManager).scrollToPosition(
+                                IOHelper.loadLegislationScrollStateFromSharedPrefs(context)
+                            )
+
                         }
                     }
                 },
@@ -71,6 +78,9 @@ class LegislationFragment : BaseFragment() {
 
     override fun onStop() {
         super.onStop()
+        val lastFirstVisiblePosition =
+            (recycler_view.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        IOHelper.saveLegislationScrollStateToSharedPrefs(context, lastFirstVisiblePosition)
         bin.clear()
     }
 
@@ -101,7 +111,7 @@ class LegislationFragment : BaseFragment() {
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.options_menu_searchable, menu)
+        inflater?.inflate(R.menu.options_menu_searchable, menu)
         // Associate searchable configuration with the SearchView
         val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu!!.findItem(R.id.action_search).actionView as SearchView

@@ -15,12 +15,17 @@
         <ImageView
                 android:id="@+id/image_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                />
 
         <TextView
                 android:id="@+id/image_description_text_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textColor="@color/timelineImageText"
+                />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
