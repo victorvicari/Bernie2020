@@ -137,10 +137,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if(currentFragment is HomeFragment){
                 finish()
             } else if (currentFragment is WebFragment) {
-                if(!currentFragment.onBackPressed() && supportFragmentManager.backStackEntryCount <= 1) {
+                val hasWebHistory = currentFragment.onBackPressed()
+                if(!hasWebHistory && supportFragmentManager.backStackEntryCount <= 1) {
                     popStackAndLoadHomeFragment()
                 }
-                else {
+                else if(!hasWebHistory) {
                     super.onBackPressed()
                 }
             } else {
