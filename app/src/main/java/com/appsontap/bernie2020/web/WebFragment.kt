@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.webkit.WebView
@@ -59,7 +61,9 @@ class WebFragment : BaseFragment() {
                 return true
             }
             R.id.action_open_in_browser -> {
-
+                val browserIntent = Intent(Intent.ACTION_VIEW)
+                browserIntent.setData(Uri.parse(webview.url))
+                startActivity(browserIntent)
                 return true
             }
             else -> return false
