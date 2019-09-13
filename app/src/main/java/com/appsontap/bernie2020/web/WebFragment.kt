@@ -8,12 +8,14 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.R
+import com.appsontap.bernie2020.util.TAG
 import kotlinx.android.synthetic.main.fragment_web.*
 
 class WebFragment : BaseFragment() {
@@ -25,23 +27,31 @@ class WebFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_web, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_web, container, false)
+        if(savedInstanceState != null) {
+            // this isn't being called. Don't know why. onSaveInstanceState *IS* being called.
+            Log.d(TAG, "state allegedly restored")
+            webview.restoreState(savedInstanceState.getBundle(KEY_WEBVIEW_STATE))
+        }
+        return rootView
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onStart() {
         super.onStart()
-        webview.settings.javaScriptEnabled = true
-        webview.loadUrl(arguments?.getString(EXTRA_URL))
-        webview.webViewClient = object : WebViewClient() {
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(view, url, favicon)
-                progress_bar.visibility = View.VISIBLE
-            }
+        if(webview.copyBackForwardList().size == 0) {
+            webview.settings.javaScriptEnabled = true
+            webview.loadUrl(arguments?.getString(EXTRA_URL))
+            webview.webViewClient = object : WebViewClient() {
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    super.onPageStarted(view, url, favicon)
+                    progress_bar.visibility = View.VISIBLE
+                }
 
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-                progress_bar.visibility = View.GONE
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    progress_bar.visibility = View.GONE
+                }
             }
         }
     }
@@ -85,10 +95,19 @@ class WebFragment : BaseFragment() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val bundle = Bundle()
+        webview.saveState(bundle)
+        outState.putBundle(KEY_WEBVIEW_STATE, bundle)
+        Log.d(TAG, "instance state saved!")
+    }
+
     companion object {
         const val EXTRA_TITLE = "title"
         const val EXTRA_URL = "url"
         const val CLIPBOARD_LABEL = "webview url"
+        const val KEY_WEBVIEW_STATE = "webview state"
         fun newInstance(args: Bundle): WebFragment {
             val fragment = WebFragment()
             fragment.arguments = args
