@@ -55,9 +55,9 @@ class WebFragment : BaseFragment() {
             R.id.action_copy_webview_url -> {
                 val activity = requireActivity()
                 val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("label", webview.url)
+                val clip = ClipData.newPlainText(CLIPBOARD_LABEL, webview.url)
                 clipboard.primaryClip = clip
-                Toast.makeText(requireContext(), "Link Copied!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.webview_link_copied), Toast.LENGTH_SHORT).show();
                 return true
             }
             R.id.action_open_in_browser -> {
@@ -88,6 +88,7 @@ class WebFragment : BaseFragment() {
     companion object {
         const val EXTRA_TITLE = "title"
         const val EXTRA_URL = "url"
+        const val CLIPBOARD_LABEL = "webview url"
         fun newInstance(args: Bundle): WebFragment {
             val fragment = WebFragment()
             fragment.arguments = args

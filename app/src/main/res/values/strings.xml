@@ -87,4 +87,5 @@
     <string name="add_to_favorites">Add some favorites!</string>
     <string name="first_timeline_year">1962</string>
     <string name="options_menu_copy_url">Copy URL</string>
+    <string name="webview_link_copied">Link Copied!</string>
 </resources>
