@@ -8,6 +8,7 @@ class IOHelper {
 
 
     companion object{
+        private const val PREFS_PLANS_SCROLL = "plans scroll state"
         private const val PREFS_FAVORITES = "favorites"
         private const val PREFS_LEGISLATION_SCROLL = "leg scroll state"
 
@@ -40,6 +41,18 @@ class IOHelper {
         fun loadFavoritesFromSharedPrefs(context: Context?) : Set<String> {
             val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
             return HashSet<String>(pref?.getStringSet(PREFS_FAVORITES, setOf()))
+        }
+
+        fun savePlansScrollStateToSharedPrefs(context: Context?, position: Int) {
+            val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+            val editor = pref?.edit()
+            editor?.putInt(PREFS_PLANS_SCROLL, position)
+            editor?.apply()
+        }
+
+        fun loadPlansScrollStateFromSharedPrefs(context: Context?) : Int {
+            val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+            return pref?.getInt(PREFS_PLANS_SCROLL, 0) ?: 0
         }
 
         fun saveLegislationScrollStateToSharedPrefs(context: Context?, position: Int) {

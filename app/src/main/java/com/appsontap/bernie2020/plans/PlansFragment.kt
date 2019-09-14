@@ -2,6 +2,7 @@ package com.appsontap.bernie2020.plans
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.utils.MiscUtils
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
@@ -36,6 +38,8 @@ import kotlinx.android.synthetic.main.fragment_plans.*
 import kotlinx.android.synthetic.main.fragment_plans.recycler_view
 import kotlinx.android.synthetic.main.fragment_plans.textview_empty_list
 import kotlinx.android.synthetic.main.item_plan_category.view.*
+import org.json.JSONArray
+import org.json.JSONException
 import java.util.*
 
 
@@ -89,6 +93,23 @@ class PlansFragment : BaseFragment() {
                         simpleCategories = getSimpleCategoriesFromAllItems(it)
                         Log.d(TAG, simpleCategories.toString())
                         simpleCategories?.let{ cats-> recycler_view.adapter = PlansAdapter(requireContext(), cats)}
+
+                        val sharedPref = requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
+                        var states: BooleanArray? = null
+                        try {
+                            val jsonArray = JSONArray(sharedPref.getString("ITEMS", "[]"))
+                            states = BooleanArray(jsonArray.length())
+                            for (i in 0 until jsonArray.length()) {
+                                states[i] = jsonArray.getBoolean(i)
+                            }
+                            (recycler_view.adapter as PlansAdapter).restoreExpandedState(states)
+                            (recycler_view.layoutManager as LinearLayoutManager).scrollToPosition(
+                                IOHelper.loadPlansScrollStateFromSharedPrefs(context)
+                            )
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+
                     },
                     onError = {
                         Log.e(TAG, "Couldn't get list of plans ${it.message}", it)
@@ -165,7 +186,7 @@ class PlansFragment : BaseFragment() {
         super.onDestroyView()
         bin.clear()
     }
-    
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater!!.inflate(R.menu.options_menu_plans, menu)
         // Associate searchable configuration with the SearchView
@@ -353,6 +374,68 @@ class PlansFragment : BaseFragment() {
             }
             notifyDataSetChanged()
         }
+
+        fun getExpandedState(): BooleanArray {
+            val expandedState = BooleanArray(groups.size)
+            var stateIndex = 0
+            for (i in 0 until itemCount) {
+                if (stateIndex < expandedState.size && getItemViewType(i) == 2) {
+                    expandedState[stateIndex] = isGroupExpanded(i)
+                    stateIndex++
+                }
+            }
+            return expandedState
+        }
+
+        fun restoreExpandedState(expandedState: BooleanArray) {
+            Log.d(TAG, "restoreExpandedState: " + Arrays.toString(expandedState))
+            var stateIndex = 0
+            for (i in 0 until itemCount) {
+                if (getItemViewType(i) == 2) {
+                    if (stateIndex < expandedState.size && expandedState[stateIndex]) {
+                        toggleGroup(i)
+                    }
+                    stateIndex++
+                }
+            }
+        }
+
+        override fun onGroupExpanded(positionStart: Int, itemCount: Int) {
+            super.onGroupExpanded(positionStart, itemCount)
+            saveState()
+        }
+
+        override fun onGroupCollapsed(positionStart: Int, itemCount: Int) {
+            super.onGroupCollapsed(positionStart, itemCount)
+            saveState()
+        }
+
+        fun saveState() {
+            val sharedPref =
+                requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
+            val editor = sharedPref.edit()
+            val jsonArray = JSONArray()
+            val states = getExpandedState()
+            for (b in states) {
+                jsonArray.put(b)
+            }
+            editor.putString("ITEMS", jsonArray.toString())
+            editor.apply()
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val lastFirstVisiblePosition =
+            (recycler_view.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        IOHelper.savePlansScrollStateToSharedPrefs(context, lastFirstVisiblePosition)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
 
     }
 
