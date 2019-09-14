@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import android.view.*
+import android.widget.EditText
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
@@ -49,6 +51,7 @@ class PlansFragment : BaseFragment() {
     private lateinit var favorites: Set<String>
     private var expandListener : MenuItem.OnActionExpandListener? = null
     private var queryTextListener : SearchView.OnQueryTextListener? = null
+    private var clearListener : View.OnClickListener? = null
 
 
 
@@ -176,7 +179,13 @@ class PlansFragment : BaseFragment() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val filteredResults = searchDataByKeyword(searchView.query.toString())
                 recycler_view.adapter = PlansAdapter(requireContext(), filteredResults)
+                (recycler_view.adapter as PlansAdapter).expandAll()
                 recycler_view.adapter?.notifyDataSetChanged()
+
+                val expandCollapseMenuItem = menu.findItem(R.id.action_expand_collapse_all)
+                expandCollapseMenuItem.setTitle(R.string.plans_collapse_all)
+                expandCollapseMenuItem.setIcon(R.drawable.ic_unfold_less_white_24dp)
+
                 textview_empty_list.visibility =
                     (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
                 return true
@@ -206,12 +215,33 @@ class PlansFragment : BaseFragment() {
                 simpleCategories?.let {
                     recycler_view.adapter =  PlansAdapter(requireContext(), it)
                     recycler_view.adapter?.notifyDataSetChanged()
+
+                    val expandCollapseMenuItem = menu.findItem(R.id.action_expand_collapse_all)
+                    expandCollapseMenuItem.setTitle(R.string.plans_expand_all)
+                    expandCollapseMenuItem.setIcon(R.drawable.ic_unfold_more_white_24dp)
                 }
                 return true
             }
         }
+        clearListener = object : View.OnClickListener {
+            override fun onClick(clearButton : View?) {
+                val expandCollapseMenuItem = menu.findItem(R.id.action_expand_collapse_all)
+                expandCollapseMenuItem.setTitle(R.string.plans_expand_all)
+                expandCollapseMenuItem.setIcon(R.drawable.ic_unfold_more_white_24dp)
+                searchView.findViewById<EditText>(R.id.search_src_text).setText("")
+                searchView.setQuery("", false)
+                searchView.onActionViewCollapsed()
+                menu.findItem(R.id.action_search).collapseActionView()
+            }
+        }
+        searchView.findViewById<ImageView>(R.id.search_close_btn).setOnClickListener(clearListener)
+
+
+
         menu.findItem(R.id.action_search).setOnActionExpandListener(expandListener)
     }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
@@ -235,6 +265,7 @@ class PlansFragment : BaseFragment() {
         super.onDestroyOptionsMenu()
         expandListener = null
         queryTextListener = null
+        clearListener = null
     }
 
 
