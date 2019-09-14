@@ -434,9 +434,6 @@ class PlansFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-
-
-
     }
 
     companion object {
