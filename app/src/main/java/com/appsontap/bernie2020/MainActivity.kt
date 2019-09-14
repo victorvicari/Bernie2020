@@ -24,15 +24,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentRouter {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    FragmentRouter {
 
     lateinit var toggle: ActionBarDrawerToggle
+    var lastMenuIdSelected = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         toolbar.setTitleTextColor(getColor(R.color.white))
         setSupportActionBar(toolbar)
-        toggle = object: ActionBarDrawerToggle(this, drawer, toolbar, 0,    0) {
+        toggle = object : ActionBarDrawerToggle(this, drawer, toolbar, 0, 0) {
             override fun onDrawerClosed(drawerView: View) {
                 setItemMenuSelected(getIdFromCurrentFragment())
                 super.onDrawerClosed(drawerView)
@@ -44,11 +46,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
         setFragmentToggleBetweenUpAndHamburger()
-        Log.d(TAG, "LOOK AT BACKSTACK COUNT: " + supportFragmentManager.backStackEntryCount.toString())
+        Log.d(
+            TAG,
+            "LOOK AT BACKSTACK COUNT: " + supportFragmentManager.backStackEntryCount.toString()
+        )
 
         nav_view_bottom.setOnNavigationItemSelectedListener(onBottomNavigationSelectedListener)
 
-        if(supportFragmentManager.backStackEntryCount == 0){
+        if (supportFragmentManager.backStackEntryCount == 0) {
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment.newInstance(), HomeFragment.TAG)
@@ -102,7 +107,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         // will dump all the fragments from the stack when switching to a new top-level fragment
-        supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.popBackStack(
+            BACK_STACK_ROOT_TAG,
+            FragmentManager.POP_BACK_STACK_INCLUSIVE
+        )
 
         if (url != null && toolbarTitle != null) {
             val args = Bundle()
@@ -113,18 +121,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .addToBackStack(BACK_STACK_ROOT_TAG)
                 .commit()
         } else {
-            lateinit var fragment : Fragment
-            when(item.title){
+            lateinit var fragment: Fragment
+            when (item.title) {
                 getString(R.string.plans) -> fragment = PlansFragment.newInstance()
                 getString(R.string.timeline) -> fragment = TimelineFragment.newInstance()
-                getString(R.string.drawer_legislation) -> fragment = LegislationFragment.newInstance()
+                getString(R.string.drawer_legislation) -> fragment =
+                    LegislationFragment.newInstance()
                 getString(R.string.drawer_favorites) -> fragment = FavoritesFragment.newInstance()
 
             }
             replaceFragment(fragment)
         }
 
-
+        lastMenuIdSelected = item.itemId
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
@@ -134,18 +143,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer.closeDrawer(GravityCompat.START)
         } else {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-            if(currentFragment is HomeFragment){
+            if (currentFragment is HomeFragment) {
                 finish()
             } else if (currentFragment is WebFragment) {
                 val hasWebHistory = currentFragment.onBackPressed()
-                if(!hasWebHistory && supportFragmentManager.backStackEntryCount <= 1) {
+                if (!hasWebHistory && supportFragmentManager.backStackEntryCount <= 1) {
                     popStackAndLoadHomeFragment()
-                }
-                else if(!hasWebHistory) {
+                } else if (!hasWebHistory) {
                     super.onBackPressed()
                 }
             } else {
-                if(supportFragmentManager.backStackEntryCount <= 1) {
+                if (supportFragmentManager.backStackEntryCount <= 1) {
                     popStackAndLoadHomeFragment()
                 } else {
                     super.onBackPressed()
@@ -155,7 +163,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun popStackAndLoadHomeFragment() {
-        supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.popBackStack(
+            BACK_STACK_ROOT_TAG,
+            FragmentManager.POP_BACK_STACK_INCLUSIVE
+        )
         supportFragmentManager.beginTransaction()
             .replace(
                 R.id.fragment_container, HomeFragment.newInstance(),
@@ -166,37 +177,61 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    private val onBottomNavigationSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {
+    private val onBottomNavigationSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener {
 
-        when(it.itemId) {
-            R.id.bot_nav_home -> {
-                popStackAndLoadHomeFragment()
-                return@OnNavigationItemSelectedListener true 
+            when (it.itemId) {
+                R.id.bot_nav_home -> {
+                    if(lastMenuIdSelected != it.itemId) {
+                        popStackAndLoadHomeFragment()
+                        lastMenuIdSelected = it.itemId
+                    }
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.bot_nav_events_map -> {
+                    if(lastMenuIdSelected != it.itemId) {
+                        loadWebFragment(
+                            getString(R.string.events_url),
+                            getString(R.string.web_title_events)
+                        )
+                        lastMenuIdSelected = it.itemId
+                    }
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.bot_nav_canvass -> {
+                    if(lastMenuIdSelected != it.itemId) {
+                        loadWebFragment(
+                            getString(R.string.bern_url),
+                            getString(R.string.web_title_canvass)
+                        )
+                        lastMenuIdSelected = it.itemId
+                    }
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.bot_nav_more -> {
+                    toggleDrawer()
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.bot_nav_plans -> {
+                    if(lastMenuIdSelected != it.itemId) {
+                        supportFragmentManager.popBackStack(
+                            BACK_STACK_ROOT_TAG,
+                            FragmentManager.POP_BACK_STACK_INCLUSIVE
+                        )
+                        supportFragmentManager.beginTransaction()
+                            .replace(
+                                R.id.fragment_container, PlansFragment.newInstance(),
+                                PlansFragment.TAG
+                            )
+                            .addToBackStack(BACK_STACK_ROOT_TAG)
+                            .commit()
+                        lastMenuIdSelected = it.itemId
+                    }
+                    return@OnNavigationItemSelectedListener true
+                }
+                else -> return@OnNavigationItemSelectedListener true
             }
-            R.id.bot_nav_events_map -> {
-                loadWebFragment(getString(R.string.events_url), getString(R.string.web_title_events))
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.bot_nav_canvass -> {
-                loadWebFragment(getString(R.string.bern_url), getString(R.string.web_title_canvass))
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.bot_nav_more -> {
-                toggleDrawer()
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.bot_nav_plans -> {
-                supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, PlansFragment.newInstance(),
-                        PlansFragment.TAG)
-                    .addToBackStack(BACK_STACK_ROOT_TAG)
-                    .commit()
-                return@OnNavigationItemSelectedListener true
-            }
-            else -> return@OnNavigationItemSelectedListener false
         }
-    }
 
 
     private fun toggleDrawer() {
@@ -213,7 +248,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val args = Bundle()
             args.putString(WebFragment.EXTRA_URL, url)
             args.putString(WebFragment.EXTRA_TITLE, title)
-            supportFragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.popBackStack(
+                BACK_STACK_ROOT_TAG,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG)
                 .addToBackStack(BACK_STACK_ROOT_TAG)
@@ -222,7 +260,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setFragmentToggleBetweenUpAndHamburger() {
-        supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener {
+        supportFragmentManager.addOnBackStackChangedListener(object :
+            FragmentManager.OnBackStackChangedListener {
             override fun onBackStackChanged() {
                 Log.d(TAG, "BACKSTACK CHANGED")
 
@@ -244,19 +283,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun replaceFragment(fragment: Fragment) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment, fragment.TAG)
-                .addToBackStack(BACK_STACK_ROOT_TAG)
-                .commit()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment, fragment.TAG)
+            .addToBackStack(BACK_STACK_ROOT_TAG)
+            .commit()
     }
 
     override fun replaceWebViewFragmentWithTitle(url: String, title: String) {
         loadWebFragment(url, title)
     }
 
-    fun getIdFromCurrentFragment() : Int {
+    fun getIdFromCurrentFragment(): Int {
         Log.d(TAG, "LOOK AT ME I'M GETTING THE ID")
-        return when(supportFragmentManager.findFragmentById(R.id.fragment_container)) {
+        return when (supportFragmentManager.findFragmentById(R.id.fragment_container)) {
             is HomeFragment -> R.id.bot_nav_home
             is PlansFragment -> R.id.bot_nav_plans
             is WebFragment -> {
@@ -271,7 +310,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun setItemMenuSelected(id: Int) {
-        when(id){
+        when (id) {
             R.id.bot_nav_home,
             R.id.bot_nav_more -> {
                 selectBotNavItemWithoutCallback(id)
