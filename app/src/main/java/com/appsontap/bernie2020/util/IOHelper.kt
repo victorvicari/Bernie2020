@@ -11,6 +11,7 @@ class IOHelper {
         private const val PREFS_PLANS_SCROLL = "plans scroll state"
         private const val PREFS_FAVORITES = "favorites"
         private const val PREFS_LEGISLATION_SCROLL = "leg scroll state"
+        private const val PREFS_PLANS_SEARCH = "plans search state"
 
         fun addFavoriteToSharedPrefs(context: Context, id: String) {
             val pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
@@ -65,6 +66,18 @@ class IOHelper {
         fun loadLegislationScrollStateFromSharedPrefs(context: Context?) : Int {
             val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
             return pref?.getInt(PREFS_LEGISLATION_SCROLL, 0) ?: 0
+        }
+
+        fun savePlansSearchStateToSharedPrefs(context: Context?, searchText: String) {
+            val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+            val editor = pref?.edit()
+            editor?.putString(PREFS_PLANS_SEARCH, searchText)
+            editor?.apply()
+        }
+
+        fun loadPlansSearchStateFromSharedPrefs(context: Context?) : String? {
+            val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+            return pref?.getString(PREFS_PLANS_SEARCH, "")
         }
     }
 }

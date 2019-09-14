@@ -56,6 +56,10 @@ class PlansFragment : BaseFragment() {
     private var expandListener : MenuItem.OnActionExpandListener? = null
     private var queryTextListener : SearchView.OnQueryTextListener? = null
     private var clearListener : View.OnClickListener? = null
+    private var searchClickListener : View.OnClickListener? = null
+    private var isSearchExpanded = false
+    private var searchText = ""
+    private lateinit var optionsMenu : Menu
 
 
 
@@ -93,6 +97,19 @@ class PlansFragment : BaseFragment() {
                         simpleCategories = getSimpleCategoriesFromAllItems(it)
                         Log.d(TAG, simpleCategories.toString())
                         simpleCategories?.let{ cats-> recycler_view.adapter = PlansAdapter(requireContext(), cats)}
+
+                        val lastSearch = IOHelper.loadPlansSearchStateFromSharedPrefs(requireContext())
+                        lastSearch?.let { search ->
+                            if(search.length > 0) {
+                                filterResults(search)
+                                optionsMenu.findItem(R.id.action_search).expandActionView()
+                                val searchView = (optionsMenu.findItem(R.id.action_search).actionView as SearchView)
+                                searchView.onActionViewExpanded()
+                                searchView.findViewById<EditText>(R.id.search_src_text).setText(search)
+                                isSearchExpanded = true
+
+                            }
+                        }
 
                         val sharedPref = requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
                         var states: BooleanArray? = null
@@ -189,6 +206,9 @@ class PlansFragment : BaseFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater!!.inflate(R.menu.options_menu_plans, menu)
+        if (menu != null) {
+            optionsMenu = menu
+        }
         // Associate searchable configuration with the SearchView
         val searchManager = activity!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu!!.findItem(R.id.action_search).actionView as SearchView
@@ -213,7 +233,7 @@ class PlansFragment : BaseFragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-
+                searchText = newText
                 simpleCategories?.let {
                     if (newText.isEmpty() && recycler_view != null) {
                         recycler_view.adapter = PlansAdapter(requireContext(), it)
@@ -240,6 +260,7 @@ class PlansFragment : BaseFragment() {
                     val expandCollapseMenuItem = menu.findItem(R.id.action_expand_collapse_all)
                     expandCollapseMenuItem.setTitle(R.string.plans_expand_all)
                     expandCollapseMenuItem.setIcon(R.drawable.ic_unfold_more_white_24dp)
+                    isSearchExpanded = false
                 }
                 return true
             }
@@ -253,9 +274,19 @@ class PlansFragment : BaseFragment() {
                 searchView.setQuery("", false)
                 searchView.onActionViewCollapsed()
                 menu.findItem(R.id.action_search).collapseActionView()
+                isSearchExpanded = false
             }
         }
         searchView.findViewById<ImageView>(R.id.search_close_btn).setOnClickListener(clearListener)
+
+        searchClickListener = object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                menu.findItem(R.id.action_search).expandActionView()
+                searchView.onActionViewExpanded()
+                isSearchExpanded = true
+            }
+        }
+        searchView.setOnSearchClickListener(searchClickListener)
 
 
 
@@ -287,6 +318,7 @@ class PlansFragment : BaseFragment() {
         expandListener = null
         queryTextListener = null
         clearListener = null
+        searchClickListener = null
     }
 
 
@@ -430,10 +462,26 @@ class PlansFragment : BaseFragment() {
         val lastFirstVisiblePosition =
             (recycler_view.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         IOHelper.savePlansScrollStateToSharedPrefs(context, lastFirstVisiblePosition)
+        if(isSearchExpanded) {
+            IOHelper.savePlansSearchStateToSharedPrefs(context, searchText)
+        } else {
+            IOHelper.savePlansSearchStateToSharedPrefs(context, "")
+        }
+
     }
 
-    override fun onResume() {
-        super.onResume()
+    fun filterResults(query : String) {
+        val filteredResults = searchDataByKeyword(query)
+        recycler_view.adapter = PlansAdapter(requireContext(), filteredResults)
+        (recycler_view.adapter as PlansAdapter).expandAll()
+        recycler_view.adapter?.notifyDataSetChanged()
+
+        val expandCollapseMenuItem = optionsMenu.findItem(R.id.action_expand_collapse_all)
+        expandCollapseMenuItem.setTitle(R.string.plans_collapse_all)
+        expandCollapseMenuItem.setIcon(R.drawable.ic_unfold_less_white_24dp)
+
+        textview_empty_list.visibility =
+            (if (recycler_view.adapter?.itemCount == 0) View.VISIBLE else View.GONE)
     }
 
     companion object {
