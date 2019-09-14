@@ -98,6 +98,7 @@ class PlansFragment : BaseFragment() {
                         Log.d(TAG, simpleCategories.toString())
                         simpleCategories?.let{ cats-> recycler_view.adapter = PlansAdapter(requireContext(), cats)}
 
+                        // populate search and filter results if there were a search before leaving fragment
                         val lastSearch = IOHelper.loadPlansSearchStateFromSharedPrefs(requireContext())
                         lastSearch?.let { search ->
                             if(search.length > 0) {
@@ -176,29 +177,6 @@ class PlansFragment : BaseFragment() {
         return simpCategories
     }
 
-    // data for the expandable recycler view must be provided in a list of SimpleCategory objects,
-    // each of which contain lists of their respective Plan objects. The database pulls down a list
-    // of categories followed by their plans, so this function groups those into a list of SimpleCategory
-    private fun getSimpleCategoriesFromCategoriesAndPlans(catsAndPlans: List<Any>): List<SimpleCategory> {
-        val categories = mutableListOf<SimpleCategory>()
-        var simpleCategory: SimpleCategory? = null
-        var last = Any()
-        for (item in catsAndPlans) {
-            if (item is Category) {
-                if (last is Plan && simpleCategory != null) {
-                    categories.add(simpleCategory)
-                }
-                simpleCategory = SimpleCategory(item.name!!, mutableListOf(), item.id)
-            }
-            if (item is Plan && simpleCategory != null) {
-                simpleCategory.addPlan(item)
-            }
-            last = item
-        }
-
-        return categories
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         bin.clear()
@@ -246,6 +224,7 @@ class PlansFragment : BaseFragment() {
             }
         }
         searchView.setOnQueryTextListener(queryTextListener)
+
         // listens for the back button press to reset the adapter to the full list
         expandListener = object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
@@ -265,6 +244,10 @@ class PlansFragment : BaseFragment() {
                 return true
             }
         }
+        menu.findItem(R.id.action_search).setOnActionExpandListener(expandListener)
+
+
+        // listens for the press of the x button and collapses the searchview
         clearListener = object : View.OnClickListener {
             override fun onClick(clearButton : View?) {
                 val expandCollapseMenuItem = menu.findItem(R.id.action_expand_collapse_all)
@@ -279,6 +262,7 @@ class PlansFragment : BaseFragment() {
         }
         searchView.findViewById<ImageView>(R.id.search_close_btn).setOnClickListener(clearListener)
 
+        // manually listen for the search button click to allow tracking of search state
         searchClickListener = object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 menu.findItem(R.id.action_search).expandActionView()
@@ -287,10 +271,6 @@ class PlansFragment : BaseFragment() {
             }
         }
         searchView.setOnSearchClickListener(searchClickListener)
-
-
-
-        menu.findItem(R.id.action_search).setOnActionExpandListener(expandListener)
     }
 
 
