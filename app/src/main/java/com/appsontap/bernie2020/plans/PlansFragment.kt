@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.utils.MiscUtils
 import com.appsontap.bernie2020.*
 import com.appsontap.bernie2020.models.Category
@@ -22,6 +23,8 @@ import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.util.into
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
+import com.thoughtbot.expandablerecyclerview.models.ExpandableList
+import com.thoughtbot.expandablerecyclerview.models.ExpandableListPosition
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -161,7 +164,7 @@ class PlansFragment : BaseFragment() {
     }
     
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.options_menu_searchable, menu)
+        inflater!!.inflate(R.menu.options_menu_plans, menu)
         // Associate searchable configuration with the SearchView
         val searchManager = activity!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu!!.findItem(R.id.action_search).actionView as SearchView
@@ -208,6 +211,24 @@ class PlansFragment : BaseFragment() {
             }
         }
         menu.findItem(R.id.action_search).setOnActionExpandListener(expandListener)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.action_expand_collapse_all -> {
+                val adapter = (recycler_view.adapter as PlansAdapter)
+                if(adapter.isFullyExpanded() || item.title == getString(R.string.plans_collapse_all)) {
+                    adapter.collapseAll()
+                    item.setIcon(R.drawable.ic_unfold_more_white_24dp)
+                    item.setTitle(getString(R.string.plans_expand_all))
+                } else {
+                    adapter.expandAll()
+                    item.setTitle(getString(R.string.plans_collapse_all))
+                    item.setIcon(R.drawable.ic_unfold_less_white_24dp)
+                }
+            }
+        }
+        return true
     }
 
     override fun onDestroyOptionsMenu() {
@@ -273,6 +294,33 @@ class PlansFragment : BaseFragment() {
             if (isGroupExpanded(group)) {
                 holder?.expand()
             }
+        }
+
+        fun isFullyExpanded() : Boolean {
+            for(i in groups.size-1 downTo 0) {
+                if(!isGroupExpanded(groups[i])) {
+                    return false
+                }
+            }
+            return true;
+        }
+
+        fun expandAll() {
+            for(i in groups.size-1 downTo 0) {
+                if(!isGroupExpanded(groups[i])) {
+                    toggleGroup(groups[i])
+                }
+            }
+            notifyDataSetChanged()
+        }
+
+        fun collapseAll() {
+            for(i in groups.size-1 downTo 0) {
+                if(isGroupExpanded(groups[i])) {
+                    toggleGroup(groups[i])
+                }
+            }
+            notifyDataSetChanged()
         }
 
     }
