@@ -162,6 +162,8 @@ class CategoryDetailsFragment : BaseFragment() {
                     if(uiState.items[position] is Plan) {
                         holder.bindPlanItems(uiState.items[position] as Plan)
                         Log.d(TAG, "Shit is getting bound!")
+                    } else {
+                        holder.bind(uiState.items[position] as String)
                     }
                 }
                 is TitleViewHolder -> holder.bind(uiState.items[position] as String)
@@ -234,11 +236,13 @@ class CategoryDetailsFragment : BaseFragment() {
                         itemView.header_plan_desc_text_view.visibility = View.GONE
                     } else {
                         itemView.header_plan_desc_text_view.text = it?.description
+                        itemView.header_plan_desc_text_view.visibility = View.VISIBLE
                     }
                     if(it?.links?.length == 0) {
                         itemView.header_plan_link_text_view.visibility = View.GONE
                     } else {
                         itemView.header_plan_link_text_view.text = it?.links
+                        itemView.header_plan_desc_text_view.visibility = View.VISIBLE
                     }
                 }
             }
