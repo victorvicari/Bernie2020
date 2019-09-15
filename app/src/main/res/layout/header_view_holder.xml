@@ -8,8 +8,8 @@
     <TextView android:id="@+id/header_title_text_view"
               android:layout_height="wrap_content"
               android:layout_width="wrap_content"
-              android:textSize="24sp"
-              android:layout_marginBottom="32dp"
+              android:textSize="20sp"
+              android:layout_marginBottom="16dp"
               style="@style/Header"
     />
     <ImageView android:id="@+id/header_image_view"
@@ -17,6 +17,19 @@
                android:layout_width="match_parent"
                android:visibility="gone"
     />
+
+    <TextView
+            android:id="@+id/header_plan_desc_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+    <TextView
+            android:id="@+id/header_plan_link_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:layout_marginBottom="8dp"/>
 
 
 </LinearLayout>
