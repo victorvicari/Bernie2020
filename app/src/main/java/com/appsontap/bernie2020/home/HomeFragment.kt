@@ -1,9 +1,18 @@
 package com.appsontap.bernie2020.home
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.FragmentRouter
@@ -30,12 +39,22 @@ class HomeFragment : BaseFragment() {
                 setItemMenuSelected(R.id.bot_nav_events_map)
             }
         }
-        volunteer_button.setOnClickListener {
+
+        val ss2 = SpannableString(getResources().getString(R.string.volunteer_btext))
+        ss2.setSpan(RelativeSizeSpan(.8f), 23, 54, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ss2.setSpan(StyleSpan(Typeface.ITALIC), 0, 22,  Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val tv = activity?.findViewById(R.id.volunteerButton) as Button
+        tv.text = ss2
+
+
+       volunteerButton.setOnClickListener {
             (requireActivity() as FragmentRouter).replaceWebViewFragmentWithTitle(
                 getString(R.string.volunteer_url),
                 getString(R.string.web_title_volunteer)
             )
         }
+
+
         timeline_button.setOnClickListener {
             (requireActivity() as FragmentRouter).run {
                replaceFragment(TimelineFragment.newInstance())
@@ -54,12 +73,15 @@ class HomeFragment : BaseFragment() {
                 setItemMenuSelected(R.id.bot_nav_more)
             }
         }
-        donate_button.setOnClickListener { 
+
+        donateButton.setOnClickListener {
             (requireActivity() as FragmentRouter).run{
                 replaceWebViewFragmentWithTitle(getString(R.string.donate_url), getString(R.string.web_title_donate))
                 setItemMenuSelected(R.id.bot_nav_more)
             }
         }
+
+
     }
 
     override fun onStart() {

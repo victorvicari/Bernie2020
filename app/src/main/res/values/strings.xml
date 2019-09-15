@@ -86,4 +86,9 @@
     <string name="share_legislation">Share Bernie\'s Legislation</string>
     <string name="add_to_favorites">Add some favorites!</string>
     <string name="first_timeline_year">1962</string>
+    <string name="volunteer_btext">Volunteer with Bernie \n  Over a million have signed up!</string>
+    <string name="donate_btext">Donate to Bernie</string>
+
+
+
 </resources>

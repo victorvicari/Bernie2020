@@ -2,12 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/homeScreenBackground"
         >
 
-<ScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
@@ -105,35 +106,60 @@
             android:background="@drawable/home_btn_timeline"
             />
 
-        <ImageView
-                android:id="@+id/donate_button"
-                android:layout_width="381dp"
+        <Button
+                android:id="@+id/donateButton"
+                android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="80dp"
-                android:background="@drawable/donate_btn"
+                tools:layout_editor_absoluteX="27dp"
+                tools:layout_editor_absoluteY="536dp"
+                android:background="@drawable/donate_background"
+                android:fontFamily="@font/lora_bold"
+                android:text="@string/donate_btext"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textStyle="italic"
+                android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+                android:drawableTint="@color/white"
+                android:textColor="@color/white"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
+                android:drawablePadding="2dip"
+                android:layout_marginEnd="20dip"
+                android:layout_marginStart="20dp"
+                android:paddingStart="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timeline_button"
                 app:layout_constraintStart_toStartOf="@id/guideline"
                 app:layout_constraintEnd_toEndOf="@id/guideline"
-                 />
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <ImageView
-            android:id="@+id/volunteer_button"
-            android:layout_width="415dp"
+
+    <Button
+            android:id="@+id/volunteerButton"
+            android:layout_width="match_parent"
             android:layout_height="77dp"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
+            android:fontFamily="@font/lora_bold"
+            android:text="@string/volunteer_btext"
+            android:textAlignment="viewStart"
+            android:background="@drawable/volunteer_background"
+            android:textAllCaps="false"
             android:scaleType="fitCenter"
-            android:src="@drawable/vol_button"
+            tools:layout_editor_absoluteX="27dp"
+            tools:layout_editor_absoluteY="536dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:drawableTint="@color/white"
+            android:textColor="@color/white"
+            android:paddingLeft="20dp"
+            />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
