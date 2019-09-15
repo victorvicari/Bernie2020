@@ -5,9 +5,11 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.text.style.TextAppearanceSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,12 +42,27 @@ class HomeFragment : BaseFragment() {
             }
         }
 
-        val ss2 = SpannableString(getResources().getString(R.string.volunteer_btext))
-        ss2.setSpan(RelativeSizeSpan(.8f), 23, 54, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        ss2.setSpan(StyleSpan(Typeface.ITALIC), 0, 22,  Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        val tv = activity?.findViewById(R.id.volunteerButton) as Button
-        tv.text = ss2
 
+        val ssTop = SpannableString(getResources().getString(R.string.volunteer_btext1))
+        ssTop.setSpan(
+            TextAppearanceSpan(activity?.applicationContext, R.style.VolunteerTopTextStyle),
+            0,
+            getResources().getString(R.string.volunteer_btext1).length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        val ssBottom = SpannableString(getResources().getString(R.string.volunteer_btext2))
+
+        ssBottom.setSpan(
+            TextAppearanceSpan(
+                activity?.applicationContext,
+                R.style.VolunteerTopTextStyle2
+            ),
+            0,
+            getResources().getString(R.string.volunteer_btext2).length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        val volButton = activity?.findViewById(R.id.volunteerButton) as Button
+       volButton.text = TextUtils.concat(ssTop, "\n", ssBottom)
 
        volunteerButton.setOnClickListener {
             (requireActivity() as FragmentRouter).replaceWebViewFragmentWithTitle(

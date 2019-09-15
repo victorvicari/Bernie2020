@@ -63,5 +63,19 @@
     <dimen name="text_subheader_size">18sp</dimen>
     <dimen name="text_legislation_size">16sp</dimen>
 
+    <style name="VolunteerTopTextStyle" parent="@android:style/Widget.TextView">
+        <item name="android:fontFamily">@font/lora_bold</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+
+    </style>
+
+    <style name="VolunteerTopTextStyle2" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/whiteTransparent</item>
+        <item name="android:fontFamily">@font/sourcesanspro_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 
 </resources>
