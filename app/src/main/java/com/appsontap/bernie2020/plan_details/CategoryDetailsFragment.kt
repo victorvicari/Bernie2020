@@ -82,7 +82,6 @@ class CategoryDetailsFragment : BaseFragment() {
                 .subscribeBy(
                     onSuccess = { uiState ->
                         recycler_view.adapter = ProposalDetailAdapter(uiState)
-                        Log.d(TAG, "meeee" + uiState.items.toString())
                     },
                     onError = { error ->
                         Log.e(TAG, error.message, error)
@@ -161,7 +160,6 @@ class CategoryDetailsFragment : BaseFragment() {
                 is HeaderViewHolder -> {
                     if(uiState.items[position] is Plan) {
                         holder.bindPlanItems(uiState.items[position] as Plan)
-                        Log.d(TAG, "Shit is getting bound!")
                     } else {
                         holder.bind(uiState.items[position] as String)
                     }
