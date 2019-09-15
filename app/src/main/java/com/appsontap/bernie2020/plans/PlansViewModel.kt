@@ -3,11 +3,12 @@ package com.appsontap.bernie2020.plans
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.appsontap.bernie2020.App
+import com.appsontap.bernie2020.plans.model.PlansRepo
+import com.appsontap.bernie2020.plans.model.UiState
 import com.appsontap.bernie2020.util.TAG
-import com.appsontap.bernie2020.util.into
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
@@ -21,7 +22,12 @@ class PlansViewModel : ViewModel() {
 
     fun fetchData() {
         plansRepo
-            .fetchData()?.let {
+            .fetchData()
+            .zipWith(plansRepo.fetchExpandedItems(), (object : BiFunction<MutableList<Any>, Boolean, UiState.ListReady>{
+                override fun apply(list: MutableList<Any>, t2: Boolean): UiState.ListReady {
+                        return UiState.ListReady(list, )
+            })
+            ?.let {
                 it.subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribeBy(
