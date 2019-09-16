@@ -88,4 +88,6 @@
     <string name="first_timeline_year">1962</string>
     <string name="options_menu_copy_url">Copy URL</string>
     <string name="webview_link_copied">Link Copied!</string>
+    <string name="context_share_on_twitter">Share on Twitter</string>
+    <string name="context_share_full_text">Share Full Text</string>
 </resources>

@@ -2,7 +2,10 @@ package com.appsontap.bernie2020.plans
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.ContextMenu
 import android.view.View
+import android.widget.PopupMenu
 import androidx.fragment.app.FragmentActivity
 import com.appsontap.bernie2020.util.IOHelper
 import com.appsontap.bernie2020.R
@@ -34,6 +37,28 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
         }
     }
 
+    fun setShareClickListener(context: Context, plan: Plan?) {
+        planView.imageview_plan_share.setOnClickListener {
+            val popup = PopupMenu(context, planView.imageview_plan_share)
+            popup.inflate(R.menu.context_menu_share_plan)
+            popup.setOnMenuItemClickListener {
+                when(it.itemId) {
+                    R.id.context_plan_share_twitter -> {
+                        Log.d(TAG, "twitter twittering!")
+
+                        return@setOnMenuItemClickListener true
+                    }
+                    R.id.context_plan_share_full_text -> {
+                        Log.d(TAG, "full text incoming!")
+                        return@setOnMenuItemClickListener true
+                    }
+                }
+                return@setOnMenuItemClickListener false
+            }
+            popup.show()
+        }
+    }
+
     fun setupFavoriteCheckbox(context: Context, id: String, favorites: Set<String>) {
         planView.checkbox_plan_favorite.isChecked = favorites.contains(id)
 
@@ -45,6 +70,5 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
             }
         }
     }
-
 
 }
