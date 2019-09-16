@@ -1,4 +1,4 @@
-package com.appsontap.bernie2020.wallpaper2
+package com.appsontap.bernie2020.wallpaper
 
 import android.annotation.SuppressLint
 import com.appsontap.bernie2020.database.AppDatabase
@@ -17,7 +17,7 @@ class WallpaperRepo{
     @SuppressLint("CheckResult")
 
 
-    fun buildWallpaper2(): Single<List<WallpaperItem>>  {
+    fun buildWallpaper(): Single<List<WallpaperItem>>  {
 
         Wallpapers.clear()
         return AppDatabase

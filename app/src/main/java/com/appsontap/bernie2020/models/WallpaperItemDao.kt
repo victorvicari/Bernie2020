@@ -18,5 +18,5 @@ interface WallPaperItemDao{
     fun insert(item: WallpaperItem)
     
     @Query("SELECT * FROM wallpaper_table WHERE id IN (:ids)")
-    fun getWallpaper2ItemsForIds(ids: List<String>) : Single<List<WallpaperItem>>
+    fun getWallpaperItemsForIds(ids: List<String>) : Single<List<WallpaperItem>>
 }

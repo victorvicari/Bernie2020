@@ -1,4 +1,4 @@
-package com.appsontap.bernie2020.wallpaper2
+package com.appsontap.bernie2020.wallpaper
 
 import android.app.AlertDialog
 import android.app.WallpaperManager
@@ -27,6 +27,7 @@ import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.models.WallpaperItem
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
 import kotlinx.android.synthetic.main.fragment_wallpaper.*
+import kotlinx.android.synthetic.main.grid_wallpaper.*
 
 
 /**
@@ -53,12 +54,12 @@ class WallpaperFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.Wallpaper2Ready()
+        viewModel.WallpaperReady()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {
-                    val wallpaperAdapter = adapter_wallpaper2(activity!!, it)
+                    val wallpaperAdapter = adapter_wallpaper(activity!!, it)
                     gridview.adapter = wallpaperAdapter
                     gridview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
                         try {
@@ -78,7 +79,7 @@ class WallpaperFragment : BaseFragment() {
                     })
                 },
                 onError = {
-                    Log.e(TAG, "Couldn't display Wallpaper2 ${it.message}", it)
+                    Log.e(TAG, "Couldn't display Wallpaper ${it.message}", it)
                 }).into(bin)
     }
 
@@ -87,7 +88,7 @@ class WallpaperFragment : BaseFragment() {
         bin.clear()
     }
 
-    inner class adapter_wallpaper2(
+    inner class adapter_wallpaper(
         private val mContext: Context,
         private val wallpapers: List<WallpaperItem>
     ) : BaseAdapter() {
@@ -106,17 +107,12 @@ class WallpaperFragment : BaseFragment() {
 
         //Sets the thumbnails within the gridView
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            var convertView = convertView
-            val thumbnail = wallpapers.get(position) as WallpaperItem
-            if (convertView == null) {
-                val layoutInflater = LayoutInflater.from(mContext)
-                convertView = layoutInflater.inflate(R.layout.grid_wallpaper, null)
-            }
-
-            val imageView = convertView!!.findViewById(R.id.imageview_wallpaper) as ImageView
+            val thumbnail = wallpapers.get(position)
+            var wallpaperView =  LayoutInflater.from(mContext).inflate(R.layout.grid_wallpaper, null)
+            val wpThumbnailView = wallpaperView!!.findViewById(R.id.imageview_wallpaper)as ImageView
             val id = resources.getIdentifier(thumbnail.wallpaper_resource, "drawable", activity!!.packageName)
-            imageView.setImageResource(id)
-            return convertView
+            wpThumbnailView.setImageResource(id)
+            return wallpaperView
         }
     }
 

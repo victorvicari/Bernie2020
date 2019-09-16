@@ -1,4 +1,4 @@
-package com.appsontap.bernie2020.wallpaper2
+package com.appsontap.bernie2020.wallpaper
 
 import androidx.lifecycle.ViewModel
 import com.appsontap.bernie2020.models.WallpaperItem
@@ -12,8 +12,8 @@ class WallpaperViewModel : ViewModel(){
 
     private val repo = WallpaperRepo()
 
-    fun Wallpaper2Ready() : Single<List<WallpaperItem>> {
-        return repo.buildWallpaper2()
+    fun WallpaperReady() : Single<List<WallpaperItem>> {
+        return repo.buildWallpaper()
     }
 }
 

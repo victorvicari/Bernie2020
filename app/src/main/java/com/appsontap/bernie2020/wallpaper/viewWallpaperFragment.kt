@@ -1,4 +1,4 @@
-package com.appsontap.bernie2020.wallpaper2
+package com.appsontap.bernie2020.wallpaper
 
 import android.app.AlertDialog
 import android.app.WallpaperManager
@@ -68,6 +68,8 @@ class viewWallpaperFragment : BaseFragment() {
         super.onDestroyView()
         bin.clear()
     }
+
+    //Resizes the wallpaper by taking into account the screen size AND the navigation bar contribution.
     fun changeBackground( id: Int) {
 
         val metrics = DisplayMetrics()
