@@ -108,12 +108,41 @@
 
 
 
+        <Button
+                android:id="@+id/ny_registration_button"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="80dp"
+                android:background="@drawable/donate_background"
+                android:fontFamily="@font/lora_bold"
+                android:text="@string/ny_registration_Text"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textStyle="bold|italic"
+                android:textSize="20sp"
+                android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+                android:drawableTint="@color/white"
+                android:textColor="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:drawablePadding="2dip"
+                android:layout_marginEnd="20dip"
+                android:layout_marginStart="20dp"
+                android:paddingStart="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timeline_button"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
+                />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
 
     <Button
-            android:id="@+id/volunteer_button"
+            android:id="@+id/volunteerButton"
             android:layout_width="match_parent"
             android:layout_height="77dp"
             android:clickable="true"
@@ -121,7 +150,7 @@
             android:fontFamily="@font/lora_bold"
             android:textStyle="bold|italic"
             android:textSize="20sp"
-            android:text="@string/volunteer_button_top_text"
+            android:text="@string/volunteer_btext1"
             android:textAlignment="viewStart"
             android:background="@drawable/volunteer_background"
             android:textAllCaps="false"

@@ -1,5 +1,7 @@
 package com.appsontap.bernie2020.home
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -15,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.FragmentRouter
@@ -43,14 +46,14 @@ class HomeFragment : BaseFragment() {
         }
 
 
-        val ssTop = SpannableString(getResources().getString(R.string.volunteer_button_top_text))
+        val ssTop = SpannableString(getResources().getString(R.string.volunteer_btext1))
         ssTop.setSpan(
             TextAppearanceSpan(activity?.applicationContext, R.style.VolunteerTopTextStyle),
             0,
-            getResources().getString(R.string.volunteer_button_top_text).length,
+            getResources().getString(R.string.volunteer_btext1).length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        val ssBottom = SpannableString(getResources().getString(R.string.volunteer_button_bottom_text))
+        val ssBottom = SpannableString(getResources().getString(R.string.volunteer_btext2))
 
         ssBottom.setSpan(
             TextAppearanceSpan(
@@ -58,13 +61,13 @@ class HomeFragment : BaseFragment() {
                 R.style.VolunteerTopTextStyle2
             ),
             0,
-            getResources().getString(R.string.volunteer_button_bottom_text).length,
+            getResources().getString(R.string.volunteer_btext2).length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
+        val volButton = activity?.findViewById(R.id.volunteerButton) as Button
+       volButton.text = TextUtils.concat(ssTop, "\n", ssBottom)
 
-        volunteer_button.text = TextUtils.concat(ssTop, "\n", ssBottom)
-
-       volunteer_button.setOnClickListener {
+       volunteerButton.setOnClickListener {
             (requireActivity() as FragmentRouter).replaceWebViewFragmentWithTitle(
                 getString(R.string.volunteer_url),
                 getString(R.string.web_title_volunteer)
@@ -90,6 +93,15 @@ class HomeFragment : BaseFragment() {
                 setItemMenuSelected(R.id.bot_nav_more)
             }
         }
+
+
+        ny_registration_button.setOnClickListener {
+            (requireActivity() as FragmentRouter).run{
+                replaceWebViewFragmentWithTitle(getString(R.string.ny_resgister_url), getString(R.string.web_ny_resgister))
+                setItemMenuSelected(R.id.bot_nav_more)
+            }
+        }
+
 
     }
 
