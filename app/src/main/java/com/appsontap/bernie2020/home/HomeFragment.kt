@@ -8,10 +8,12 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
+import android.text.method.LinkMovementMethod
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.TextAppearanceSpan
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -96,6 +98,21 @@ class HomeFragment : BaseFragment() {
 
 
         ny_registration_button.setOnClickListener {
+
+            val message = TextView( activity?.applicationContext)
+            val s = SpannableString(this.getText(R.string.ny_dialog))
+            Linkify.addLinks(s, Linkify.WEB_URLS)
+            message.text = s
+            message.movementMethod = LinkMovementMethod.getInstance()
+
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle("Voter Registration Deadline: Oct 11th")
+           // builder.setMessage("https://www.elections.ny.gov/countyboards.html")
+            builder.setView(message)
+            builder.setPositiveButton("PROCEED") { dialog, which -> dialog.cancel() }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+
             (requireActivity() as FragmentRouter).run{
                 replaceWebViewFragmentWithTitle(getString(R.string.ny_resgister_url), getString(R.string.web_ny_resgister))
                 setItemMenuSelected(R.id.bot_nav_more)

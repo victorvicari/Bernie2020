@@ -94,6 +94,6 @@
     <string name="ny_registration_Text">NY Registration Date Oct.11th! </string>
     <string name="web_ny_resgister">Register to Vote! </string>
     <string name="ny_resgister_url">https://www.ny.gov/services/register-vote</string>
-
+    <string name="ny_dialog"> To make sure your change in registration counts go to your local Board of Elections instead of the DMV if possible located here:\n https://www.elections.ny.gov/countyboards.html \n OR \n https://www.elections.ny.gov/NYSBOE/Counties/CountyBoardRoster.pdf</string>
 
 </resources>
