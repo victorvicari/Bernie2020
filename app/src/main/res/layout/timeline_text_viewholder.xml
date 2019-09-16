@@ -10,6 +10,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textColor="@color/homeScreenBackground"
+            android:textIsSelectable="true"
             />
 
 </androidx.cardview.widget.CardView>
