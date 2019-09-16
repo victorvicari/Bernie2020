@@ -43,14 +43,14 @@ class HomeFragment : BaseFragment() {
         }
 
 
-        val ssTop = SpannableString(getResources().getString(R.string.volunteer_btext1))
+        val ssTop = SpannableString(getResources().getString(R.string.volunteer_button_top_text))
         ssTop.setSpan(
             TextAppearanceSpan(activity?.applicationContext, R.style.VolunteerTopTextStyle),
             0,
-            getResources().getString(R.string.volunteer_btext1).length,
+            getResources().getString(R.string.volunteer_button_top_text).length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        val ssBottom = SpannableString(getResources().getString(R.string.volunteer_btext2))
+        val ssBottom = SpannableString(getResources().getString(R.string.volunteer_button_bottom_text))
 
         ssBottom.setSpan(
             TextAppearanceSpan(
@@ -58,13 +58,13 @@ class HomeFragment : BaseFragment() {
                 R.style.VolunteerTopTextStyle2
             ),
             0,
-            getResources().getString(R.string.volunteer_btext2).length,
+            getResources().getString(R.string.volunteer_button_bottom_text).length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        val volButton = activity?.findViewById(R.id.volunteerButton) as Button
-       volButton.text = TextUtils.concat(ssTop, "\n", ssBottom)
 
-       volunteerButton.setOnClickListener {
+        volunteer_button.text = TextUtils.concat(ssTop, "\n", ssBottom)
+
+       volunteer_button.setOnClickListener {
             (requireActivity() as FragmentRouter).replaceWebViewFragmentWithTitle(
                 getString(R.string.volunteer_url),
                 getString(R.string.web_title_volunteer)
@@ -91,7 +91,7 @@ class HomeFragment : BaseFragment() {
             }
         }
 
-        donateButton.setOnClickListener {
+        donate_button.setOnClickListener {
             (requireActivity() as FragmentRouter).run{
                 replaceWebViewFragmentWithTitle(getString(R.string.donate_url), getString(R.string.web_title_donate))
                 setItemMenuSelected(R.id.bot_nav_more)

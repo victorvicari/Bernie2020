@@ -107,16 +107,14 @@
             />
 
         <Button
-                android:id="@+id/donateButton"
+                android:id="@+id/donate_button"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="80dp"
-                tools:layout_editor_absoluteX="27dp"
-                tools:layout_editor_absoluteY="536dp"
                 android:background="@drawable/donate_background"
                 android:fontFamily="@font/lora_bold"
-                android:text="@string/donate_btext"
+                android:text="@string/donate_button_text"
                 android:textAlignment="viewStart"
                 android:textAllCaps="false"
                 android:textStyle="bold|italic"
@@ -141,7 +139,7 @@
 
 
     <Button
-            android:id="@+id/volunteerButton"
+            android:id="@+id/volunteer_button"
             android:layout_width="match_parent"
             android:layout_height="77dp"
             android:clickable="true"
@@ -149,13 +147,11 @@
             android:fontFamily="@font/lora_bold"
             android:textStyle="bold|italic"
             android:textSize="20sp"
-            android:text="@string/volunteer_btext1"
+            android:text="@string/volunteer_button_top_text"
             android:textAlignment="viewStart"
             android:background="@drawable/volunteer_background"
             android:textAllCaps="false"
             android:scaleType="fitCenter"
-            tools:layout_editor_absoluteX="27dp"
-            tools:layout_editor_absoluteY="536dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
