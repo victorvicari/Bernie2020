@@ -106,33 +106,7 @@
             android:background="@drawable/home_btn_timeline"
             />
 
-        <Button
-                android:id="@+id/donate_button"
-                android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="80dp"
-                android:background="@drawable/donate_background"
-                android:fontFamily="@font/lora_bold"
-                android:text="@string/donate_button_text"
-                android:textAlignment="viewStart"
-                android:textAllCaps="false"
-                android:textStyle="bold|italic"
-                android:textSize="20sp"
-                android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
-                android:drawableTint="@color/white"
-                android:textColor="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:drawablePadding="2dip"
-                android:layout_marginEnd="20dip"
-                android:layout_marginStart="20dp"
-                android:paddingStart="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/timeline_button"
-                app:layout_constraintStart_toStartOf="@id/guideline"
-                app:layout_constraintEnd_toEndOf="@id/guideline"
-                />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

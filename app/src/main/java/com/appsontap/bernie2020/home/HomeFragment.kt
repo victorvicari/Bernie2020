@@ -91,14 +91,6 @@ class HomeFragment : BaseFragment() {
             }
         }
 
-        donate_button.setOnClickListener {
-            (requireActivity() as FragmentRouter).run{
-                replaceWebViewFragmentWithTitle(getString(R.string.donate_url), getString(R.string.web_title_donate))
-                setItemMenuSelected(R.id.bot_nav_more)
-            }
-        }
-
-
     }
 
     override fun onStart() {
