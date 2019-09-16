@@ -150,7 +150,7 @@
             android:fontFamily="@font/lora_bold"
             android:textStyle="bold|italic"
             android:textSize="20sp"
-            android:text="@string/volunteer_btext1"
+            android:text="@string/volunteer_button_top_text"
             android:textAlignment="viewStart"
             android:background="@drawable/volunteer_background"
             android:textAllCaps="false"
