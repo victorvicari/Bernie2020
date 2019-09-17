@@ -58,7 +58,18 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
                         return@setOnMenuItemClickListener true
                     }
                     R.id.context_plan_share_full_text -> {
-                        Log.d(TAG, "full text incoming!")
+                        var message = activity.getString(R.string.plan_share_full_text_preamble) + plan?.name
+                        if(plan?.description != null) {
+                            message += "\n\n" + plan?.description
+                        }
+                        val link = plan?.links?.split(" ")?.get(0)
+                        if(link != null && link.isNotEmpty()) {
+                            message += activity.getString(R.string.plan_share_full_text_link) + link
+                        }
+                        val i = Intent(Intent.ACTION_SEND)
+                        i.setType("text/plain")
+                        i.putExtra(Intent.EXTRA_TEXT, message)
+                        activity.startActivity(i)
                         return@setOnMenuItemClickListener true
                     }
                 }
