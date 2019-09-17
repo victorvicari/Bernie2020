@@ -65,9 +65,8 @@ class HomeFragment : BaseFragment() {
             getResources().getString(R.string.volunteer_button_bottom_text).length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        val volButton = activity?.findViewById(R.id.volunteerButton) as Button
-       volButton.text = TextUtils.concat(ssTop, "\n", ssBottom)
 
+       volunteerButton.text = TextUtils.concat(ssTop, "\n", ssBottom)
        volunteerButton.setOnClickListener {
             (requireActivity() as FragmentRouter).replaceWebViewFragmentWithTitle(
                 getString(R.string.volunteer_url),
@@ -95,9 +94,14 @@ class HomeFragment : BaseFragment() {
             }
         }
 
+        donate_button.setOnClickListener {
+            (requireActivity() as FragmentRouter).run {
+                replaceWebViewFragmentWithTitle(getString(R.string.donate_url),getString(R.string.web_title_donate))
+                setItemMenuSelected(R.id.bot_nav_more)
+            }
+        }
 
         ny_registration_button.setOnClickListener {
-
             val message = TextView( activity?.applicationContext)
             val s = SpannableString(this.getText(R.string.ny_dialog))
             Linkify.addLinks(s, Linkify.WEB_URLS)

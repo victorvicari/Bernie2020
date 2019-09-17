@@ -87,6 +87,8 @@
     <string name="first_timeline_year">1962</string>
     <string name="volunteer_button_top_text">Volunteer with Bernie</string>
     <string name="volunteer_button_bottom_text">Over a million have signed up!</string>
+    <string name="donate_button_text">Donate to Bernie</string>
+
     <string name="ny_registration_Text">NY Registration Date Oct.11th! </string>
     <string name="web_ny_resgister">Register to Vote! </string>
     <string name="ny_resgister_url">https://www.ny.gov/services/register-vote</string>
