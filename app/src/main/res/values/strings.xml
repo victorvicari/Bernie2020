@@ -86,5 +86,8 @@
     <string name="share_legislation">Share Bernie\'s Legislation</string>
     <string name="add_to_favorites">Add some favorites!</string>
 
-
+    <string name="wallpaper_title">Wallpapers</string>
+    <string name="wallpaper_warning">Are you want to change your phones wallpaper?</string>
+    <string name="wallpaper_agree">Yes</string>
+    <string name="wallpaper_disagree">No</string>
 </resources>

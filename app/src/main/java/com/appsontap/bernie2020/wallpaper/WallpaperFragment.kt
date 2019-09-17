@@ -59,23 +59,20 @@ class WallpaperFragment : BaseFragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {
-                    val wallpaperAdapter = adapter_wallpaper(activity!!, it)
+                    val wallpaperAdapter = adapter_wallpaper(requireActivity(), it)
                     gridview.adapter = wallpaperAdapter
                     gridview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
-                        try {
-                            val args = Bundle()
-                            args.putString("wpTag", it.get(position).wallpaper_resource)
-                            (context as FragmentActivity).supportFragmentManager.beginTransaction()
-                                .replace(
-                                    R.id.fragment_container,
-                                    viewWallpaperFragment.newInstance(args),
-                                    CategoryDetailsFragment.TAG
-                                )
-                                .addToBackStack(CategoryDetailsFragment.TAG)
-                                .commit()
-                        } catch (e: Exception) {
-                            Log.e(TAG, "Cannot set image as wallpaper", e)
-                        }
+                        val args = Bundle()
+                        args.putString("wpTag", it.get(position).wallpaper_resource)
+                        (context as FragmentActivity).supportFragmentManager.beginTransaction()
+                            .replace(
+                                R.id.fragment_container,
+                                viewWallpaperFragment.newInstance(args),
+                                CategoryDetailsFragment.TAG
+                            )
+                            .addToBackStack(CategoryDetailsFragment.TAG)
+                            .commit()
+
                     })
                 },
                 onError = {
@@ -109,8 +106,8 @@ class WallpaperFragment : BaseFragment() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val thumbnail = wallpapers.get(position)
             var wallpaperView =  LayoutInflater.from(mContext).inflate(R.layout.grid_wallpaper, null)
-            val wpThumbnailView = wallpaperView!!.findViewById(R.id.imageview_wallpaper)as ImageView
-            val id = resources.getIdentifier(thumbnail.wallpaper_resource, "drawable", activity!!.packageName)
+            val wpThumbnailView = wallpaperView?.findViewById(R.id.imageview_wallpaper)as ImageView
+            val id = resources.getIdentifier(thumbnail.wallpaper_resource, "drawable", requireActivity().packageName)
             wpThumbnailView.setImageResource(id)
             return wallpaperView
         }

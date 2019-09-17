@@ -48,15 +48,15 @@ class viewWallpaperFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        wallpaperImageView.setImageResource(resources.getIdentifier(wallpaperId, "drawable", activity!!.packageName))
+        wallpaperImageView.setImageResource(resources.getIdentifier(wallpaperId, "drawable", requireActivity().packageName))
         buttonWallpaper.setOnClickListener{
             val builder = AlertDialog.Builder(activity)
-            builder.setTitle("Wallpapers")
-            builder.setMessage("Are you want to change your phones wallpaper?")
-            builder.setPositiveButton("YES") { dialog, which ->
-                changeBackground(resources.getIdentifier(wallpaperId, "drawable", activity!!.packageName))
+            builder.setTitle(getString(R.string.wallpaper_title))
+            builder.setMessage(getString(R.string.wallpaper_warning))
+            builder.setPositiveButton(getString(R.string.wallpaper_agree)) { dialog, which ->
+                changeBackground(resources.getIdentifier(wallpaperId, "drawable", requireActivity().packageName))
             }
-            builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
+            builder.setNegativeButton(getString(R.string.wallpaper_disagree)) { dialog, which -> dialog.cancel() }
             val dialog: AlertDialog = builder.create()
             dialog.show()
         }
@@ -74,7 +74,7 @@ class viewWallpaperFragment : BaseFragment() {
 
         val metrics = DisplayMetrics()
         val windowManager =
-            activity!!.applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+           requireActivity().applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         windowManager.defaultDisplay.getMetrics(metrics)
         val height = metrics.heightPixels
         val width = metrics.widthPixels
@@ -86,7 +86,7 @@ class viewWallpaperFragment : BaseFragment() {
         }
         val bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, id), width, height + navigationBarHeight, true
         )
-        val wallpaperManager = WallpaperManager.getInstance(activity!!.applicationContext)
+        val wallpaperManager = WallpaperManager.getInstance(requireActivity().applicationContext)
         wallpaperManager.setBitmap(bitmap)
     }
 
