@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.appsontap.bernie2020.R
+import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import java.net.URL
 import java.net.URLEncoder
@@ -99,6 +100,43 @@ class IOHelper {
             uriBuilder.appendQueryParameter("text", message)
 
             return uriBuilder.build()
+        }
+
+        fun getLegislationStringForTwitter(context: Context, leg: Legislation) : Uri {
+            var link = leg.url
+            var preamble = context.getString(R.string.twitter_share_leg_preamble)
+            var charOffset = preamble.length + 1 // 1 is for the space
+            var hasLink = false
+            if (link != null && link.isNotEmpty()) {
+                charOffset += min(TWITTER_URL_LENGTH, link.length)
+                hasLink = true
+            }
+            val uriBuilder = Uri.Builder()
+            uriBuilder.scheme("https")
+                .authority("twitter.com")
+                .appendPath("intent")
+                .appendPath("tweet")
+
+            if(hasLink) {
+                uriBuilder.appendQueryParameter("url", link)
+            }
+
+            var message = preamble
+
+            val remainingChars = TWITTER_MAX_CHARS - charOffset
+            val legTitle = leg.name as String
+            if(legTitle.length <= remainingChars) {
+                message += " " + legTitle
+            } else {
+                // makes it so the message fits within the 280 twitter character limit
+                val excess = (legTitle.length + 3) - remainingChars
+                message += " " + legTitle.substring(0, legTitle.length - excess - 1) + "..."
+            }
+
+            uriBuilder.appendQueryParameter("text", message)
+
+            return uriBuilder.build()
+
         }
     }
 

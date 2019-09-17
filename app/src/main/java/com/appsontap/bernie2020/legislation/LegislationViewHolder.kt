@@ -13,8 +13,10 @@ import com.appsontap.bernie2020.util.IOHelper
 import com.appsontap.bernie2020.util.TAG
 import kotlinx.android.synthetic.main.item_legislation.view.*
 import android.content.Intent
+import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
+import kotlinx.android.synthetic.main.item_plan.view.*
 
 
 class LegislationViewHolder(itemView: View, private val uiState: UiState.ListReady) :
@@ -48,6 +50,41 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
         }
 
         itemView.imageview_share?.setOnClickListener {
+            val legislation = uiState.items[adapterPosition] as Legislation
+            val popup = PopupMenu(itemView.context, itemView.imageview_share)
+            popup.inflate(com.appsontap.bernie2020.R.menu.context_menu_share_plan)
+            popup.setOnMenuItemClickListener {
+                when(it.itemId) {
+                    R.id.context_plan_share_twitter -> {
+                        val message =
+                            legislation?.let { leg -> IOHelper.getLegislationStringForTwitter(itemView.context, leg) }
+                        Log.d(TAG, message.toString())
+                        val i = Intent(Intent.ACTION_VIEW)
+                        i.data = message
+                        itemView.context.startActivity(i)
+                        return@setOnMenuItemClickListener true
+                    }
+//                    R.id.context_plan_share_full_text -> {
+//                        var message = activity.getString(R.string.plan_share_full_text_preamble) + plan?.name
+//                        if(plan?.description != null) {
+//                            message += "\n\n" + plan?.description
+//                        }
+//                        val link = plan?.links?.split(" ")?.get(0)
+//                        if(link != null && link.isNotEmpty()) {
+//                            message += activity.getString(R.string.plan_share_full_text_link) + link
+//                        }
+//                        val i = Intent(Intent.ACTION_SEND)
+//                        i.setType("text/plain")
+//                        i.putExtra(Intent.EXTRA_TEXT, message)
+//                        activity.startActivity(i)
+//                        return@setOnMenuItemClickListener true
+//                    }
+                }
+                return@setOnMenuItemClickListener false
+            }
+            popup.show()
+
+
             val sendIntent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, (uiState.items[adapterPosition] as Legislation).name)

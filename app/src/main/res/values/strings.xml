@@ -93,4 +93,5 @@
     <string name="twitter_share_hashtag">#BernieHasPlans: </string>
     <string name="plan_share_full_text_preamble">Bernie has plans that meet the level of the crises we face.\n\n</string>
     <string name="plan_share_full_text_link">\n\nMore information can be found at:</string>
+    <string name="twitter_share_leg_preamble">.\@BernieSanders has serious legislation to match the depth of our serious problems.\n\nFor example, check out his</string>
 </resources>
