@@ -90,4 +90,5 @@
     <string name="webview_link_copied">Link Copied!</string>
     <string name="context_share_on_twitter">Share on Twitter</string>
     <string name="context_share_full_text">Share Full Text</string>
+    <string name="twitter_share_hashtag">#BernieHasPlans: </string>
 </resources>

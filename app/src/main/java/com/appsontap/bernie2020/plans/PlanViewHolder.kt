@@ -1,5 +1,6 @@
 package com.appsontap.bernie2020.plans
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,10 @@ import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
 import kotlinx.android.synthetic.main.item_plan.view.*
+import android.net.Uri
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+
 
 class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
     fun setTextViewName(name: String?) {
@@ -28,7 +33,7 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
 
             (context as FragmentActivity).supportFragmentManager.beginTransaction()
                 .replace(
-                    R.id.fragment_container,
+                    com.appsontap.bernie2020.R.id.fragment_container,
                     CategoryDetailsFragment.newInstance(args),
                     CategoryDetailsFragment.TAG
                 )
@@ -37,15 +42,19 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
         }
     }
 
-    fun setShareClickListener(context: Context, plan: Plan?) {
+    fun setShareClickListener(activity: Activity, plan: Plan?) {
         planView.imageview_plan_share.setOnClickListener {
-            val popup = PopupMenu(context, planView.imageview_plan_share)
-            popup.inflate(R.menu.context_menu_share_plan)
+            val popup = PopupMenu(activity, planView.imageview_plan_share)
+            popup.inflate(com.appsontap.bernie2020.R.menu.context_menu_share_plan)
             popup.setOnMenuItemClickListener {
                 when(it.itemId) {
                     R.id.context_plan_share_twitter -> {
-                        Log.d(TAG, "twitter twittering!")
-
+                        val message =
+                            plan?.let { it1 -> IOHelper.getPlanStringForTwitter(activity, it1) }
+                        Log.d(TAG, message.toString())
+                        val i = Intent(Intent.ACTION_VIEW)
+                        i.data = message
+                        activity.startActivity(i)
                         return@setOnMenuItemClickListener true
                     }
                     R.id.context_plan_share_full_text -> {
