@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_copy_webview_url"
+        android:title="@string/options_menu_copy_url"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_content_copy_white_24dp"/>
+
+    <item
         android:id="@+id/action_open_in_browser"
         android:orderInCategory="100"
         android:title="@string/options_menu_open_in_browser"
