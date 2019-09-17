@@ -49,7 +49,7 @@ class HomeFragment : BaseFragment() {
 
         val ssTop = SpannableString(getResources().getString(R.string.volunteer_button_top_text))
         ssTop.setSpan(
-            TextAppearanceSpan(activity?.applicationContext, R.style.VolunteerTopTextStyle),
+            TextAppearanceSpan(requireActivity().applicationContext, R.style.VolunteerTopTextStyle),
             0,
             getResources().getString(R.string.volunteer_button_top_text).length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -58,7 +58,7 @@ class HomeFragment : BaseFragment() {
 
         ssBottom.setSpan(
             TextAppearanceSpan(
-                activity?.applicationContext,
+                requireActivity().applicationContext,
                 R.style.VolunteerTopTextStyle2
             ),
             0,
@@ -66,7 +66,7 @@ class HomeFragment : BaseFragment() {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
-       volunteerButton.text = TextUtils.concat(ssTop, "\n", ssBottom)
+       volunteerButton.text =TextUtils.concat(ssTop, "\n", ssBottom)
        volunteerButton.setOnClickListener {
             (requireActivity() as FragmentRouter).replaceWebViewFragmentWithTitle(
                 getString(R.string.volunteer_url),
