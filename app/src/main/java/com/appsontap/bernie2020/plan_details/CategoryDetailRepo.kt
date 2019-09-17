@@ -20,11 +20,8 @@ class CategoryDetailRepo {
             .planDao()
             .getPlan(planId)
             .doOnSuccess {
-                it.name?.let { name ->
-                    result.add(name)
-                    titleIndexes.add(0)
-                }
-
+                result.add(it)
+                titleIndexes.add(0)
             }.map {
                 it.getCategoryIds()?.first()
             }.flatMap {
