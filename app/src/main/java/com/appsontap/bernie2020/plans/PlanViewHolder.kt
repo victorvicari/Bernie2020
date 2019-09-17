@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
 import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.FragmentActivity
@@ -15,9 +14,7 @@ import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
 import kotlinx.android.synthetic.main.item_plan.view.*
-import android.net.Uri
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 
 
 class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
@@ -45,10 +42,10 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
     fun setShareClickListener(activity: Activity, plan: Plan?) {
         planView.imageview_plan_share.setOnClickListener {
             val popup = PopupMenu(activity, planView.imageview_plan_share)
-            popup.inflate(com.appsontap.bernie2020.R.menu.context_menu_share_plan)
+            popup.inflate(com.appsontap.bernie2020.R.menu.context_menu_share_plan_and_leg)
             popup.setOnMenuItemClickListener {
                 when(it.itemId) {
-                    R.id.context_plan_share_twitter -> {
+                    R.id.context_share_twitter -> {
                         val message =
                             plan?.let { it1 -> IOHelper.getPlanStringForTwitter(activity, it1) }
                         Log.d(TAG, message.toString())
@@ -57,14 +54,14 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
                         activity.startActivity(i)
                         return@setOnMenuItemClickListener true
                     }
-                    R.id.context_plan_share_full_text -> {
+                    R.id.context_share_full_text -> {
                         var message = activity.getString(R.string.plan_share_full_text_preamble) + plan?.name
                         if(plan?.description != null) {
                             message += "\n\n" + plan?.description
                         }
                         val link = plan?.links?.split(" ")?.get(0)
                         if(link != null && link.isNotEmpty()) {
-                            message += activity.getString(R.string.plan_share_full_text_link) + link
+                            message += activity.getString(R.string.share_full_text_link) + link
                         }
                         val i = Intent(Intent.ACTION_SEND)
                         i.setType("text/plain")

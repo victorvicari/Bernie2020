@@ -14,9 +14,9 @@ import com.appsontap.bernie2020.util.TAG
 import kotlinx.android.synthetic.main.item_legislation.view.*
 import android.content.Intent
 import android.widget.PopupMenu
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
-import kotlinx.android.synthetic.main.item_plan.view.*
+import com.appsontap.bernie2020.legislation_details.MarkupParser
+import com.google.gson.Gson
+import com.google.gson.JsonArray
 
 
 class LegislationViewHolder(itemView: View, private val uiState: UiState.ListReady) :
@@ -52,10 +52,10 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
         itemView.imageview_share?.setOnClickListener {
             val legislation = uiState.items[adapterPosition] as Legislation
             val popup = PopupMenu(itemView.context, itemView.imageview_share)
-            popup.inflate(com.appsontap.bernie2020.R.menu.context_menu_share_plan)
+            popup.inflate(R.menu.context_menu_share_plan_and_leg)
             popup.setOnMenuItemClickListener {
                 when(it.itemId) {
-                    R.id.context_plan_share_twitter -> {
+                    R.id.context_share_twitter -> {
                         val message =
                             legislation?.let { leg -> IOHelper.getLegislationStringForTwitter(itemView.context, leg) }
                         Log.d(TAG, message.toString())
@@ -64,33 +64,28 @@ class LegislationViewHolder(itemView: View, private val uiState: UiState.ListRea
                         itemView.context.startActivity(i)
                         return@setOnMenuItemClickListener true
                     }
-//                    R.id.context_plan_share_full_text -> {
-//                        var message = activity.getString(R.string.plan_share_full_text_preamble) + plan?.name
-//                        if(plan?.description != null) {
-//                            message += "\n\n" + plan?.description
-//                        }
-//                        val link = plan?.links?.split(" ")?.get(0)
-//                        if(link != null && link.isNotEmpty()) {
-//                            message += activity.getString(R.string.plan_share_full_text_link) + link
-//                        }
-//                        val i = Intent(Intent.ACTION_SEND)
-//                        i.setType("text/plain")
-//                        i.putExtra(Intent.EXTRA_TEXT, message)
-//                        activity.startActivity(i)
-//                        return@setOnMenuItemClickListener true
-//                    }
+                    R.id.context_share_full_text -> {
+                        var message = itemView.context.getString(R.string.share_full_text_leg_preamble) + " " + legislation.name + "."
+                        Log.d(TAG, "WHITEPAPER " + legislation.whitepaper)
+                        Log.d(TAG, "DESC" + legislation.description)
+                        val parser = MarkupParser()
+                        if(legislation.markup != null && !legislation.markup.isJsonNull) {
+                            message += "\n\n" + parser.parse((legislation.markup as JsonArray)[0].toString())
+                        }
+                        val link = legislation.url
+                        if(link != null && link.isNotEmpty()) {
+                            message += itemView.context.getString(R.string.share_full_text_link) + " " + link
+                        }
+                        val i = Intent(Intent.ACTION_SEND)
+                        i.setType("text/plain")
+                        i.putExtra(Intent.EXTRA_TEXT, message)
+                        itemView.context.startActivity(i)
+                        return@setOnMenuItemClickListener true
+                    }
                 }
                 return@setOnMenuItemClickListener false
             }
             popup.show()
-
-
-            val sendIntent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, (uiState.items[adapterPosition] as Legislation).name)
-                type = "text/plain"
-            }
-            itemView.context.startActivity(Intent.createChooser(sendIntent, "Placeholder Text"))
         }
     }
 
