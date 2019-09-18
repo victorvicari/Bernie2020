@@ -100,5 +100,12 @@
     <string name="plans_expand_all">Expand All</string>
     <string name="options_menu_copy_url">Copy URL</string>
     <string name="webview_link_copied">Link Copied!</string>
+    <string name="context_share_on_twitter">Share on Twitter</string>
+    <string name="context_share_full_text">Share Full Text</string>
+    <string name="twitter_share_hashtag">#BernieHasPlans: </string>
+    <string name="plan_share_full_text_preamble">Bernie has plans that meet the level of the crises we face.\n\n</string>
+    <string name="share_full_text_link">\n\nMore information can be found at:</string>
+    <string name="twitter_share_leg_preamble">.\@BernieSanders has serious legislation to match the depth of our serious problems.\n\nFor example, check out his</string>
+    <string name="share_full_text_leg_preamble">Bernie Sanders has serious legislation to match the depth of our serious problems.\n\nFor example, check out his</string>
 
 </resources>

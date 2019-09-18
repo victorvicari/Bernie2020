@@ -336,6 +336,7 @@ class PlansFragment : BaseFragment() {
             holder?.setTextViewName(proposal.name)
             holder?.setOnClickListener(context, proposal)
             holder?.setupFavoriteCheckbox(context, proposal.id, favorites)
+            holder?.setShareClickListener(requireActivity(), proposal)
             favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
         }
 
