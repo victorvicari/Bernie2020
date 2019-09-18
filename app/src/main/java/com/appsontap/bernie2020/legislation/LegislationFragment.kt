@@ -7,21 +7,17 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.appsontap.bernie2020.*
+import com.appsontap.bernie2020.BaseFragment
+import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.plan_details.UiState
-import com.appsontap.bernie2020.util.IOHelper
-import com.appsontap.bernie2020.util.TAG
-import com.appsontap.bernie2020.util.into
+import com.appsontap.bernie2020.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_legislation.*
-import kotlinx.android.synthetic.main.fragment_legislation.recycler_view
-import androidx.recyclerview.widget.LinearLayoutManager
-
-
 
 
 /**
@@ -40,7 +36,7 @@ class LegislationFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         title = getString(R.string.drawer_legislation)
-        favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
+        favorites = context!!.loadFavoritesFromSharedPrefs()
         setHasOptionsMenu(true)
     }
 
@@ -62,7 +58,7 @@ class LegislationFragment : BaseFragment() {
                             @Suppress("UNCHECKED_CAST")
                             recycler_view.adapter = LegislationAdapter(uiState.items as List<Legislation>)
                             (recycler_view.layoutManager as LinearLayoutManager).scrollToPosition(
-                                IOHelper.loadLegislationScrollStateFromSharedPrefs(context)
+                                context!!.loadLegislationScrollStateFromSharedPrefs()
                             )
 
                         }
@@ -80,7 +76,7 @@ class LegislationFragment : BaseFragment() {
         super.onStop()
         val lastFirstVisiblePosition =
             (recycler_view.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
-        IOHelper.saveLegislationScrollStateToSharedPrefs(context, lastFirstVisiblePosition)
+        context?.saveLegislationScrollStateToSharedPrefs(lastFirstVisiblePosition)
         bin.clear()
     }
 
@@ -105,7 +101,7 @@ class LegislationFragment : BaseFragment() {
         }
 
         override fun onBindViewHolder(holder: LegislationViewHolder, position: Int) {
-            holder.bind(items[position], IOHelper.loadFavoritesFromSharedPrefs(requireContext()))
+            holder.bind(items[position], context!!.loadFavoritesFromSharedPrefs())
         }
     }
 

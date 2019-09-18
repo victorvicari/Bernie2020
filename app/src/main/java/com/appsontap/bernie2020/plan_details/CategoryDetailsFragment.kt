@@ -16,8 +16,8 @@ import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.Quote
 import com.appsontap.bernie2020.plans.PlanViewHolder
-import com.appsontap.bernie2020.util.IOHelper
 import com.appsontap.bernie2020.util.TAG
+import com.appsontap.bernie2020.util.loadFavoritesFromSharedPrefs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -41,7 +41,7 @@ class CategoryDetailsFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
+        context?.let { favorites = it.loadFavoritesFromSharedPrefs() }
         arguments?.let {
             it.run {
                 categoryId = getString(EXTRA_CATEGORY_ID)
@@ -173,7 +173,12 @@ class CategoryDetailsFragment : BaseFragment() {
                 }
                 is LegislationViewHolder -> {
                     when (val item = uiState.items[position]) {
-                        is Legislation -> holder.bind(item, IOHelper.loadFavoritesFromSharedPrefs(requireContext()))
+                        is Legislation -> context?.let {
+                            holder.bind(
+                                item,
+                                it.loadFavoritesFromSharedPrefs()
+                            )
+                        }
                     }
                 }
                 is QuoteViewHolder -> {

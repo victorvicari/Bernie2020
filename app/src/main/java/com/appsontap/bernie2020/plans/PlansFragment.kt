@@ -2,7 +2,6 @@ package com.appsontap.bernie2020.plans
 
 import android.app.SearchManager
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -13,30 +12,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.airbnb.lottie.utils.MiscUtils
-import com.appsontap.bernie2020.*
+import com.appsontap.bernie2020.BaseFragment
+import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.models.Category
-import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.SimpleCategory
 import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
-import com.appsontap.bernie2020.util.IOHelper
-import com.appsontap.bernie2020.util.TAG
-import com.appsontap.bernie2020.util.into
+import com.appsontap.bernie2020.util.*
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
-import com.thoughtbot.expandablerecyclerview.models.ExpandableList
-import com.thoughtbot.expandablerecyclerview.models.ExpandableListPosition
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_legislation.*
 import kotlinx.android.synthetic.main.fragment_plans.*
-import kotlinx.android.synthetic.main.fragment_plans.recycler_view
-import kotlinx.android.synthetic.main.fragment_plans.textview_empty_list
 import kotlinx.android.synthetic.main.item_plan_category.view.*
 import org.json.JSONArray
 import org.json.JSONException
@@ -82,7 +71,7 @@ class PlansFragment : BaseFragment() {
         )
 
         (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.fragment_title_plans)
-        favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
+        context?.let { favorites = it.loadFavoritesFromSharedPrefs() }
         Log.d(TAG, "FAVORITES ARE: $favorites")
 
 
@@ -99,9 +88,9 @@ class PlansFragment : BaseFragment() {
                         simpleCategories?.let{ cats-> recycler_view.adapter = PlansAdapter(requireContext(), cats)}
 
                         // populate search and filter results if there were a search before leaving fragment
-                        val lastSearch = IOHelper.loadPlansSearchStateFromSharedPrefs(requireContext())
+                        val lastSearch = context?.loadPlansSearchStateFromSharedPrefs()
                         lastSearch?.let { search ->
-                            if(search.length > 0) {
+                            if (search.isNotEmpty()) {
                                 filterResults(search)
                                 optionsMenu.findItem(R.id.action_search).expandActionView()
                                 val searchView = (optionsMenu.findItem(R.id.action_search).actionView as SearchView)
@@ -113,7 +102,7 @@ class PlansFragment : BaseFragment() {
                         }
 
                         val sharedPref = requireContext().getSharedPreferences("EXPANDED STATE", Context.MODE_PRIVATE)
-                        var states: BooleanArray? = null
+                        val states: BooleanArray?
                         try {
                             val jsonArray = JSONArray(sharedPref.getString("ITEMS", "[]"))
                             states = BooleanArray(jsonArray.length())
@@ -122,7 +111,7 @@ class PlansFragment : BaseFragment() {
                             }
                             (recycler_view.adapter as PlansAdapter).restoreExpandedState(states)
                             (recycler_view.layoutManager as LinearLayoutManager).scrollToPosition(
-                                IOHelper.loadPlansScrollStateFromSharedPrefs(context)
+                                context!!.loadPlansScrollStateFromSharedPrefs()
                             )
                         } catch (e: JSONException) {
                             e.printStackTrace()
@@ -337,7 +326,7 @@ class PlansFragment : BaseFragment() {
             holder?.setOnClickListener(context, proposal)
             holder?.setupFavoriteCheckbox(context, proposal.id, favorites)
             holder?.setShareClickListener(requireActivity(), proposal)
-            favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
+            favorites = context.loadFavoritesFromSharedPrefs()
         }
 
 
@@ -367,7 +356,7 @@ class PlansFragment : BaseFragment() {
                     return false
                 }
             }
-            return true;
+            return true
         }
 
         fun expandAll() {
@@ -442,11 +431,11 @@ class PlansFragment : BaseFragment() {
         super.onPause()
         val lastFirstVisiblePosition =
             (recycler_view.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
-        IOHelper.savePlansScrollStateToSharedPrefs(context, lastFirstVisiblePosition)
+        context?.savePlansScrollStateToSharedPrefs(lastFirstVisiblePosition)
         if(isSearchExpanded) {
-            IOHelper.savePlansSearchStateToSharedPrefs(context, searchText)
+            context?.savePlansSearchStateToSharedPrefs(searchText)
         } else {
-            IOHelper.savePlansSearchStateToSharedPrefs(context, "")
+            context?.savePlansSearchStateToSharedPrefs("")
         }
 
     }

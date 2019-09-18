@@ -1,6 +1,5 @@
 package com.appsontap.bernie2020.favorites
 
-import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -9,24 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieAnimationView
-import com.appsontap.bernie2020.*
+import com.appsontap.bernie2020.BaseFragment
+import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.legislation.LegislationViewHolder
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import com.appsontap.bernie2020.models.Quote
 import com.appsontap.bernie2020.plan_details.UiState
 import com.appsontap.bernie2020.plans.PlanViewHolder
-import com.appsontap.bernie2020.util.IOHelper
 import com.appsontap.bernie2020.util.TAG
 import com.appsontap.bernie2020.util.into
+import com.appsontap.bernie2020.util.loadFavoritesFromSharedPrefs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_favorites.*
-import kotlinx.android.synthetic.main.fragment_plans.*
 import kotlinx.android.synthetic.main.fragment_plans.recycler_view
-import java.lang.RuntimeException
 
 class FavoritesFragment : BaseFragment() {
 
@@ -39,7 +36,7 @@ class FavoritesFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         title = getString(R.string.title_favorites)
-        favorites = IOHelper.loadFavoritesFromSharedPrefs(context)
+        favorites = context!!.loadFavoritesFromSharedPrefs()
         viewModel.fetchData()
         setHasOptionsMenu(true)
     }
@@ -128,7 +125,7 @@ class FavoritesFragment : BaseFragment() {
                 is LegislationViewHolder -> {
                     when (val item = favoriteItems?.get(position)) {
                         is Legislation -> {
-                            holder.bind(item, IOHelper.loadFavoritesFromSharedPrefs(context))
+                            holder.bind(item, context.loadFavoritesFromSharedPrefs())
                         }
                     }
                 }
