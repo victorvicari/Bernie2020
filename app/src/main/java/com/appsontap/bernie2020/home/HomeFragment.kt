@@ -1,9 +1,25 @@
 package com.appsontap.bernie2020.home
 
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextUtils
+import android.text.method.LinkMovementMethod
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
+import android.text.style.TextAppearanceSpan
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.FragmentRouter
@@ -30,12 +46,35 @@ class HomeFragment : BaseFragment() {
                 setItemMenuSelected(R.id.bot_nav_events_map)
             }
         }
-        volunteer_button.setOnClickListener {
+
+        val ssTop = SpannableString(getResources().getString(R.string.volunteer_button_top_text))
+        ssTop.setSpan(
+            TextAppearanceSpan(requireActivity().applicationContext, R.style.VolunteerTopTextStyle),
+            0,
+            getResources().getString(R.string.volunteer_button_top_text).length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        val ssBottom = SpannableString(getResources().getString(R.string.volunteer_button_bottom_text))
+
+        ssBottom.setSpan(
+            TextAppearanceSpan(
+                requireActivity().applicationContext,
+                R.style.VolunteerTopTextStyle2
+            ),
+            0,
+            getResources().getString(R.string.volunteer_button_bottom_text).length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+       volunteer_button.text =TextUtils.concat(ssTop, "\n", ssBottom)
+       volunteer_button.setOnClickListener {
             (requireActivity() as FragmentRouter).replaceWebViewFragmentWithTitle(
                 getString(R.string.volunteer_url),
                 getString(R.string.web_title_volunteer)
             )
         }
+
+
         timeline_button.setOnClickListener {
             (requireActivity() as FragmentRouter).run {
                replaceFragment(TimelineFragment.newInstance())
@@ -54,12 +93,36 @@ class HomeFragment : BaseFragment() {
                 setItemMenuSelected(R.id.bot_nav_more)
             }
         }
-        donate_button.setOnClickListener { 
-            (requireActivity() as FragmentRouter).run{
-                replaceWebViewFragmentWithTitle(getString(R.string.donate_url), getString(R.string.web_title_donate))
+
+        donate_button.setOnClickListener {
+            (requireActivity() as FragmentRouter).run {
+                replaceWebViewFragmentWithTitle(getString(R.string.donate_url),getString(R.string.web_title_donate))
                 setItemMenuSelected(R.id.bot_nav_more)
             }
         }
+
+        ny_registration_button.setOnClickListener {
+            val message = TextView( activity?.applicationContext)
+            val s = SpannableString(this.getText(R.string.ny_dialog))
+            Linkify.addLinks(s, Linkify.WEB_URLS)
+            message.text = s
+            message.movementMethod = LinkMovementMethod.getInstance()
+
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle("Voter Registration Deadline: Oct 11th")
+           // builder.setMessage("https://www.elections.ny.gov/countyboards.html")
+            builder.setView(message)
+            builder.setPositiveButton("PROCEED") { dialog, which -> dialog.cancel() }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+
+            (requireActivity() as FragmentRouter).run{
+                replaceWebViewFragmentWithTitle(getString(R.string.ny_resgister_url), getString(R.string.web_ny_resgister))
+                setItemMenuSelected(R.id.bot_nav_more)
+            }
+        }
+
+
     }
 
     override fun onStart() {
