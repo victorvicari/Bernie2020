@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.appsontap.bernie2020.legislation.LegislationFragment
 import androidx.fragment.app.FragmentManager
 import com.appsontap.bernie2020.Constants.Companion.BACK_STACK_ROOT_TAG
+import com.appsontap.bernie2020.debt_calculator.DebtCalculatorFragment
 import com.appsontap.bernie2020.favorites.FavoritesFragment
 import com.appsontap.bernie2020.home.HomeFragment
 import com.appsontap.bernie2020.plans.PlansFragment
@@ -93,10 +94,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 url = getString(R.string.podcast_url)
                 toolbarTitle = getString(R.string.web_title_podcast)
             }
-            getString(R.string.drawer_debt_calculator) -> {
-                url = getString(R.string.debt_calc_url)
-                toolbarTitle = getString(R.string.web_title_debt_calculator)
-            }
             getString(R.string.drawer_how_to_vote) -> {
                 url = getString(R.string.how_to_vote_url)
                 toolbarTitle = getString(R.string.web_title_vote)
@@ -128,6 +125,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 getString(R.string.drawer_legislation) -> fragment =
                     LegislationFragment.newInstance()
                 getString(R.string.drawer_favorites) -> fragment = FavoritesFragment.newInstance()
+                getString(R.string.drawer_debt_calculator) -> fragment = DebtCalculatorFragment.newInstance()
 
             }
             replaceFragment(fragment)
