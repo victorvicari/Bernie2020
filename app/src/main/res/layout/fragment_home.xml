@@ -170,7 +170,7 @@
 
 
     <Button
-            android:id="@+id/volunteerButton"
+            android:id="@+id/volunteer_button"
             android:layout_width="match_parent"
             android:layout_height="77dp"
             android:clickable="true"

@@ -66,8 +66,8 @@ class HomeFragment : BaseFragment() {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
-       volunteerButton.text =TextUtils.concat(ssTop, "\n", ssBottom)
-       volunteerButton.setOnClickListener {
+       volunteer_button.text =TextUtils.concat(ssTop, "\n", ssBottom)
+       volunteer_button.setOnClickListener {
             (requireActivity() as FragmentRouter).replaceWebViewFragmentWithTitle(
                 getString(R.string.volunteer_url),
                 getString(R.string.web_title_volunteer)
