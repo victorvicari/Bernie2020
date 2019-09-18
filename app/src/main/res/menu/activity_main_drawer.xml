@@ -22,10 +22,10 @@
         android:icon="@drawable/ic_playlist_add_check_black_24dp"
         android:title="@string/drawer_how_to_vote" />
 
-    <item
-        android:id="@+id/nav_debtcalc"
-        android:icon="@drawable/ic_attach_money_black_24dp"
-        android:title="@string/drawer_debt_calculator" />
+<!--    <item-->
+<!--        android:id="@+id/nav_debtcalc"-->
+<!--        android:icon="@drawable/ic_attach_money_black_24dp"-->
+<!--        android:title="@string/drawer_debt_calculator" />-->
     <item
         android:id="@+id/nav_news"
         android:icon="@drawable/ic_local_library_black_24dp"

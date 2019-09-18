@@ -121,12 +121,15 @@ class FavoritesFragment : BaseFragment() {
                             holder.setTextViewName(item.name)
                             holder.setOnClickListener(context, item) 
                             holder.setupFavoriteCheckbox(context, item.id, favorites)
+                            holder.setShareClickListener(requireActivity(), item)
                         }
                     }
                 }
                 is LegislationViewHolder -> {
                     when (val item = favoriteItems?.get(position)) {
-                        is Legislation -> holder.bind(item, IOHelper.loadFavoritesFromSharedPrefs(context))
+                        is Legislation -> {
+                            holder.bind(item, IOHelper.loadFavoritesFromSharedPrefs(context))
+                        }
                     }
                 }
             }
