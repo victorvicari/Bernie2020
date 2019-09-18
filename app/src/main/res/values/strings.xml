@@ -75,7 +75,6 @@
     <string name="plans_and_bills">Plans \n &amp; Bills</string>
     <string name="upcoming_events">Upcoming \n Events</string>
     <string name="volunteer_with_bernie">Volunteer with Bernie</string>
-    <string name="donate_to_bernie">Donate to Bernie</string>
     <string name="title_favorites">Favorites</string>
     <string name="drawer_favorites">Favorites</string>
     <string name="plans_no_search_matches">No plans match your keyword search.\nPlease try another!</string>
@@ -86,6 +85,19 @@
     <string name="share_legislation">Share Bernie\'s Legislation</string>
     <string name="add_to_favorites">Add some favorites!</string>
     <string name="first_timeline_year">1962</string>
+
+    <string name="volunteer_button_top_text">Volunteer with Bernie</string>
+    <string name="volunteer_button_bottom_text">Over a million have signed up!</string>
+    <string name="donate_button_text">Donate to Bernie</string>
+
+    <string name="ny_registration_Text">NY Registration Date Oct.11th! </string>
+    <string name="web_ny_resgister">Register to Vote! </string>
+    <string name="ny_resgister_url">https://www.ny.gov/services/register-vote</string>
+    <string name="ny_dialog"> To make sure your change in registration counts go to your local Board of Elections instead of the DMV if possible located here:\n https://www.elections.ny.gov/countyboards.html \n OR \n https://www.elections.ny.gov/NYSBOE/Counties/CountyBoardRoster.pdf</string>
+
+
+    <string name="plans_collapse_all">Collapse All</string>
+    <string name="plans_expand_all">Expand All</string>
     <string name="options_menu_copy_url">Copy URL</string>
     <string name="webview_link_copied">Link Copied!</string>
     <string name="context_share_on_twitter">Share on Twitter</string>
