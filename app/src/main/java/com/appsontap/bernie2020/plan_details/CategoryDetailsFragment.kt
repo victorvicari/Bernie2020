@@ -157,7 +157,13 @@ class CategoryDetailsFragment : BaseFragment() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             when (holder) {
-                is HeaderViewHolder -> holder.bind(uiState.items[position] as String)
+                is HeaderViewHolder -> {
+                    if(uiState.items[position] is Plan) {
+                        holder.bindPlanItems(uiState.items[position] as Plan)
+                    } else {
+                        holder.bind(uiState.items[position] as String)
+                    }
+                }
                 is TitleViewHolder -> holder.bind(uiState.items[position] as String)
                 is ItemViewHolder -> {
                     //this is just an easy way to cast all these things
@@ -179,8 +185,9 @@ class CategoryDetailsFragment : BaseFragment() {
                     when (val item = uiState.items[position]) {
                         is Plan -> {
                             holder.setTextViewName(item.name)
-                             holder.setOnClickListener(requireContext(), item) 
-                             holder.setupFavoriteCheckbox(requireContext(), item.id, favorites)
+                            holder.setTextViewDesc(item.description)
+                            holder.setOnClickListener(requireContext(), item)
+                            holder.setupFavoriteCheckbox(requireContext(), item.id, favorites)
                         }
                     }
                 }
@@ -219,6 +226,24 @@ class CategoryDetailsFragment : BaseFragment() {
                     itemView.header_title_text_view.text = it
                 }
             }
+
+            fun bindPlanItems(plan: Plan?) {
+                plan.let {
+                    itemView.header_title_text_view.text = it?.name
+                    if(it?.description?.length == 0) {
+                        itemView.header_plan_desc_text_view.visibility = View.GONE
+                    } else {
+                        itemView.header_plan_desc_text_view.text = it?.description
+                        itemView.header_plan_desc_text_view.visibility = View.VISIBLE
+                    }
+                    if(it?.links?.length == 0) {
+                        itemView.header_plan_link_text_view.visibility = View.GONE
+                    } else {
+                        itemView.header_plan_link_text_view.text = it?.links
+                        itemView.header_plan_desc_text_view.visibility = View.VISIBLE
+                    }
+                }
+            }
         }
 
         inner class TitleViewHolder(itemView: View) : BaseViewHolder(itemView) {
@@ -231,7 +256,7 @@ class CategoryDetailsFragment : BaseFragment() {
 
         inner class ItemViewHolder(itemView: View) : BaseViewHolder(itemView) {
             fun bind(description: String?){
-                description?.let { 
+                description?.let {
                     itemView.item_name.text = it
                 }
             }

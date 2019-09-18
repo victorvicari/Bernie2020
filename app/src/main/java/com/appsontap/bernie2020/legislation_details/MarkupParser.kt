@@ -43,7 +43,7 @@ class MarkupParser {
                             start = 0
                         }
                         builder.setSpan(
-                            ForegroundColorSpan(App.get().getColor(R.color.primaryColor)),
+                            ForegroundColorSpan(App.get().getColor(R.color.colorPrimary)),
                             start,
                             builder.length,
                             Spanned.SPAN_INCLUSIVE_EXCLUSIVE
