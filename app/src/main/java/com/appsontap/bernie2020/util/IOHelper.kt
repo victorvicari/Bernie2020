@@ -15,7 +15,7 @@ import kotlin.math.min
 class IOHelper {
 
 
-    companion object{
+    companion object {
         private const val PREFS_PLANS_SCROLL = "plans scroll state"
         private const val PREFS_FAVORITES = "favorites"
         private const val PREFS_LEGISLATION_SCROLL = "leg scroll state"
@@ -27,7 +27,7 @@ class IOHelper {
             val pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
             val idSet = HashSet<String>(pref.getStringSet(PREFS_FAVORITES, setOf()))
 
-            if(!(idSet.contains(id))) {
+            if (!(idSet.contains(id))) {
                 idSet.add(id)
             }
 
@@ -40,7 +40,7 @@ class IOHelper {
         fun removeFavoriteFromSharedPrefs(context: Context, id: String) {
             val pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
             val idSet = HashSet<String>(pref.getStringSet(PREFS_FAVORITES, setOf()))
-            if(idSet.contains(id)) {
+            if (idSet.contains(id)) {
                 idSet.remove(id)
                 Log.d(TAG, idSet.toString())
                 val editor = pref.edit()
@@ -49,7 +49,7 @@ class IOHelper {
             }
         }
 
-        fun loadFavoritesFromSharedPrefs(context: Context?) : Set<String> {
+        fun loadFavoritesFromSharedPrefs(context: Context?): Set<String> {
             val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
             return HashSet<String>(pref?.getStringSet(PREFS_FAVORITES, setOf()))
         }
@@ -61,7 +61,7 @@ class IOHelper {
             editor?.apply()
         }
 
-        fun loadPlansScrollStateFromSharedPrefs(context: Context?) : Int {
+        fun loadPlansScrollStateFromSharedPrefs(context: Context?): Int {
             val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
             return pref?.getInt(PREFS_PLANS_SCROLL, 0) ?: 0
         }
@@ -73,12 +73,12 @@ class IOHelper {
             editor?.apply()
         }
 
-        fun loadLegislationScrollStateFromSharedPrefs(context: Context?) : Int {
+        fun loadLegislationScrollStateFromSharedPrefs(context: Context?): Int {
             val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
             return pref?.getInt(PREFS_LEGISLATION_SCROLL, 0) ?: 0
         }
 
-        fun getPlanStringForTwitter(context: Context, plan: Plan) : Uri {
+        fun getPlanStringForTwitter(context: Context, plan: Plan): Uri {
             val link = plan.links?.split(" ")?.get(0)
             //val hashtag = URLEncoder.encode(context.getString(R.string.twitter_share_hashtag), "utf-8")
             val hashtag = context.getString(R.string.twitter_share_hashtag)
@@ -94,7 +94,7 @@ class IOHelper {
                 .appendPath("intent")
                 .appendPath("tweet")
 
-            if(hasLink) {
+            if (hasLink) {
                 uriBuilder.appendQueryParameter("url", link)
             }
 
@@ -102,7 +102,7 @@ class IOHelper {
 
             val remainingChars = TWITTER_MAX_CHARS - charOffset
             val planName = plan.name as String
-            if(planName.length <= remainingChars) {
+            if (planName.length <= remainingChars) {
                 message += " " + planName
             } else {
                 // makes it so the message fits within the 280 twitter character limit
@@ -115,7 +115,7 @@ class IOHelper {
             return uriBuilder.build()
         }
 
-        fun getLegislationStringForTwitter(context: Context, leg: Legislation) : Uri {
+        fun getLegislationStringForTwitter(context: Context, leg: Legislation): Uri {
             var link = leg.url
             var preamble = context.getString(R.string.twitter_share_leg_preamble)
             var charOffset = preamble.length + 1 // 1 is for the space
@@ -130,7 +130,7 @@ class IOHelper {
                 .appendPath("intent")
                 .appendPath("tweet")
 
-            if(hasLink) {
+            if (hasLink) {
                 uriBuilder.appendQueryParameter("url", link)
             }
 
@@ -138,7 +138,7 @@ class IOHelper {
 
             val remainingChars = TWITTER_MAX_CHARS - charOffset
             val legTitle = leg.name as String
-            if(legTitle.length <= remainingChars) {
+            if (legTitle.length <= remainingChars) {
                 message += " " + legTitle
             } else {
                 // makes it so the message fits within the 280 twitter character limit
@@ -149,15 +149,16 @@ class IOHelper {
             uriBuilder.appendQueryParameter("text", message)
 
             return uriBuilder.build()
+        }
 
-         fun savePlansSearchStateToSharedPrefs(context: Context?, searchText: String) {
+        fun savePlansSearchStateToSharedPrefs(context: Context?, searchText: String) {
             val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
             val editor = pref?.edit()
             editor?.putString(PREFS_PLANS_SEARCH, searchText)
             editor?.apply()
         }
 
-        fun loadPlansSearchStateFromSharedPrefs(context: Context?) : String? {
+        fun loadPlansSearchStateFromSharedPrefs(context: Context?): String? {
             val pref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
             return pref?.getString(PREFS_PLANS_SEARCH, "")
         }

@@ -185,7 +185,6 @@ class CategoryDetailsFragment : BaseFragment() {
                     when (val item = uiState.items[position]) {
                         is Plan -> {
                             holder.setTextViewName(item.name)
-                            holder.setTextViewDesc(item.description)
                             holder.setOnClickListener(requireContext(), item)
                             holder.setupFavoriteCheckbox(requireContext(), item.id, favorites)
                         }

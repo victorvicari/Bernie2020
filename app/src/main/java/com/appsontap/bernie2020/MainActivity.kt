@@ -174,6 +174,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
             .addToBackStack(BACK_STACK_ROOT_TAG)
             .commit()
+        lastMenuIdSelected = R.id.bot_nav_home
     }
 
 
