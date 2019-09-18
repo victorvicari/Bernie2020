@@ -1,19 +1,18 @@
 package com.appsontap.bernie2020
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import com.appsontap.bernie2020.legislation.LegislationFragment
 import androidx.fragment.app.FragmentManager
-import com.appsontap.bernie2020.Constants.Companion.BACK_STACK_ROOT_TAG
 import com.appsontap.bernie2020.favorites.FavoritesFragment
 import com.appsontap.bernie2020.home.HomeFragment
+import com.appsontap.bernie2020.legislation.LegislationFragment
 import com.appsontap.bernie2020.plans.PlansFragment
 import com.appsontap.bernie2020.timeline.TimelineFragment
 import com.appsontap.bernie2020.util.TAG
@@ -183,14 +182,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             when (it.itemId) {
                 R.id.bot_nav_home -> {
-                    if(lastMenuIdSelected != it.itemId) {
+                    if (lastMenuIdSelected != it.itemId) {
                         popStackAndLoadHomeFragment()
                         lastMenuIdSelected = it.itemId
                     }
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.bot_nav_events_map -> {
-                    if(lastMenuIdSelected != it.itemId) {
+                    if (lastMenuIdSelected != it.itemId) {
                         loadWebFragment(
                             getString(R.string.events_url),
                             getString(R.string.web_title_events)
@@ -200,7 +199,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.bot_nav_canvass -> {
-                    if(lastMenuIdSelected != it.itemId) {
+                    if (lastMenuIdSelected != it.itemId) {
                         loadWebFragment(
                             getString(R.string.bern_url),
                             getString(R.string.web_title_canvass)
@@ -214,7 +213,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.bot_nav_plans -> {
-                    if(lastMenuIdSelected != it.itemId) {
+                    if (lastMenuIdSelected != it.itemId) {
                         supportFragmentManager.popBackStack(
                             BACK_STACK_ROOT_TAG,
                             FragmentManager.POP_BACK_STACK_INCLUSIVE

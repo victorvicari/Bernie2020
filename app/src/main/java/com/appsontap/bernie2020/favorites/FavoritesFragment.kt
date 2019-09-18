@@ -36,7 +36,7 @@ class FavoritesFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         title = getString(R.string.title_favorites)
-        favorites = context!!.loadFavoritesFromSharedPrefs()
+        favorites = requireContext().loadFavoritesFromSharedPrefs()
         viewModel.fetchData()
         setHasOptionsMenu(true)
     }
