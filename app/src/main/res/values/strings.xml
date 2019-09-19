@@ -93,7 +93,7 @@
     <string name="ny_registration_Text">NY Registration Ends Oct. 11th!</string>
     <string name="web_ny_resgister">Register to Vote! </string>
     <string name="ny_resgister_url">https://www.elections.ny.gov/VotingRegister.html</string>
-    <string name="ny_dialog">New York has a closed primary and you MUST be registered Democrat to vote for Bernie.\n\nTo make sure your change in registration counts, DO NOT register online through the DMV.\n\nOn the following page, scroll down to New York State Voter Registration Form. Either complete the English or Spanish fillable pdf or use the accessible form. Print the resulting page and mail it to the Board of Elections, or drop it off in person.\n\nBOE Locations can be found here:\n\nhttps://www.elections.ny.gov/countyboards.html \n OR \n https://www.elections.ny.gov/NYSBOE/Counties/CountyBoardRoster.pdf</string>
+    <string name="ny_dialog">New York has a closed primary and you MUST be registered Democrat to vote for Bernie.\n\nTo make sure your change in registration counts, DO NOT register online through the DMV.\n\nOn the following page, scroll down to New York State Voter Registration Form. Either complete the English or Spanish fillable pdf or use the accessible form. Print the resulting page and mail it to the Board of Elections (BOE), or drop it off in person.\n\nBOE Locations can be found here:\n\nhttps://www.elections.ny.gov/countyboards.html \n OR \n https://www.elections.ny.gov/NYSBOE/Counties/CountyBoardRoster.pdf</string>
 
 
     <string name="plans_collapse_all">Collapse All</string>
