@@ -15,9 +15,14 @@ import com.appsontap.bernie2020.plan_details.CategoryDetailsFragment
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
 import kotlinx.android.synthetic.main.item_plan.view.*
 import android.content.Intent
+import android.view.MotionEvent
 
 
-class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
+class PlanViewHolder(private val planView: View) : ChildViewHolder(planView), View.OnTouchListener {
+    init {
+        planView.textview_proposal_item_name.setOnTouchListener(this)
+    }
+    
     fun setTextViewName(name: String?) {
         planView.textview_proposal_item_name.text = name
     }
@@ -31,7 +36,7 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
 
             (context as FragmentActivity).supportFragmentManager.beginTransaction()
                 .replace(
-                    com.appsontap.bernie2020.R.id.fragment_container,
+                    R.id.fragment_container,
                     CategoryDetailsFragment.newInstance(args),
                     CategoryDetailsFragment.TAG
                 )
@@ -40,10 +45,23 @@ class PlanViewHolder(private val planView: View) : ChildViewHolder(planView) {
         }
     }
 
+    /**
+     * This is needed because the textview has selectable text
+     * Without this, it takes 2 taps to tap the textview
+     * https://stackoverflow.com/questions/22653641/using-onclick-on-textview-with-selectable-text-how-to-avoid-double-click
+     */
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        when (v?.id) {
+            R.id.textview_proposal_item_name -> 
+                if (event?.action == MotionEvent.ACTION_DOWN) v.requestFocus()
+        }
+        return false
+    }
+
     fun setShareClickListener(activity: Activity, plan: Plan?) {
         planView.imageview_plan_share.setOnClickListener {
             val popup = PopupMenu(activity, planView.imageview_plan_share)
-            popup.inflate(com.appsontap.bernie2020.R.menu.context_menu_share_plan_and_leg)
+            popup.inflate(R.menu.context_menu_share_plan_and_leg)
             popup.setOnMenuItemClickListener {
                 when(it.itemId) {
                     R.id.context_share_twitter -> {
