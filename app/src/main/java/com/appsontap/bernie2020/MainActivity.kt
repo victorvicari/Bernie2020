@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment.newInstance(), HomeFragment.TAG)
-                .addToBackStack(BACK_STACK_ROOT_TAG)
+                .addToBackStack(Constants.BACK_STACK_ROOT_TAG)
                 .commit()
         }
     }
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // will dump all the fragments from the stack when switching to a new top-level fragment
         supportFragmentManager.popBackStack(
-            BACK_STACK_ROOT_TAG,
+            Constants.BACK_STACK_ROOT_TAG,
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
 
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             args.putString(WebFragment.EXTRA_TITLE, toolbarTitle)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG)
-                .addToBackStack(BACK_STACK_ROOT_TAG)
+                .addToBackStack(Constants.BACK_STACK_ROOT_TAG)
                 .commit()
         } else {
             lateinit var fragment: Fragment
@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun popStackAndLoadHomeFragment() {
         supportFragmentManager.popBackStack(
-            BACK_STACK_ROOT_TAG,
+            Constants.BACK_STACK_ROOT_TAG,
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
         supportFragmentManager.beginTransaction()
@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 R.id.fragment_container, HomeFragment.newInstance(),
                 HomeFragment.TAG
             )
-            .addToBackStack(BACK_STACK_ROOT_TAG)
+            .addToBackStack(Constants.BACK_STACK_ROOT_TAG)
             .commit()
         lastMenuIdSelected = R.id.bot_nav_home
     }
@@ -215,7 +215,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 R.id.bot_nav_plans -> {
                     if (lastMenuIdSelected != it.itemId) {
                         supportFragmentManager.popBackStack(
-                            BACK_STACK_ROOT_TAG,
+                            Constants.BACK_STACK_ROOT_TAG,
                             FragmentManager.POP_BACK_STACK_INCLUSIVE
                         )
                         supportFragmentManager.beginTransaction()
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 R.id.fragment_container, PlansFragment.newInstance(),
                                 PlansFragment.TAG
                             )
-                            .addToBackStack(BACK_STACK_ROOT_TAG)
+                            .addToBackStack(Constants.BACK_STACK_ROOT_TAG)
                             .commit()
                         lastMenuIdSelected = it.itemId
                     }
@@ -249,12 +249,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             args.putString(WebFragment.EXTRA_URL, url)
             args.putString(WebFragment.EXTRA_TITLE, title)
             supportFragmentManager.popBackStack(
-                BACK_STACK_ROOT_TAG,
+                Constants.BACK_STACK_ROOT_TAG,
                 FragmentManager.POP_BACK_STACK_INCLUSIVE
             )
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, WebFragment.newInstance(args), WebFragment.TAG)
-                .addToBackStack(BACK_STACK_ROOT_TAG)
+                .addToBackStack(Constants.BACK_STACK_ROOT_TAG)
                 .commit()
         }
     }
@@ -285,7 +285,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment, fragment.TAG)
-            .addToBackStack(BACK_STACK_ROOT_TAG)
+            .addToBackStack(Constants.BACK_STACK_ROOT_TAG)
             .commit()
     }
 

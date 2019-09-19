@@ -5,7 +5,8 @@ import android.net.Uri
 import android.util.Log
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentManager
-import com.appsontap.bernie2020.*
+import com.appsontap.bernie2020.Constants
+import com.appsontap.bernie2020.R
 import com.appsontap.bernie2020.models.Legislation
 import com.appsontap.bernie2020.models.Plan
 import io.reactivex.disposables.CompositeDisposable
@@ -29,7 +30,7 @@ fun FragmentManager.getTopFragmentEntry(): FragmentManager.BackStackEntry =
 
 fun Context.addFavoriteToSharedPrefs(id: String) {
     val pref = this.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-    val idSet = HashSet<String>(pref.getStringSet(PREFS_FAVORITES, setOf()))
+    val idSet = HashSet<String>(pref.getStringSet(Constants.PREFS_FAVORITES, setOf()))
 
     if (!(idSet.contains(id))) {
         idSet.add(id)
@@ -37,49 +38,49 @@ fun Context.addFavoriteToSharedPrefs(id: String) {
 
     Log.d(TAG, idSet.toString())
     pref.edit {
-        putStringSet(PREFS_FAVORITES, idSet)
+        putStringSet(Constants.PREFS_FAVORITES, idSet)
     }
 }
 
 fun Context.removeFavoriteFromSharedPrefs(id: String) {
     val pref = this.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-    val idSet = HashSet<String>(pref.getStringSet(PREFS_FAVORITES, setOf()))
+    val idSet = HashSet<String>(pref.getStringSet(Constants.PREFS_FAVORITES, setOf()))
     if (idSet.contains(id)) {
         idSet.remove(id)
         Log.d(TAG, idSet.toString())
         pref.edit {
-            putStringSet(PREFS_FAVORITES, idSet)
+            putStringSet(Constants.PREFS_FAVORITES, idSet)
         }
     }
 }
 
 fun Context.loadFavoritesFromSharedPrefs(): Set<String> {
     val pref = this.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-    return HashSet<String>(pref?.getStringSet(PREFS_FAVORITES, setOf()))
+    return HashSet<String>(pref?.getStringSet(Constants.PREFS_FAVORITES, setOf()))
 }
 
 fun Context.savePlansScrollStateToSharedPrefs(position: Int) {
     val pref = this.getSharedPreferences(TAG, Context.MODE_PRIVATE)
     pref?.edit {
-        putInt(PREFS_PLANS_SCROLL, position)
+        putInt(Constants.PREFS_PLANS_SCROLL, position)
     }
 }
 
 fun Context.loadPlansScrollStateFromSharedPrefs(): Int {
     val pref = this.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-    return pref?.getInt(PREFS_PLANS_SCROLL, 0) ?: 0
+    return pref?.getInt(Constants.PREFS_PLANS_SCROLL, 0) ?: 0
 }
 
 fun Context.saveLegislationScrollStateToSharedPrefs(position: Int) {
     val pref = this.getSharedPreferences(TAG, Context.MODE_PRIVATE)
     pref?.edit {
-        putInt(PREFS_LEGISLATION_SCROLL, position)
+        putInt(Constants.PREFS_LEGISLATION_SCROLL, position)
     }
 }
 
 fun Context.loadLegislationScrollStateFromSharedPrefs(): Int {
     val pref = this.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-    return pref?.getInt(PREFS_LEGISLATION_SCROLL, 0) ?: 0
+    return pref?.getInt(Constants.PREFS_LEGISLATION_SCROLL, 0) ?: 0
 }
 
 fun Plan.getPlanStringForTwitter(context: Context): Uri {
@@ -89,7 +90,7 @@ fun Plan.getPlanStringForTwitter(context: Context): Uri {
     var charOffset = hashtag.length
     var hasLink = false
     if (link != null && link.isNotEmpty()) {
-        charOffset += min(TWITTER_URL_LENGTH, link.length)
+        charOffset += min(Constants.TWITTER_URL_LENGTH, link.length)
         hasLink = true
     }
     val uriBuilder = Uri.Builder()
@@ -104,7 +105,7 @@ fun Plan.getPlanStringForTwitter(context: Context): Uri {
 
     var message = hashtag
 
-    val remainingChars = TWITTER_MAX_CHARS - charOffset
+    val remainingChars = Constants.TWITTER_MAX_CHARS - charOffset
     val planName = this.name as String
     message += getMessage(planName, remainingChars)
 
@@ -119,7 +120,7 @@ fun Legislation.getLegislationStringForTwitter(context: Context): Uri {
     var charOffset = preamble.length + 1 // 1 is for the space
     var hasLink = false
     if (link != null && link.isNotEmpty()) {
-        charOffset += min(TWITTER_URL_LENGTH, link.length)
+        charOffset += min(Constants.TWITTER_URL_LENGTH, link.length)
         hasLink = true
     }
     val uriBuilder = Uri.Builder()
@@ -134,7 +135,7 @@ fun Legislation.getLegislationStringForTwitter(context: Context): Uri {
 
     var message = preamble
 
-    val remainingChars = TWITTER_MAX_CHARS - charOffset
+    val remainingChars = Constants.TWITTER_MAX_CHARS - charOffset
     val legTitle = this.name as String
     message += getMessage(legTitle, remainingChars)
 
@@ -156,11 +157,11 @@ fun getMessage(planName: String, remainingChars: Int): String {
 fun Context.savePlansSearchStateToSharedPrefs(searchText: String) {
     val pref = this.getSharedPreferences(TAG, Context.MODE_PRIVATE)
     pref?.edit {
-        putString(PREFS_PLANS_SEARCH, searchText)
+        putString(Constants.PREFS_PLANS_SEARCH, searchText)
     }
 }
 
 fun Context.loadPlansSearchStateFromSharedPrefs(): String? {
     val pref = this.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-    return pref?.getString(PREFS_PLANS_SEARCH, "")
+    return pref?.getString(Constants.PREFS_PLANS_SEARCH, "")
 }
