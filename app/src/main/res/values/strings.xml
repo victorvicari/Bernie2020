@@ -90,10 +90,10 @@
     <string name="volunteer_button_bottom_text">Over a million have signed up!</string>
     <string name="donate_button_text">Donate to Bernie</string>
 
-    <string name="ny_registration_Text">NY Registration Date Oct.11th! </string>
+    <string name="ny_registration_Text">NY Registration Ends Oct. 11th!</string>
     <string name="web_ny_resgister">Register to Vote! </string>
-    <string name="ny_resgister_url">https://www.ny.gov/services/register-vote</string>
-    <string name="ny_dialog"> To make sure your change in registration counts go to your local Board of Elections instead of the DMV if possible located here:\n https://www.elections.ny.gov/countyboards.html \n OR \n https://www.elections.ny.gov/NYSBOE/Counties/CountyBoardRoster.pdf</string>
+    <string name="ny_resgister_url">https://www.elections.ny.gov/VotingRegister.html</string>
+    <string name="ny_dialog">New York has a closed primary and you MUST be registered Democrat to vote for Bernie.\n\nTo make sure your change in registration counts, DO NOT register online through the DMV.\n\nOn the following page, scroll down to New York State Voter Registration Form. Either complete the English or Spanish fillable pdf or use the accessible form. Print the resulting page and mail it to the Board of Elections, or drop it off in person.\n\nBOE Locations can be found here:\n\nhttps://www.elections.ny.gov/countyboards.html \n OR \n https://www.elections.ny.gov/NYSBOE/Counties/CountyBoardRoster.pdf</string>
 
 
     <string name="plans_collapse_all">Collapse All</string>
@@ -107,5 +107,7 @@
     <string name="share_full_text_link">\n\nMore information can be found at:</string>
     <string name="twitter_share_leg_preamble">.\@BernieSanders has serious legislation to match the depth of our serious problems.\n\nFor example, check out his</string>
     <string name="share_full_text_leg_preamble">Bernie Sanders has serious legislation to match the depth of our serious problems.\n\nFor example, check out his</string>
+    <string name="ny_voter_reg_deadline">Voter Registration Deadline: Oct 11th</string>
+    <string name="ny_dialog_proceed">PROCEED TO VOTER REGISTRATION</string>
 
 </resources>

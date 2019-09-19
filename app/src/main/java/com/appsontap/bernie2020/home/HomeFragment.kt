@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.lifecycle.ViewModelProviders
 import com.appsontap.bernie2020.BaseFragment
 import com.appsontap.bernie2020.FragmentRouter
@@ -66,7 +67,7 @@ class HomeFragment : BaseFragment() {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
-       volunteer_button.text =TextUtils.concat(ssTop, "\n", ssBottom)
+       volunteer_button.text = TextUtils.concat(ssTop, "\n", ssBottom)
        volunteer_button.setOnClickListener {
             (requireActivity() as FragmentRouter).replaceWebViewFragmentWithTitle(
                 getString(R.string.volunteer_url),
@@ -107,12 +108,14 @@ class HomeFragment : BaseFragment() {
             Linkify.addLinks(s, Linkify.WEB_URLS)
             message.text = s
             message.movementMethod = LinkMovementMethod.getInstance()
+            message.setTextColor(Color.parseColor("#FFFFFF"))
+            message.setLinkTextColor(Color.parseColor("#FFFF99"))
 
-            val builder = AlertDialog.Builder(activity)
-            builder.setTitle("Voter Registration Deadline: Oct 11th")
+            val builder = AlertDialog.Builder(ContextThemeWrapper(context,R.style.AlertDialogCustom))
+            builder.setTitle(getString(R.string.ny_voter_reg_deadline))
            // builder.setMessage("https://www.elections.ny.gov/countyboards.html")
             builder.setView(message)
-            builder.setPositiveButton("PROCEED") { dialog, which -> dialog.cancel() }
+            builder.setPositiveButton(getString(R.string.ny_dialog_proceed)) { dialog, which -> dialog.cancel() }
             val dialog: AlertDialog = builder.create()
             dialog.show()
 
@@ -121,8 +124,6 @@ class HomeFragment : BaseFragment() {
                 setItemMenuSelected(R.id.bot_nav_more)
             }
         }
-
-
     }
 
     override fun onStart() {
